@@ -10,6 +10,7 @@ import AddProduct from "./pages/Product/AddProduct";
 import Productcard from './pages/Product/Productcard';
 import EditProduct from "./pages/Product/EditProduct"
 import ProductAdd from "./pages/Product/ProductAdd"
+import Login from './pages/Dashboard/Login';
 const App = () => {
   return (
     <>
@@ -24,6 +25,8 @@ const App = () => {
         <Route path="/product-card" element={<Productcard />} />
         <Route path="/edit-product" element={<EditProduct />} />
          <Route path="/product" element={<ProductAdd />} />
+         <Route path="/login" element={<Login />} />
+
       </Routes>
     </>
   );

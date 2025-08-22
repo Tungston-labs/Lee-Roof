@@ -2,9 +2,10 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import productRoutes from "./routes/productRoutes.js";
-
+import adminRoutes from "./routes/adminRoutes.js";
+import dotenv from "dotenv";
 const app = express();
-
+dotenv.config();
 // Enable CORS
 const corsOptions = {
   origin: "http://localhost:5173", // frontend
@@ -21,12 +22,13 @@ app.use("/uploads", express.static("uploads"));
 
 // Routes
 app.use("/api/products", productRoutes);
+app.use("/api/admin", adminRoutes);
 
 // MongoDB connection
 mongoose
   .connect("mongodb://127.0.0.1:27017/leeRoof")
   .then(() => {
-    console.log("✅ MongoDB connected");
+    console.log(" MongoDB connected");
     app.listen(5000, () =>
       console.log("🚀 Server running on http://localhost:5000")
     );

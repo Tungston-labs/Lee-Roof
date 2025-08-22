@@ -1,13 +1,18 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/products"; // update if needed
+const API_URL = "http://localhost:5000/api/products";
 
-// Create product
 export const createProductAPI = async (formData) => {
+  const token = localStorage.getItem("accessToken");
+
   const res = await axios.post(API_URL, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: token ? `Bearer ${token}` : "",
+    },
   });
-  console.log('ADDING',res)
+
+  console.log("ADDING", res);
   return res.data;
 };
 

@@ -5,6 +5,7 @@ import { createProduct,
   getProductById,
   updateProduct,
   deleteProduct} from "../controllers/productController.js";
+import { adminAuth } from "../middleware/jwtAuthentication.js";
 
 const router = express.Router();
 
@@ -15,20 +16,20 @@ router.post(
     { name: "primaryImage", maxCount: 1 },
     { name: "brandIcon", maxCount: 1 },
     // frontend must send color images with unique field names, e.g. colorImage_material_color
-  ]),
+  ]),adminAuth,
   createProduct
 );
 
 router.get("/", getProducts);
 router.get("/:id", getProductById);
-router.delete("/:id", deleteProduct);
+router.delete("/:id", adminAuth,deleteProduct);
 router.put(
   "/:id",
   upload.fields([
     { name: "primaryImage", maxCount: 1 },
     { name: "brandIcon", maxCount: 1 },
   ]),
-  updateProduct
+  adminAuth, updateProduct
 );
 
 export default router;
