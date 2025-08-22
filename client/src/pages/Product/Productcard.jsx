@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   CardWrapper,
   ImageSection,
@@ -14,105 +14,211 @@ import {
   ActionButton,
   Logo,
   HeaderRow,
-  BackButton, PageWrapper, Title, TitleWrapper 
-} from './Productcard.Styles';
+  BackButton,
+  PageWrapper,
+  Title,
+  TitleWrapper,
+} from "./Productcard.Styles";
 
-import logo from '../../assets/client/jsw.svg';
-import productImg from '../../assets/client/dummy.svg'; 
-import Navbar from '../../components/Navbar/Navbar';
-import { FaArrowLeft } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import Navbar from "../../components/Navbar/Navbar";
+import { FaArrowLeft } from "react-icons/fa";
+import { useNavigate, useParams } from "react-router-dom";
+import { getProductByIdAPI } from "../../service/productService";
 
 const ProductCard = () => {
-  const [material, setMaterial] = useState('GI');
-  const [thickness, setThickness] = useState('0.35 mm');
-  const [color, setColor] = useState('Blue');
-const navigate = useNavigate();
+  const [selectedMaterial, setSelectedMaterial] = useState(null);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedThickness, setSelectedThickness] = useState("");
+  const [product, setProduct] = useState(null);
+console.log(product)
+console.log("selectedColor=",selectedColor)
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  // Fetch product by ID
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const data = await getProductByIdAPI(id);
+        setProduct(data);
+console.log("data",data)
+        // set default selections from primary fields
+        const defaultMaterial =
+          data.variants.find(v => v.material === data.primaryMaterial) ||
+          data.variants[0];
+console.log("defaultMaterial=",defaultMaterial)
+        const defaultColor =
+          defaultMaterial?.colors.find(c => c.name === data.primaryColor) ||
+          defaultMaterial?.colors[0];
+
+        const defaultThickness =
+          defaultColor?.thickness.find(t => t.value === data.primaryThickness) ||
+          defaultColor?.thickness[0];
+
+        setSelectedMaterial(defaultMaterial);
+        setSelectedColor(defaultColor);
+        setSelectedThickness(defaultThickness?.value || "");
+      } catch (err) {
+        console.error("Error fetching product:", err);
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
+
+  if (!product) return <p>Loading...</p>;
+
+  // Handle Material Click
+  const handleMaterialClick = (variant) => {
+    setSelectedMaterial(variant);
+    setSelectedColor(variant.colors[0] || null);
+    setSelectedThickness(variant.colors[0]?.thickness[0]?.value || "");
+  };
+
+  // Handle Color Click
+  const handleColorClick = (color) => {
+    setSelectedColor(color);
+    setSelectedThickness(color.thickness[0]?.value || "");
+  };
+
   return (
     <>
-    <Navbar/>
-        <PageWrapper>
-     <TitleWrapper>
-    <BackButton onClick={() => navigate(-1)}>
-      <FaArrowLeft />
-    </BackButton>
-    <Title>Product</Title>
-  </TitleWrapper>
-      <HeaderRow>
-  <p>
-    Easily add new products to your store with images, pricing, descriptions, and stock
-    details, keeping your listings updated for customers.
-  </p>
-  <ButtonGroup>
-    <ActionButton variant="delete">Delete</ActionButton>
-   <ActionButton variant="edit" onClick={() => navigate('/edit-product')}>
-  Edit
-</ActionButton>
-  </ButtonGroup>
-</HeaderRow>
+      <Navbar />
+      <PageWrapper>
+        {/* Header */}
+        <TitleWrapper>
+          <BackButton onClick={() => navigate(-1)}>
+            <FaArrowLeft />
+          </BackButton>
+          <Title>Product</Title>
+        </TitleWrapper>
 
+        <HeaderRow>
+          <p>
+            Easily add new products to your store with images, materials, colors,
+            thickness, and variant details.
+          </p>
+          <ButtonGroup>
+            <ActionButton variant="delete">Delete</ActionButton>
+            <ActionButton
+              variant="edit"
+              onClick={() => navigate(`/edit-product/${id}`)}
+            >
+              Edit
+            </ActionButton>
+          </ButtonGroup>
+        </HeaderRow>
 
-      <CardWrapper>
-        <ImageSection>
-          <ProductImage src={productImg} alt="Product" />
-        </ImageSection>
+        {/* Product Card */}
+        <CardWrapper>
+          {/* IMAGE */}
+          <ImageSection>
+            <ProductImage
+              src={
+                selectedColor?.image
+                  ? `http://localhost:5000/${selectedColor.image}`
+                  : product.primaryImage
+                  ? `http://localhost:5000/${product.primaryImage}`
+                  : "/images/sheet.webp"
+              }
+              alt={product.name}
+            />
+          </ImageSection>
 
-        <InfoSection>
-          <Logo src={logo} alt="Logo" />
-          <ProductTitle>JSW Roofing Sheets</ProductTitle>
-          <ProductDesc>
-            Made from high-tensile pure steel and featuring an Al-Zn (Galvalume) anti-corrosion
-            layer, JSW roofing sheets offer up to 4% greater rust resistance, even in coastal or
-            humid environments like Kochi, Kerala. Engineered with superior UV-resistant paint
-            technology, JSW Colouron+ retains its vibrant, crack- and peel-resistant finish year
-            after year, providing durable roofing solutions.
-          </ProductDesc>
-
-          <SectionTitle>Material</SectionTitle>
-          <OptionsRow>
-            {['GI', 'Al-Zn'].map((item) => (
-              <OptionButton
-                key={item}
-                selected={material === item}
-                onClick={() => setMaterial(item)}
-              >
-                {item}
-              </OptionButton>
-            ))}
-          </OptionsRow>
-
-          <SectionTitle>Thickness</SectionTitle>
-          <OptionsRow>
-            {['0.35 mm', '0.40 mm', '0.45 mm'].map((item) => (
-              <OptionButton
-                key={item}
-                selected={thickness === item}
-                onClick={() => setThickness(item)}
-              >
-                {item}
-              </OptionButton>
-            ))}
-          </OptionsRow>
-
-          <SectionTitle>Color</SectionTitle>
-          <OptionsRow>
-            {[
-              { name: 'White', hex: '#ffffff' },
-              { name: 'Blue', hex: '#004D7B' },
-              { name: 'Green', hex: '#17866c' }
-            ].map(({ name, hex }) => (
-              <ColorSwatch
-                key={name}
-                color={hex}
-                selected={color === name}
-                onClick={() => setColor(name)}
+          <InfoSection>
+            {/* Brand */}
+            {product.brandIcon && (
+              <Logo
+                src={`http://localhost:5000/${product.brandIcon}`}
+                alt={product.brandName}
               />
-            ))}
-          </OptionsRow>
+            )}
+            {/* {product.brandName && (
+              <ProductDesc><strong>Brand:</strong> {product.brandName}</ProductDesc>
+            )} */}
 
-         
-        </InfoSection>
-      </CardWrapper>
+            {/* Main Info */}
+            <ProductTitle>{product.name}</ProductTitle>
+            <ProductDesc>{product.description}</ProductDesc>
+
+            {/* Primary details */}
+            <ProductDesc>
+              <strong>Material:</strong> {product.primaryMaterial}
+            </ProductDesc>
+            <ProductDesc>
+              <strong>Color:</strong> 
+              {/* {product.primaryColor}{" "} */}
+              {product.primaryColorCode && (
+                <span
+                  style={{
+                    display: "inline-block",
+                    width: "16px",
+                    height: "16px",
+                    background: product.primaryColorCode,
+                    borderRadius: "50%",
+                    marginLeft: "6px",
+                  }}
+                />
+              )}
+            </ProductDesc>
+            <ProductDesc>
+              <strong>Thickness:</strong> {product.primaryThickness}
+            </ProductDesc>
+
+            {/* Material Options */}
+            {product.variants?.length > 0 && (
+              <>
+                <SectionTitle>Material</SectionTitle>
+                <OptionsRow>
+                  {product.variants.map((variant) => (
+                    <OptionButton
+                      key={variant.material}
+                      selected={selectedMaterial?.material === variant.material}
+                      onClick={() => handleMaterialClick(variant)}
+                    >
+                      {variant.material}
+                    </OptionButton>
+                  ))}
+                </OptionsRow>
+              </>
+            )}
+
+            {/* Color Options */}
+            {selectedMaterial?.colors?.length > 0 && (
+              <>
+                <SectionTitle>Color</SectionTitle>
+                <OptionsRow>
+                  {selectedMaterial.colors.map((c) => (
+                    <ColorSwatch
+                      key={c.name}
+                      color={c.code}
+                      selected={selectedColor?.name === c.name}
+                      onClick={() => handleColorClick(c)}
+                    />
+                  ))}
+                </OptionsRow>
+              </>
+            )}
+
+            {/* Thickness Options */}
+            {selectedColor?.thickness?.length > 0 && (
+              <>
+                <SectionTitle>Thickness</SectionTitle>
+                <OptionsRow>
+                  {selectedColor.thickness.map((t) => (
+                    <OptionButton
+                      key={t.value}
+                      selected={selectedThickness === t.value}
+                      onClick={() => setSelectedThickness(t.value)}
+                    >
+                      {t.value}
+                    </OptionButton>
+                  ))}
+                </OptionsRow>
+              </>
+            )}
+          </InfoSection>
+        </CardWrapper>
       </PageWrapper>
     </>
   );
