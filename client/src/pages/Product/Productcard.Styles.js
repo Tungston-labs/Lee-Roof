@@ -42,7 +42,7 @@ export const ImageSection = styled.div`
 
 export const ProductImage = styled.img`
   width: 100%;
-//   max-width: 300px;
+//   max-width: 250px;
   height: auto;
 //   border-radius: 10px;
 `;

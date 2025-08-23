@@ -94,32 +94,32 @@ export const AddButton = styled.button`
 
 export const ProductsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
 `;
 
 export const ProductCard = styled.div`
-  background: #f5f5f5;
+  background: #E5E5E5;
   border-radius: 12px;
-  padding: 12px;
+  padding: 15px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  // align-items: center;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 `;
 
 export const ProductImage = styled.img`
-  width: 100%;
-  height: auto;
+  width: 19rem;
+  height: 20rem;
   border-radius: 8px;
   margin-bottom: 12px;
 `;
 
 export const ProductTitle = styled.h3`
   margin: 0;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 600;
-  text-align: center;
+  // text-align: center;
 `;
 
 export const ProductInfo = styled.div`
@@ -136,3 +136,6 @@ export const QuantityInput = styled.input`
   border: 1px solid #ccc;
   border-radius: 6px;
 `;
+
+
+
