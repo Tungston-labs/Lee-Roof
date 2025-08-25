@@ -201,3 +201,19 @@ export const FooterNote = styled.p`
   text-align: center;
   font-family: "Raleway", sans-serif;
 `;
+export const AddToCartBtn = styled.button`
+  margin-top: 8px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  background: #004D7B;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: #1374c2;
+  }
+`;
