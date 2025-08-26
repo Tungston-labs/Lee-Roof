@@ -9,16 +9,13 @@ import { adminAuth } from "../middleware/jwtAuthentication.js";
 
 const router = express.Router();
 
-// now you can use .fields()
 router.post(
   "/",
-  upload.fields([
-    { name: "primaryImage", maxCount: 1 },
-    { name: "brandIcon", maxCount: 1 },
-    // frontend must send color images with unique field names, e.g. colorImage_material_color
-  ]),adminAuth,
+upload.single("brandIcon"),  adminAuth,
   createProduct
 );
+
+
 
 router.get("/", getProducts);
 router.get("/:id", getProductById);

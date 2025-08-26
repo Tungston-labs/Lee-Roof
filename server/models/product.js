@@ -1,39 +1,31 @@
 import mongoose from "mongoose";
 
-const ThicknessSchema = new mongoose.Schema({
-  value: { type: String, required: true }
+const colorSchema = new mongoose.Schema({
+  colorName: { type: String, required: true },
+  colorCode: { type: String }, // e.g. HEX
+  image: { type: String }, // URL of the image for this color
 });
 
-const ColorSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-    code: { type: String }, 
-      image: { type: String },
-  thickness: [ThicknessSchema]
+const thicknessSchema = new mongoose.Schema({
+  thickness: { type: String, required: true }, // e.g. "10mm"
+  colors: [colorSchema], // multiple colors for each thickness
 });
 
-const VariantSchema = new mongoose.Schema({
-  material: { type: String, required: true },
-  colors: [ColorSchema]
+const materialSchema = new mongoose.Schema({
+  materialName: { type: String, required: true }, // e.g. "Steel"
+  thicknesses: [thicknessSchema], // multiple thickness options under material
 });
 
-const ProductSchema = new mongoose.Schema(
+const productSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
+    productName: { type: String, required: true },
     description: { type: String },
-
-    // brand details
     brandName: { type: String, required: true },
-    brandIcon: { type: String }, // uploaded brand icon
-
-    // product images
-    primaryImage: { type: String }, // main product image
-    primaryMaterial: { type: String },
-    primaryColor: { type: String },
-    primaryThickness: { type: String },
-    primaryColorCode: { type: String },
-    variants: [VariantSchema]
+    brandIcon: { type: String }, // URL
+    materials: [materialSchema], // embedded materials -> thickness -> colors -> images
   },
   { timestamps: true }
 );
 
-export default mongoose.model("Product", ProductSchema);
+const Product = mongoose.model("Product", productSchema);
+export default Product;

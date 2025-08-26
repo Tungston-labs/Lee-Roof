@@ -1,8 +1,11 @@
 import express from "express";
+import path from "path";
 import mongoose from "mongoose";
 import cors from "cors";
 import productRoutes from "./routes/productRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import uploadRoutes from "./routes/uploadRoutes.js"
+
 import dotenv from "dotenv";
 const app = express();
 dotenv.config();
@@ -18,11 +21,12 @@ app.use(cors(corsOptions));
 
 // Middleware
 app.use(express.json());
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 // Routes
 app.use("/api/products", productRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/upload", uploadRoutes);
 
 // MongoDB connection
 mongoose

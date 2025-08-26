@@ -70,7 +70,7 @@ const ProductPage = () => {
                 <ProductImage
                   src={
                     primaryImage
-                      ? `http://localhost:5000/${primaryImage}`
+                      ? `${primaryImage}`
                       : "/images/sheet.webp"
                   }
                   alt={name}

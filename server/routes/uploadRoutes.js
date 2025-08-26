@@ -1,15 +1,10 @@
-// const express = require("express");
-// const router = express.Router();
-// const upload = require("../middleware/upload");
+// routes/uploadRoutes.js
+import express from "express";
+import upload from "../middleware/upload.js";
+import {  uploadImages } from "../controllers/uploadController.js";
+import { adminAuth } from "../middleware/jwtAuthentication.js";
 
-// router.post("/", upload.single("file"), (req, res) => {
-//   if (!req.file) {
-//     return res.status(400).json({ message: "No file uploaded" });
-//   }
-//   res.json({
-//     message: "File uploaded successfully",
-//     filePath: `/uploads/${req.file.filename}`,
-//   });
-// });
+const router = express.Router();
 
-// module.exports = router;
+router.post("/", upload.array("images", 10), adminAuth,uploadImages);
+export default router;

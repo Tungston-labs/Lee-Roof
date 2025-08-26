@@ -71,44 +71,61 @@ const ProductForm = () => {
   const [editingData, setEditingData] = useState(null);
 
 
-  const handleSave = async () => {
-    const formData = new FormData();
-    formData.append("name", productName);
-    formData.append("description", description);
-    formData.append("brandName", brandName);
-    formData.append("primaryMaterial", primaryMaterial);
-    formData.append("primaryColor", color1);
-    formData.append("primaryThickness", thicknesses.join(","));
-    formData.append("primaryColorCode", color1Hex);
+const handleSave = async () => {
+  const formData = new FormData();
+  formData.append("name", productName);
+  formData.append("description", description);
+  formData.append("brandName", brandName);
+  formData.append("primaryMaterial", primaryMaterial);
+  formData.append("primaryColor", color1);
+  formData.append("primaryThickness", thicknesses.join(",")); 
+  formData.append("primaryColorCode", color1Hex);
 
-    if (primaryImage) formData.append("primaryImage", primaryImage.file);
-    if (brandIcon) formData.append("brandIcon", brandIcon.file);
+  if (primaryImage) formData.append("primaryImage", primaryImage.file);
+  if (brandIcon) formData.append("brandIcon", brandIcon.file);
 
-   variants.forEach((variant) => {
-  variant.colors = [
-    {
-      name: variant.colorName,
-      code: variant.colorCode,
-      thickness: variant.thickness
-        ? variant.thickness.split(",").map((t) => ({ value: t }))
-        : [],
-      image: variant.image?.preview || "", 
-    },
-  ];
-});
+  // ✅ build variants properly (only metadata)
+  const cleanVariants = variants.map((variant) => ({
+    material: variant.material,
+    colors: [
+      {
+        name: variant.colorName,
+        code: variant.colorCode,
+        thickness: variant.thickness
+          ? variant.thickness.split(",").map((t) => t.trim())
+          : [],
+        image: null, // backend will fill once file matches
+      },
+    ],
+  }));
+
+  // ✅ attach color images with correct fieldname
+  variants.forEach((variant) => {
+    if (variant.image?.file && variant.colorName) {
+      const fieldKey = `colorImage_${variant.material}_${variant.colorName}`;
+      formData.append(fieldKey, variant.image.file);
+    }
+  });
+
+  formData.append("variants", JSON.stringify(cleanVariants));
+
+  try {
+    await dispatch(createProduct(formData)).unwrap();
+    Swal.fire({ 
+      icon: "success", 
+      title: "Product Saved!", 
+      confirmButtonColor: "#004D7B" 
+    });
+  } catch {
+    Swal.fire({ 
+      icon: "error", 
+      title: "Failed to save product", 
+      confirmButtonColor: "#E63946" 
+    });
+  }
+};
 
 
-    formData.append("variants", JSON.stringify(variants));
-
-    dispatch(createProduct(formData))
-      .unwrap()
-      .then(() => {
-        Swal.fire({ icon: "success", title: "Product Saved!", confirmButtonColor: "#004D7B" });
-      })
-      .catch(() => {
-        Swal.fire({ icon: "error", title: "Failed to save product", confirmButtonColor: "#E63946" });
-      });
-  };
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);

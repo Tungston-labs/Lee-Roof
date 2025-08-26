@@ -2,61 +2,49 @@ import Product from "../models/product.js";
 
 export const createProduct = async (req, res) => {
   try {
-    const {
-      name,
-      description,
-      brandName,
-      variants,
-      primaryMaterial,
-    primaryColor,
-    primaryThickness,
-    primaryColorCode
-    } = req.body;
+    const { productName, description, brandName, materials } = req.body;
 
-    // get uploaded files
-    const primaryImage = req.files["primaryImage"]
-      ? req.files["primaryImage"][0].path
-      : null;
-    const brandIcon = req.files["brandIcon"]
-      ? req.files["brandIcon"][0].path
-      : null;
+    const BASE_URL = process.env.BASE_URL || "http://localhost:5000";
 
-    // parse variants JSON
-    let parsedVariants = [];
-    if (variants) {
-      parsedVariants = JSON.parse(variants);
+    let brandIcon = null;
+    if (req.file) {
+      brandIcon = `${BASE_URL}/uploads/${req.file.filename}`;
+    }
 
-      // attach uploaded color images
-      parsedVariants.forEach((variant) => {
-        variant.colors.forEach((color) => {
-          const fieldKey = `colorImage_${variant.material}_${color.name}`;
-          if (req.files[fieldKey]) {
-            color.image = req.files[fieldKey][0].path;
-          }
+    let parsedMaterials = [];
+    if (materials) {
+      parsedMaterials = JSON.parse(materials);
+
+      parsedMaterials.forEach((material) => {
+        material.thicknesses.forEach((thickness) => {
+          thickness.colors.forEach((color) => {
+            color.image = color.image || null;
+          });
         });
       });
     }
 
     const product = new Product({
-      name,
+      productName,
       description,
       brandName,
       brandIcon,
-      primaryImage,
-      primaryMaterial,
-    primaryColor,
-    primaryThickness,
-    primaryColorCode,
-      variants: parsedVariants
+      materials: parsedMaterials,
     });
 
     await product.save();
-    res.status(201).json(product);
+
+    res.status(201).json({
+      message: "Product created successfully",
+      product,
+    });
   } catch (error) {
-    console.log(error)
+    console.error("createProduct error:", error);
     res.status(500).json({ error: error.message });
   }
 };
+
+
 
 export const getProducts = async (req, res) => {
   try {
@@ -90,7 +78,7 @@ export const updateProduct = async (req, res) => {
       primaryMaterial,
       primaryColor,
       primaryThickness,
-      primaryColorCode
+      primaryColorCode,
     } = req.body;
 
     const primaryImage = req.files?.primaryImage?.[0]?.path || undefined;
@@ -122,12 +110,13 @@ export const updateProduct = async (req, res) => {
         primaryColor,
         primaryThickness,
         primaryColorCode,
-        variants: parsedVariants
+        variants: parsedVariants,
       },
       { new: true }
     );
 
-    if (!updatedProduct) return res.status(404).json({ error: "Product not found" });
+    if (!updatedProduct)
+      return res.status(404).json({ error: "Product not found" });
     res.json(updatedProduct);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -139,7 +128,8 @@ export const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const deletedProduct = await Product.findByIdAndDelete(id);
-    if (!deletedProduct) return res.status(404).json({ error: "Product not found" });
+    if (!deletedProduct)
+      return res.status(404).json({ error: "Product not found" });
     res.json({ message: "Product deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });

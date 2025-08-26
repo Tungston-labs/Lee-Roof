@@ -116,9 +116,9 @@ console.log("defaultMaterial=",defaultMaterial)
             <ProductImage
               src={
                 selectedColor?.image
-                  ? `http://localhost:5000/${selectedColor.image}`
+                  ? `${selectedColor.image}`
                   : product.primaryImage
-                  ? `http://localhost:5000/${product.primaryImage}`
+                  ? `${product.primaryImage}`
                   : "/images/sheet.webp"
               }
               alt={product.name}
@@ -129,7 +129,7 @@ console.log("defaultMaterial=",defaultMaterial)
             {/* Brand */}
             {product.brandIcon && (
               <Logo
-                src={`http://localhost:5000/${product.brandIcon}`}
+                src={`${product.brandIcon}`}
                 alt={product.brandName}
               />
             )}
