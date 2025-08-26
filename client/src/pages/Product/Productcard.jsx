@@ -28,10 +28,10 @@ import { getProductByIdAPI } from "../../service/productService";
 const ProductCard = () => {
   const [selectedMaterial, setSelectedMaterial] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
-  const [selectedThickness, setSelectedThickness] = useState("");
+  const [selectedThickness, setSelectedThickness] = useState(null);
   const [product, setProduct] = useState(null);
-console.log(product)
-console.log("selectedColor=",selectedColor)
+  console.log(product);
+  console.log("selectedColor=", selectedColor);
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -41,23 +41,15 @@ console.log("selectedColor=",selectedColor)
       try {
         const data = await getProductByIdAPI(id);
         setProduct(data);
-console.log("data",data)
-        // set default selections from primary fields
-        const defaultMaterial =
-          data.variants.find(v => v.material === data.primaryMaterial) ||
-          data.variants[0];
-console.log("defaultMaterial=",defaultMaterial)
-        const defaultColor =
-          defaultMaterial?.colors.find(c => c.name === data.primaryColor) ||
-          defaultMaterial?.colors[0];
 
-        const defaultThickness =
-          defaultColor?.thickness.find(t => t.value === data.primaryThickness) ||
-          defaultColor?.thickness[0];
+        // Default selections
+        const defaultMaterial = data.materials?.[0] || null;
+        const defaultThickness = defaultMaterial?.thicknesses?.[0] || null;
+        const defaultColor = defaultThickness?.colors?.[0] || null;
 
         setSelectedMaterial(defaultMaterial);
+        setSelectedThickness(defaultThickness);
         setSelectedColor(defaultColor);
-        setSelectedThickness(defaultThickness?.value || "");
       } catch (err) {
         console.error("Error fetching product:", err);
       }
@@ -68,18 +60,26 @@ console.log("defaultMaterial=",defaultMaterial)
 
   if (!product) return <p>Loading...</p>;
 
-  // Handle Material Click
-  const handleMaterialClick = (variant) => {
-    setSelectedMaterial(variant);
-    setSelectedColor(variant.colors[0] || null);
-    setSelectedThickness(variant.colors[0]?.thickness[0]?.value || "");
+  // Material click
+  const handleMaterialClick = (material) => {
+    setSelectedMaterial(material);
+    const firstThickness = material.thicknesses?.[0] || null;
+    setSelectedThickness(firstThickness);
+    setSelectedColor(firstThickness?.colors?.[0] || null);
   };
 
-  // Handle Color Click
+  // Thickness click
+  const handleThicknessClick = (thickness) => {
+    setSelectedThickness(thickness);
+    setSelectedColor(thickness?.colors?.[0] || null);
+  };
+
+  // Color click
   const handleColorClick = (color) => {
     setSelectedColor(color);
-    setSelectedThickness(color.thickness[0]?.value || "");
   };
+  const defaultVariantImage =
+  product.materials?.[0]?.thicknesses?.[0]?.colors?.[0]?.image || "/images/sheet.webp";
 
   return (
     <>
@@ -95,8 +95,8 @@ console.log("defaultMaterial=",defaultMaterial)
 
         <HeaderRow>
           <p>
-            Easily add new products to your store with images, materials, colors,
-            thickness, and variant details.
+            Easily add new products to your store with images, materials,
+            colors, thickness, and variant details.
           </p>
           <ButtonGroup>
             <ActionButton variant="delete">Delete</ActionButton>
@@ -115,54 +115,75 @@ console.log("defaultMaterial=",defaultMaterial)
           <ImageSection>
             <ProductImage
               src={
-                selectedColor?.image
-                  ? `${selectedColor.image}`
-                  : product.primaryImage
-                  ? `${product.primaryImage}`
-                  : "/images/sheet.webp"
+                selectedColor?.image ? selectedColor.image : defaultVariantImage
               }
-              alt={product.name}
+              alt={product.productName}
             />
           </ImageSection>
 
           <InfoSection>
             {/* Brand */}
             {product.brandIcon && (
-              <Logo
-                src={`${product.brandIcon}`}
-                alt={product.brandName}
-              />
+              <Logo src={`${product.brandIcon}`} alt={product.brandName} />
             )}
             {/* {product.brandName && (
               <ProductDesc><strong>Brand:</strong> {product.brandName}</ProductDesc>
             )} */}
 
             {/* Main Info */}
-            <ProductTitle>{product.name}</ProductTitle>
+            <ProductTitle>{product.brandName}</ProductTitle>
+            <ProductTitle>{product.productName}</ProductTitle>
             <ProductDesc>{product.description}</ProductDesc>
 
             {/* Primary details */}
+            <SectionTitle>Material</SectionTitle>
+            <OptionsRow>
+              {product.materials.map((m) => (
+                <OptionButton
+                  key={m._id}
+                  selected={selectedMaterial?._id === m._id}
+                  onClick={() => handleMaterialClick(m)}
+                >
+                  {m.materialName}
+                </OptionButton>
+              ))}
+            </OptionsRow>
             <ProductDesc>
-              <strong>Material:</strong> {product.primaryMaterial}
-            </ProductDesc>
-            <ProductDesc>
-              <strong>Color:</strong> 
-              {/* {product.primaryColor}{" "} */}
-              {product.primaryColorCode && (
-                <span
-                  style={{
-                    display: "inline-block",
-                    width: "16px",
-                    height: "16px",
-                    background: product.primaryColorCode,
-                    borderRadius: "50%",
-                    marginLeft: "6px",
-                  }}
-                />
+              {selectedMaterial?.thicknesses?.length > 0 && (
+                <>
+                  <SectionTitle>Thickness</SectionTitle>
+                  <OptionsRow>
+                    {selectedMaterial.thicknesses.map((t) => (
+                      <OptionButton
+                        key={t._id}
+                        selected={selectedThickness?._id === t._id}
+                        onClick={() => handleThicknessClick(t)}
+                      >
+                        {t.thickness}
+                      </OptionButton>
+                    ))}
+                  </OptionsRow>
+                </>
               )}
             </ProductDesc>
             <ProductDesc>
-              <strong>Thickness:</strong> {product.primaryThickness}
+              <strong>Color:</strong>
+              {/* {product.primaryColor}{" "} */}
+              {selectedThickness?.colors?.length > 0 && (
+                <>
+                  <SectionTitle>Color</SectionTitle>
+                  <OptionsRow>
+                    {selectedThickness.colors.map((c) => (
+                      <ColorSwatch
+                        key={c._id}
+                        color={c.colorCode}
+                        selected={selectedColor?._id === c._id}
+                        onClick={() => handleColorClick(c)}
+                      />
+                    ))}
+                  </OptionsRow>
+                </>
+              )}
             </ProductDesc>
 
             {/* Material Options */}

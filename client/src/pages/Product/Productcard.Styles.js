@@ -43,7 +43,8 @@ export const ImageSection = styled.div`
 export const ProductImage = styled.img`
   width: 100%;
 //   max-width: 250px;
-  height: auto;
+  min-height: 400px;
+  height:500px
 //   border-radius: 10px;
 `;
 

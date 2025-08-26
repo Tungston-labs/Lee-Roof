@@ -16,7 +16,7 @@ import {
 import { FaArrowLeft } from "react-icons/fa";
 import Navbar from "../../components/Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
-import { getProductsAPI } from "../../service/productService"; 
+import { getProductsAPI } from "../../service/productService";
 
 const ProductPage = () => {
   const navigate = useNavigate();
@@ -54,30 +54,37 @@ const ProductPage = () => {
         </Header>
 
         <Subtitle>
-          Easily add new products to your store with images, pricing, descriptions,
-          and stock details, keeping your listings updated for customers.
+          Easily add new products to your store with images, pricing,
+          descriptions, and stock details, keeping your listings updated for
+          customers.
         </Subtitle>
 
         {/* Product Grid */}
         <ProductsGrid>
           {products.length > 0 ? (
-            products.map(({ _id, name, size, primaryImage }) => (
-              <ProductCard
-                key={_id}
-                onClick={() => navigate(`/products-card/${_id}`)} // navigate to detail page
-                style={{ cursor: "pointer" }}
-              >
-                <ProductImage
-                  src={
-                    primaryImage
-                      ? `${primaryImage}`
-                      : "/images/sheet.webp"
-                  }
-                  alt={name}
-                />
-                <ProductTitle>{name}</ProductTitle>
-              </ProductCard>
-            ))
+            products.map(({ _id, productName, materials }) => {
+              // 👇 extract default variant image
+              let defaultVariantImage = "/images/sheet.webp"; // fallback image
+              if (
+                materials?.length > 0 &&
+                materials[0].thicknesses?.length > 0 &&
+                materials[0].thicknesses[0].colors?.length > 0
+              ) {
+                defaultVariantImage =
+                  materials[0].thicknesses[0].colors[0].image;
+              }
+
+              return (
+                <ProductCard
+                  key={_id}
+                  onClick={() => navigate(`/products-card/${_id}`)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <ProductImage src={defaultVariantImage} alt={productName} />
+                  <ProductTitle>{productName}</ProductTitle>
+                </ProductCard>
+              );
+            })
           ) : (
             <p>No products found.</p>
           )}
