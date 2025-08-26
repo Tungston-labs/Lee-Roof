@@ -7,6 +7,7 @@ import adminRoutes from "./routes/adminRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js"
 
 import dotenv from "dotenv";
+import enquiryRoutes from "./routes/enquiryRoutes.js"
 const app = express();
 dotenv.config();
 // Enable CORS
@@ -28,6 +29,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/upload", uploadRoutes);
 
+app.use("/api/enquiries", enquiryRoutes);
 // MongoDB connection
 mongoose
   .connect("mongodb://127.0.0.1:27017/leeRoof")
