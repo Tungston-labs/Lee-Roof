@@ -6,12 +6,11 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import Enquiry from './pages/Enquiry/Enquiry';
 import EnquiryDetails from './pages/Enquiry/EnquiryDetails';
 import ViewProduct from "./pages/Product/ViewProduct";
-import AddProduct from "./pages/Product/AddProduct";
+import AddProduct from "./pages/Product/Add_product/AddProduct";
 import Productcard from './pages/Product/Productcard';
 import EditProduct from "./pages/Product/EditProduct"
-
-const App = () => {
-  return (
+import MultiStepForm from './components/Navbar/multistep/MultiStepForm';
+const App = () => {  return (
     <>
 
 
@@ -23,10 +22,9 @@ const App = () => {
         <Route path="/add-product" element={<AddProduct />} />
      <Route path="/products-card/:id" element={<Productcard />} />
         <Route path="/edit-product" element={<EditProduct />} />
-
+     <Route path="/mult" element={<MultiStepForm />} />
       </Routes>
-    </>
-  );
+    </>  );
 };
 
 export default App;

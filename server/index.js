@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import productRoutes from "./routes/productRoutes.js";
-
+import enquiryRoutes from "./routes/enquiryRoutes.js"
 const app = express();
 
 // Enable CORS
@@ -21,7 +21,7 @@ app.use("/uploads", express.static("uploads"));
 
 // Routes
 app.use("/api/products", productRoutes);
-
+app.use("/api/enquiries", enquiryRoutes);
 // MongoDB connection
 mongoose
   .connect("mongodb://127.0.0.1:27017/leeRoof")
