@@ -11,16 +11,17 @@ import Productcard from "./pages/Product/Productcard";
 import EditProduct from "./pages/Product/EditProduct";
 import MultiStepForm from "./components/Navbar/multistep/MultiStepForm";
 import Login from "./pages/Dashboard/Login";
-
+import Product from "./pages/Product/Product"
 const App = () => {
   return (
     <>
       <Routes>
         <Route path="/" element={<Dashboard />} />
-        <Route path="/enquiry" element={<Enquiry />} />
+        <Route path="/enquiry" element={<Enquiry />} />/
         <Route path="/enquiry-page" element={<EnquiryDetails />} />
         <Route path="/view-product" element={<ViewProduct />} />
         <Route path="/add-product" element={<AddProduct />} />
+        <Route path="/product" element={<Product />} />
         <Route path="/products-card/:id" element={<Productcard />} />
         <Route path="/edit-product" element={<EditProduct />} />
         <Route path="/mult" element={<MultiStepForm />} />

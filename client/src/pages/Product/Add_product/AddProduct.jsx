@@ -1,87 +1,118 @@
 import React from "react";
 import {
-  PageWrapper,TitleWrapper,
-  FormWrapper,BackButton,
+  PageWrapper,
+  TitleWrapper,
+  FormWrapper,
+  BackButton,
   UploadSection,
   UploadBox,
   RightSection,
   Label,
-  Select,
   Input,
   Textarea,
   Title,
   Subtitle,
   Header,
 } from "./AddProduct.Styles";
-import { useState } from "react";
-import Navbar from "../../../components/Navbar/Navbar"
-import MaterialAdd from "./MaterialAdd"
-import AddVarient from "./AddVarient"
+
+import Navbar from "../../../components/Navbar/Navbar";
 import MultiStepForm from "../../../components/Navbar/multistep/MultiStepForm";
 import { FaArrowLeft } from "react-icons/fa";
 
-const ProductForm = () => {
- const [step, setStep] = useState(1);
-      const totalSteps = 3;
+const ProductForm = ({ data, onUpdate }) => {
+  const handleChange = (field, value) => {
+    onUpdate({ ...data, [field]: value });
+  };
+
   return (
     <>
-    <Navbar />
-    <PageWrapper>
-      <Header>
-                <TitleWrapper>
-                  <BackButton onClick={() => navigate(-1)}>
-                    <FaArrowLeft />
-                  </BackButton>
-                  <Title>Product</Title>
-                </TitleWrapper>
-                {/* <AddButton onClick={() => navigate("/add-product")}>
-                  Add product
-                </AddButton> */}
-              </Header>
-      
-              <Subtitle>
-                Easily add new products to your store with images, pricing, descriptions,
-                and stock details, keeping your listings updated for customers.
-              </Subtitle>
-      
+      <PageWrapper>
+        <Header>
+          <TitleWrapper>
+            <BackButton onClick={() => window.history.back()}>
+              <FaArrowLeft />
+            </BackButton>
+            <Title>Product</Title>
+          </TitleWrapper>
+        </Header>
+
+        <Subtitle>
+          Easily add new products to your store with images, pricing,
+          descriptions, and stock details, keeping your listings updated for
+          customers.
+        </Subtitle>
+
         <div>
-      <MultiStepForm currentStep={1} totalSteps={3} />
-    </div>
-      <FormWrapper>
-        {/* Left Upload Box */}
-        <UploadSection>
-          <Label>Product Brand Icon</Label>
-          <UploadBox>
-            <p>Click to upload or Drag and Drop</p>
-            <span>Max 800x400px PNG or JPG</span>
-          </UploadBox>
-        </UploadSection>
+          <MultiStepForm currentStep={1} totalSteps={3} />
+        </div>
 
-        {/* Right Inputs */}
-        <RightSection>
-          <div>
-            <Label>Product Brand name</Label>
-            <Select>
-              <option>Product name</option>
-              <option>Brand A</option>
-              <option>Brand B</option>
-            </Select>
-          </div>
+        <FormWrapper>
+          {/* Left Upload Box */}
+          <UploadSection>
+            <Label>Product Brand Icon</Label>
+            <UploadBox>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    handleChange("brandIconFile", file); // save actual file
+                  }
+                }}
+              />
+              {data.brandIconFile ? (
+                <img
+                  src={URL.createObjectURL(data.brandIconFile)}
+                  alt="Preview"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: "8px",
+                  }}
+                />
+              ) : (
+                <>
+                  <p>Click to upload or Drag and Drop</p>
+                  <span>Max 800x400px PNG or JPG</span>
+                </>
+              )}
+            </UploadBox>
+          </UploadSection>
 
-          <div>
-            <Label>Product name</Label>
-            <Input type="text" placeholder="Product name" />
-          </div>
+          {/* Right Inputs */}
+          <RightSection>
+            <div>
+              <Label>Product Brand name</Label>
+              <Input
+                type="text"
+                value={data.brandName}
+                onChange={(e) => handleChange("brandName", e.target.value)}
+                placeholder="Brand name"
+              />
+            </div>
 
-          <div>
-            <Label>Product Description</Label>
-            <Textarea placeholder="Product Description" />
-          </div>
-        </RightSection>
-      </FormWrapper>
-    </PageWrapper>
-    <MaterialAdd />
-    <AddVarient/>
+            <div>
+              <Label>Product name</Label>
+              <Input
+                type="text"
+                value={data.productName}
+                onChange={(e) => handleChange("productName", e.target.value)}
+                placeholder="Product name"
+              />
+            </div>
+
+            <div>
+              <Label>Product Description</Label>
+              <Textarea
+                value={data.description}
+                onChange={(e) => handleChange("description", e.target.value)}
+                placeholder="Product Description"
+              />
+            </div>
+          </RightSection>
+        </FormWrapper>
+      </PageWrapper>
     </>
   );
 };
