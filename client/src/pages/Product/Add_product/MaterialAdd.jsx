@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import {
   PageWrapper,
   Header,
   Title,
   Subtitle,
-//   StepIndicator,
   MaterialSection,
   Input,
   AddButton,
@@ -21,45 +22,84 @@ import {
   SaveButton,
 } from "./MaterialAdd.Styles";
 import MultiStepForm from "../../../components/Navbar/multistep/MultiStepForm";
+import {
+  addMaterial,
+  removeMaterial,
+  addImages,
+  removeImage,
+  saveMaterials,
+} from "../../../redux/materialSlice"; // adjust path
 
 const ProductMaterialForm = () => {
-      const [step, setStep] = useState(1);
-      const totalSteps = 3;
-  const [materials, setMaterials] = useState(["GI", "Al-Zn"]);
+  const dispatch = useDispatch();
+  const { materials, images } = useSelector((state) => state.materials);
+
+  const [step, setStep] = useState(1);
   const [inputValue, setInputValue] = useState("");
-  const [images, setImages] = useState([
-    "/images/roof1.png",
-    "/images/roof2.png",
-    "/images/roof3.png",
-    "/images/roof4.png",
-  ]);
+  const [uploading, setUploading] = useState(false);
 
   const handleAddMaterial = () => {
-    if (inputValue && !materials.includes(inputValue)) {
-      setMaterials([...materials, inputValue]);
+    if (inputValue && !materials.some((m) => m.materialName === inputValue)) {
+      dispatch(addMaterial({ materialName: inputValue, thicknesses: [] }));
       setInputValue("");
     }
   };
 
-  const handleRemoveMaterial = (mat) => {
-    setMaterials(materials.filter((m) => m !== mat));
+  const handleRemoveMaterial = (matName) => {
+    dispatch(removeMaterial(matName));
   };
 
   const handleRemoveImage = (index) => {
-    setImages(images.filter((_, i) => i !== index));
+    dispatch(removeImage(index));
+  };
+
+  const handleUpload = async (files) => {
+    const uploadedUrls = [];
+    setUploading(true);
+
+    const token = localStorage.getItem("token");
+
+    for (const file of files) {
+      const formData = new FormData();
+      formData.append("images", file);
+
+      try {
+        const res = await axios.post(
+          "http://localhost:5000/api/upload/",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (res.data && res.data.images) {
+          res.data.images.forEach((img) => {
+            uploadedUrls.push(img.url);
+          });
+        }
+      } catch (err) {
+        console.error("Upload failed for", file.name, err);
+      }
+    }
+
+    dispatch(addImages(uploadedUrls));
+    setUploading(false);
+  };
+
+  const handleSave = () => {
+    // Save in Redux state (later you can push to API if needed)
+    dispatch(saveMaterials());
   };
 
   return (
     <PageWrapper>
+      <div>
+        <MultiStepForm currentStep={2} totalSteps={3} />
+      </div>
 
-             <div>
-      <MultiStepForm currentStep={2} totalSteps={3} />
-
-      {/* <div style={{ marginTop: '20px' }}>
-        <button onClick={() => setStep(s => Math.max(1, s - 1))}>Back</button>
-        <button onClick={() => setStep(s => Math.min(totalSteps, s + 1))}>Next</button>
-      </div> */}
-    </div>
       <Header>
         <div>
           <Title>Add product image and material</Title>
@@ -69,44 +109,53 @@ const ProductMaterialForm = () => {
             customers.
           </Subtitle>
         </div>
-
       </Header>
 
       {/* Material Input */}
-    <MaterialSection>
-  {/* Left: Input + Add */}
-  <div style={{ display: "flex", gap: "0.75rem", flex: 1 }}>
-    <Input
-      type="text"
-      placeholder="Material"
-      value={inputValue}
-      onChange={(e) => setInputValue(e.target.value)}
-    />
-    <AddButton onClick={handleAddMaterial}>+ Add</AddButton>
-  </div>
+      <MaterialSection>
+        <div style={{ display: "flex", gap: "0.75rem", flex: 1 }}>
+          <Input
+            type="text"
+            placeholder="Material"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+          />
+          <AddButton onClick={handleAddMaterial}>+ Add</AddButton>
+        </div>
 
-  {/* Middle: Tags */}
-  <TagsWrapper>
-    {materials.map((mat, idx) => (
-      <Tag key={idx}>
-        {mat} <span onClick={() => handleRemoveMaterial(mat)}>✕</span>
-      </Tag>
-    ))}
-  </TagsWrapper>
+        <TagsWrapper>
+          {materials.map((mat, idx) => (
+            <Tag key={idx}>
+              {mat.materialName}
+              <span onClick={() => handleRemoveMaterial(mat.materialName)}>
+                ✕
+              </span>
+            </Tag>
+          ))}
+        </TagsWrapper>
 
-  {/* Right: Actions */}
-  <Actions>
-    <CancelButton>Cancel</CancelButton>
-    <SaveButton>Save</SaveButton>
-  </Actions>
-</MaterialSection>
+        <Actions>
+          <CancelButton>Cancel</CancelButton>
+          <SaveButton onClick={handleSave}>Save</SaveButton>
+        </Actions>
+      </MaterialSection>
 
       {/* Upload and Images */}
       <UploadSection>
-        <UploadBox>
-          <p>Click to upload or Drag and Drop</p>
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          style={{ display: "none" }}
+          id="fileInput"
+          onChange={(e) => handleUpload(Array.from(e.target.files))}
+        />
+
+        <UploadBox onClick={() => document.getElementById("fileInput").click()}>
+          <p>{uploading ? "Uploading..." : "Click to upload or Drag and Drop"}</p>
           <span>Max 800x400px PNG or JPG</span>
         </UploadBox>
+
         <ImageGrid>
           {images.map((img, idx) => (
             <ImageCard key={idx}>
@@ -116,9 +165,6 @@ const ProductMaterialForm = () => {
           ))}
         </ImageGrid>
       </UploadSection>
-
-      {/* Actions */}
-    
     </PageWrapper>
   );
 };

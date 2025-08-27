@@ -13,7 +13,7 @@ export const createProductAPI = async (formData) => {
   });
 
   console.log("ADDING", res);
-  return res.data;
+  return res.data.products;
 };
 
 // Get all products
