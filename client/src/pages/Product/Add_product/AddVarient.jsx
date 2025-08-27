@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React from "react";
 import {
   FormWrapper,
   Row,
@@ -13,77 +12,58 @@ import {
 import MultiStepForm from "../../../components/Navbar/multistep/MultiStepForm";
 import ImageDropdown from "../../../components/ImageDropDown";
 
-const VariantForm = () => {
-  const { materials = [], images = [] } = useSelector((s) => s.materials || {});
+const VariantForm = ({ data, materials = [], savedImages = [], onUpdate }) => {
+  const handleVariantsChange = (updatedVariants) => {
+    onUpdate(updatedVariants);
+  };
 
-  const [variants, setVariants] = useState([
-    {
-      material: "",
-      thicknesses: [
-        {
-          thickness: "",
-          colors: [{ image: "", color: "", colorHex: "#000000" }],
-        },
-      ],
-    },
-  ]);
-
-  // Add new Variant (new material group)
   const addVariant = () => {
-    setVariants([
-      ...variants,
+    handleVariantsChange([
+      ...data,
       {
         material: "",
         thicknesses: [
-          {
-            thickness: "",
-            colors: [{ image: "", color: "", colorHex: "#000000" }],
-          },
+          { thickness: "", colors: [{ image: "", color: "", colorHex: "#000000" }] },
         ],
       },
     ]);
   };
 
-  // Update material name
   const handleMaterialChange = (vIndex, value) => {
-    const updated = [...variants];
+    const updated = [...data];
     updated[vIndex].material = value;
-    setVariants(updated);
+    handleVariantsChange(updated);
   };
 
-  // Update thickness value
   const handleThicknessChange = (vIndex, tIndex, value) => {
-    const updated = [...variants];
+    const updated = [...data];
     updated[vIndex].thicknesses[tIndex].thickness = value;
-    setVariants(updated);
+    handleVariantsChange(updated);
   };
 
-  // Update a color row
   const handleColorChange = (vIndex, tIndex, cIndex, field, value) => {
-    const updated = [...variants];
+    const updated = [...data];
     updated[vIndex].thicknesses[tIndex].colors[cIndex][field] = value;
-    setVariants(updated);
+    handleVariantsChange(updated);
   };
 
-  // Add new color row inside a thickness
   const addColorRow = (vIndex, tIndex) => {
-    const updated = [...variants];
+    const updated = [...data];
     updated[vIndex].thicknesses[tIndex].colors.push({
       image: "",
       color: "",
       colorHex: "#000000",
     });
-    setVariants(updated);
+    handleVariantsChange(updated);
   };
 
-  // Add new thickness row inside a variant
   const addThicknessRow = (vIndex) => {
-    const updated = [...variants];
+    const updated = [...data];
     updated[vIndex].thicknesses.push({
       thickness: "",
       colors: [{ image: "", color: "", colorHex: "#000000" }],
     });
-    setVariants(updated);
+    handleVariantsChange(updated);
   };
 
   return (
@@ -127,9 +107,8 @@ const VariantForm = () => {
         </div>
       </Header>
 
-      {variants.map((variant, vIndex) => (
+      {data.map((variant, vIndex) => (
         <div key={vIndex} style={{ marginBottom: 20 }}>
-          {/* Material Row */}
           <Row>
             <Select
               value={variant.material}
@@ -145,71 +124,47 @@ const VariantForm = () => {
             </Select>
           </Row>
 
-          {/* Thickness + Colors */}
           {variant.thicknesses.map((th, tIndex) => (
-            <div
-              key={tIndex}
-            >
+            <div key={tIndex}>
               <Row>
-                {/* Thickness input */}
                 <Input
                   type="text"
                   placeholder="Enter thickness"
                   value={th.thickness}
-                  onChange={(e) =>
-                    handleThicknessChange(vIndex, tIndex, e.target.value)
-                  }
+                  onChange={(e) => handleThicknessChange(vIndex, tIndex, e.target.value)}
                 />
               </Row>
 
-              {/* Colors inside this thickness */}
               {th.colors.map((colorRow, cIndex) => (
                 <Row key={cIndex}>
                   <ImageDropdown
-                    images={images}
+                    images={savedImages}
                     value={colorRow.image}
                     onChange={(val) =>
                       handleColorChange(vIndex, tIndex, cIndex, "image", val)
                     }
                   />
-
                   <Input
                     type="text"
                     placeholder="Colour name"
                     value={colorRow.color}
                     onChange={(e) =>
-                      handleColorChange(
-                        vIndex,
-                        tIndex,
-                        cIndex,
-                        "color",
-                        e.target.value
-                      )
+                      handleColorChange(vIndex, tIndex, cIndex, "color", e.target.value)
                     }
                   />
-
                   <ColorInput
                     type="color"
                     value={colorRow.colorHex || "#000000"}
                     onChange={(e) =>
-                      handleColorChange(
-                        vIndex,
-                        tIndex,
-                        cIndex,
-                        "colorHex",
-                        e.target.value
-                      )
+                      handleColorChange(vIndex, tIndex, cIndex, "colorHex", e.target.value)
                     }
                   />
-
-                  {/* Add new color row */}
                   <Button type="button" onClick={() => addColorRow(vIndex, tIndex)}>
                     + Add Color
                   </Button>
                 </Row>
               ))}
 
-              {/* Add new thickness row */}
               <Button type="button" onClick={() => addThicknessRow(vIndex)}>
                 + Add Thickness
               </Button>

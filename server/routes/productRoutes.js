@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.post(
   "/",
-upload.single("brandIcon"),  adminAuth,
+upload.single("brandIcon"), 
   createProduct
 );
 

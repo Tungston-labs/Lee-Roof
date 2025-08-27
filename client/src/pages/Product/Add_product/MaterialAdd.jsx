@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
 import {
   PageWrapper,
   Header,
@@ -22,35 +21,30 @@ import {
   SaveButton,
 } from "./MaterialAdd.Styles";
 import MultiStepForm from "../../../components/Navbar/multistep/MultiStepForm";
-import {
-  addMaterial,
-  removeMaterial,
-  addImages,
-  removeImage,
-  saveMaterials,
-} from "../../../redux/materialSlice"; // adjust path
 
-const ProductMaterialForm = () => {
-  const dispatch = useDispatch();
-  const { materials, images } = useSelector((state) => state.materials);
+const ProductMaterialForm = ({ data, onUpdate }) => {
+  const { materials = [], images = [] } = data;
 
-  const [step, setStep] = useState(1);
   const [inputValue, setInputValue] = useState("");
   const [uploading, setUploading] = useState(false);
 
   const handleAddMaterial = () => {
     if (inputValue && !materials.some((m) => m.materialName === inputValue)) {
-      dispatch(addMaterial({ materialName: inputValue, thicknesses: [] }));
+      const updatedMaterials = [...materials, { materialName: inputValue, thicknesses: [] }];
+      onUpdate({ ...data, materials: updatedMaterials });
       setInputValue("");
     }
   };
 
   const handleRemoveMaterial = (matName) => {
-    dispatch(removeMaterial(matName));
+    const updatedMaterials = materials.filter((m) => m.materialName !== matName);
+    onUpdate({ ...data, materials: updatedMaterials });
   };
 
   const handleRemoveImage = (index) => {
-    dispatch(removeImage(index));
+    const updatedImages = [...images];
+    updatedImages.splice(index, 1);
+    onUpdate({ ...data, images: updatedImages });
   };
 
   const handleUpload = async (files) => {
@@ -64,34 +58,23 @@ const ProductMaterialForm = () => {
       formData.append("images", file);
 
       try {
-        const res = await axios.post(
-          "http://localhost:5000/api/upload/",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await axios.post("http://localhost:5000/api/upload/", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (res.data && res.data.images) {
-          res.data.images.forEach((img) => {
-            uploadedUrls.push(img.url);
-          });
+          res.data.images.forEach((img) => uploadedUrls.push(img.url));
         }
       } catch (err) {
         console.error("Upload failed for", file.name, err);
       }
     }
 
-    dispatch(addImages(uploadedUrls));
+    onUpdate({ ...data, images: [...images, ...uploadedUrls] });
     setUploading(false);
-  };
-
-  const handleSave = () => {
-    // Save in Redux state (later you can push to API if needed)
-    dispatch(saveMaterials());
   };
 
   return (
@@ -104,9 +87,8 @@ const ProductMaterialForm = () => {
         <div>
           <Title>Add product image and material</Title>
           <Subtitle>
-            Easily add new products to your store with images, pricing,
-            descriptions, and stock details, keeping your listings updated for
-            customers.
+            Easily add new products to your store with images, pricing, descriptions, and stock
+            details, keeping your listings updated for customers.
           </Subtitle>
         </div>
       </Header>
@@ -127,16 +109,14 @@ const ProductMaterialForm = () => {
           {materials.map((mat, idx) => (
             <Tag key={idx}>
               {mat.materialName}
-              <span onClick={() => handleRemoveMaterial(mat.materialName)}>
-                ✕
-              </span>
+              <span onClick={() => handleRemoveMaterial(mat.materialName)}>✕</span>
             </Tag>
           ))}
         </TagsWrapper>
 
         <Actions>
           <CancelButton>Cancel</CancelButton>
-          <SaveButton onClick={handleSave}>Save</SaveButton>
+          <SaveButton onClick={() => onUpdate(data)}>Save</SaveButton>
         </Actions>
       </MaterialSection>
 
