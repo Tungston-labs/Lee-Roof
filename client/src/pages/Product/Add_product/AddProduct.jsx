@@ -15,8 +15,8 @@ import {
 } from "./AddProduct.Styles";
 import { useState } from "react";
 import Navbar from "../../../components/Navbar/Navbar"
-import MaterialAdd from "./MaterialAdd"
-import AddVarient from "./AddVarient"
+// import MaterialAdd from "./MaterialAdd"
+// import AddVarient from "./AddVarient"
 import MultiStepForm from "../../../components/Navbar/multistep/MultiStepForm";
 import { FaArrowLeft } from "react-icons/fa";
 
@@ -80,8 +80,8 @@ const ProductForm = () => {
         </RightSection>
       </FormWrapper>
     </PageWrapper>
-    <MaterialAdd />
-    <AddVarient/>
+    {/* <MaterialAdd />
+    <AddVarient/> */}
     </>
   );
 };

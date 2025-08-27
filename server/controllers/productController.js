@@ -66,59 +66,61 @@ export const getProductById = async (req, res) => {
   }
 };
 // Update Product
+// Update Product
 export const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
+    const { productName, description, brandName, materials } = req.body;
 
-    const {
-      name,
-      description,
-      brandName,
-      variants,
-      primaryMaterial,
-      primaryColor,
-      primaryThickness,
-      primaryColorCode,
-    } = req.body;
+    const BASE_URL = process.env.BASE_URL || "http://localhost:5000";
 
-    const primaryImage = req.files?.primaryImage?.[0]?.path || undefined;
-    const brandIcon = req.files?.brandIcon?.[0]?.path || undefined;
+    // handle files (brandIcon / images)
+    let brandIcon = undefined;
+    if (req.files?.brandIcon?.[0]) {
+      brandIcon = `${BASE_URL}/uploads/${req.files.brandIcon[0].filename}`;
+    }
 
-    let parsedVariants = [];
-    if (variants) {
-      parsedVariants = JSON.parse(variants);
-
-      parsedVariants.forEach((variant) => {
-        variant.colors.forEach((color) => {
-          const fieldKey = `colorImage_${variant.material}_${color.name}`;
-          if (req.files?.[fieldKey]) {
-            color.image = req.files[fieldKey][0].path;
-          }
+    // parse materials JSON
+    let parsedMaterials = [];
+    if (materials) {
+      parsedMaterials = JSON.parse(materials);
+      parsedMaterials.forEach((material) => {
+        material.thicknesses.forEach((thickness) => {
+          thickness.colors.forEach((color) => {
+            // if color image uploaded separately, handle it here
+            if (req.files && req.files[`colorImage_${material.materialName}_${color.colorName}`]) {
+              color.image = `${BASE_URL}/uploads/${req.files[`colorImage_${material.materialName}_${color.colorName}`][0].filename}`;
+            } else {
+              color.image = color.image || null;
+            }
+          });
         });
       });
     }
 
-    const updatedProduct = await Product.findByIdAndUpdate(
-      id,
-      {
-        name,
-        description,
-        brandName,
-        ...(brandIcon && { brandIcon }),
-        ...(primaryImage && { primaryImage }),
-        primaryMaterial,
-        primaryColor,
-        primaryThickness,
-        primaryColorCode,
-        variants: parsedVariants,
-      },
-      { new: true }
-    );
+    const updateData = {
+      productName,
+      description,
+      brandName,
+      materials: parsedMaterials,
+    };
 
-    if (!updatedProduct)
+    if (brandIcon) updateData.brandIcon = brandIcon;
+
+    const updatedProduct = await Product.findByIdAndUpdate(id, updateData, {
+      new: true,
+    });
+
+    if (!updatedProduct) {
       return res.status(404).json({ error: "Product not found" });
-    res.json(updatedProduct);
+    }
+
+    res.json({
+      message: "Product updated successfully",
+      product: updatedProduct,
+    });
   } catch (error) {
+    console.error("updateProduct error:", error);
     res.status(500).json({ error: error.message });
   }
 };

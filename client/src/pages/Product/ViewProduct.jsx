@@ -48,7 +48,7 @@ const ProductPage = () => {
             </BackButton>
             <Title>Product</Title>
           </TitleWrapper>
-          <AddButton onClick={() => navigate("/add-product")}>
+          <AddButton onClick={() => navigate("/product")}>
             Add product
           </AddButton>
         </Header>

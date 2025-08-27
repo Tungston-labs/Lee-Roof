@@ -83,7 +83,7 @@ export const Textarea = styled.textarea`
   resize: vertical;
 `;
 export const Header = styled.div`
-  display: flex;
+  // display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;

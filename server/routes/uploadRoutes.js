@@ -5,5 +5,5 @@ import { adminAuth } from "../middleware/jwtAuthentication.js";
 
 const router = express.Router();
 
-router.post("/", upload.array("images", 10), adminAuth,uploadImages);
+router.post("/", upload.array("images", 10),uploadImages);
 export default router;
