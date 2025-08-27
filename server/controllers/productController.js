@@ -3,6 +3,7 @@ import Product from "../models/product.js";
 export const createProduct = async (req, res) => {
   try {
     const { productName, description, brandName, materials } = req.body;
+       console.log("REQ.BODY:", req.body);
 
     const BASE_URL = process.env.BASE_URL || "http://localhost:5000";
 
@@ -45,7 +46,6 @@ export const createProduct = async (req, res) => {
 };
 
 
-
 export const getProducts = async (req, res) => {
   try {
     const products = await Product.find();
@@ -66,30 +66,33 @@ export const getProductById = async (req, res) => {
   }
 };
 // Update Product
-// Update Product
+
 export const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const { productName, description, brandName, materials } = req.body;
 
+    console.log("REQ.BODY (UPDATE):", req.body);
+
     const BASE_URL = process.env.BASE_URL || "http://localhost:5000";
 
-    // handle files (brandIcon / images)
-    let brandIcon = undefined;
+    // Handle brand icon (Multer -> req.files.brandIcon[0])
+    let brandIcon = null;
     if (req.files?.brandIcon?.[0]) {
       brandIcon = `${BASE_URL}/uploads/${req.files.brandIcon[0].filename}`;
     }
 
-    // parse materials JSON
+    // Parse materials
     let parsedMaterials = [];
     if (materials) {
       parsedMaterials = JSON.parse(materials);
+
       parsedMaterials.forEach((material) => {
         material.thicknesses.forEach((thickness) => {
           thickness.colors.forEach((color) => {
-            // if color image uploaded separately, handle it here
-            if (req.files && req.files[`colorImage_${material.materialName}_${color.colorName}`]) {
-              color.image = `${BASE_URL}/uploads/${req.files[`colorImage_${material.materialName}_${color.colorName}`][0].filename}`;
+            const fieldKey = `colorImage_${material.materialName}_${color.colorName}`;
+            if (req.files?.[fieldKey]?.[0]) {
+              color.image = `${BASE_URL}/uploads/${req.files[fieldKey][0].filename}`;
             } else {
               color.image = color.image || null;
             }
@@ -98,30 +101,29 @@ export const updateProduct = async (req, res) => {
       });
     }
 
-    const updateData = {
-      productName,
-      description,
-      brandName,
-      materials: parsedMaterials,
-    };
-
-    if (brandIcon) updateData.brandIcon = brandIcon;
-
-    const updatedProduct = await Product.findByIdAndUpdate(id, updateData, {
-      new: true,
-    });
+    const updatedProduct = await Product.findByIdAndUpdate(
+      id,
+      {
+        productName,
+        description,
+        brandName,
+        ...(brandIcon && { brandIcon }),
+        materials: parsedMaterials,
+      },
+      { new: true }
+    );
 
     if (!updatedProduct) {
-      return res.status(404).json({ error: "Product not found" });
+      return res.status(404).json({ message: "Product not found" });
     }
 
     res.json({
-      message: "Product updated successfully",
+      message: "✅ Product updated successfully",
       product: updatedProduct,
     });
   } catch (error) {
     console.error("updateProduct error:", error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: "Server error while updating product" });
   }
 };
 
@@ -129,11 +131,17 @@ export const updateProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const deletedProduct = await Product.findByIdAndDelete(id);
-    if (!deletedProduct)
-      return res.status(404).json({ error: "Product not found" });
+
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    await product.deleteOne();
+
     res.json({ message: "Product deleted successfully" });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Delete product error:", error.message);
+    res.status(500).json({ message: "Server error while deleting product" });
   }
 };

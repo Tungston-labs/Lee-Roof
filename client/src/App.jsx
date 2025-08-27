@@ -8,7 +8,7 @@ import EnquiryDetails from "./pages/Enquiry/EnquiryDetails";
 import ViewProduct from "./pages/Product/ViewProduct";
 import AddProduct from "./pages/Product/Add_product/AddProduct";
 import Productcard from "./pages/Product/Productcard";
-import EditProduct from "./pages/Product/EditProduct";
+// import EditProduct from "./pages/Product/EditProduct";
 import MultiStepForm from "./components/Navbar/multistep/MultiStepForm";
 import Login from "./pages/Dashboard/Login";
 import Product from "./pages/Product/Product";
@@ -23,7 +23,7 @@ const App = () => {
     <Route path="/product" element={<Product />} />
         <Route path="/add-product" element={<AddProduct />} />
         <Route path="/products-card/:id" element={<Productcard />} />
-        <Route path="/edit-product/:id" element={<EditProduct />} />
+        {/* <Route path="/edit-product/:id" element={<EditProduct />} /> */}
         <Route path="/mult" element={<MultiStepForm />} />
         <Route path="/login" element={<Login />} />
       </Routes>
