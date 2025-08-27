@@ -7,26 +7,24 @@ import VariantForm from "./Add_product/AddVarient";
 const AddFullProductPage = ({ existingProduct }) => {
   const [formData, setFormData] = useState({
     product: {
-      // match ProductForm which uses brandIconFile
       brandIconFile: null,
-      brandIconUrl: "", // optional preview when loading existing product
+      brandIconUrl: "", 
       brandName: "",
       productName: "",
       description: "",
     },
     materials: {
-      materials: [], // full structure with thicknesses + colors
-      images: [], // array of image URLs for dropdowns
+      materials: [], 
+      images: [], 
     },
-    variants: [], // prefilled if needed
+    variants: [],
   });
 
-  // If editing/existing product, populate formData with backend response
   useEffect(() => {
     if (existingProduct) {
       setFormData({
         product: {
-          brandIconFile: null, // file not available from backend; leave null
+          brandIconFile: null, 
           brandIconUrl: existingProduct.brandIcon || "",
           brandName: existingProduct.brandName || "",
           productName: existingProduct.productName || "",
@@ -117,7 +115,6 @@ const AddFullProductPage = ({ existingProduct }) => {
     <div style={{ padding: "20px" }}>
       <Navbar />
 
-      {/* Step 1: Product Details */}
       <ProductForm
         data={formData.product}
         onUpdate={(updatedProduct) =>
@@ -128,7 +125,6 @@ const AddFullProductPage = ({ existingProduct }) => {
         }
       />
 
-      {/* Step 2: Materials */}
       <ProductMaterialForm
         data={formData.materials}
         onUpdate={(updatedMaterials) =>
@@ -139,7 +135,6 @@ const AddFullProductPage = ({ existingProduct }) => {
         }
       />
 
-      {/* Step 3: Variants */}
       <VariantForm
         data={formData.variants}
         materials={formData.materials.materials}

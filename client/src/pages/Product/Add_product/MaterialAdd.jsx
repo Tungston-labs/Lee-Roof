@@ -93,7 +93,6 @@ const ProductMaterialForm = ({ data, onUpdate }) => {
         </div>
       </Header>
 
-      {/* Material Input */}
       <MaterialSection>
         <div style={{ display: "flex", gap: "0.75rem", flex: 1 }}>
           <Input
@@ -120,7 +119,6 @@ const ProductMaterialForm = ({ data, onUpdate }) => {
         </Actions>
       </MaterialSection>
 
-      {/* Upload and Images */}
       <UploadSection>
         <input
           type="file"
