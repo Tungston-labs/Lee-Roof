@@ -70,9 +70,9 @@ export const Card = styled.div`
 `;
 
 export const ImagePlaceholder = styled.div`
-  flex: 1;
+ flex: 1;
   min-height: 220px;
-  height:12rem;
+  max-height:500px;
   background: #eaeaea;
   display: flex;
   align-items: center;

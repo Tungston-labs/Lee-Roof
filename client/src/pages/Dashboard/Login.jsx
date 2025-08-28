@@ -21,7 +21,7 @@ const [username, setUsername] = useState("");
       });
       const token = response.data.accessToken;
       localStorage.setItem("accessToken", token);
-      navigate("/");
+      navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     }

@@ -1,551 +1,5 @@
-// // // Ourproducts.jsx
-// // import React, { useState } from "react";
-// // import {
-// //   Section,
-// //   HeaderWrapper,
-// //   Title,
-// //   IntroText,
-// //   BrandPill,
-// //   BrandPillLogo,
-// //   BrandPillText,
-// //   CardsWrapper,
-// //   Card,
-// //   ImageWrapper,
-// //   ProductImage,
-// //   CardContent,
-// //   CardHeader,
-// //   Logo,
-// //   LogoImage,
-// //   CardTitle,
-// //   CardDescription,
-// //   Options,
-// //   OptionGroup,
-// //   OptionLabel,
-// //   OptionValues,
-// //   OptionValue,
-// //   Colors,
-// //   ColorRectangle,
-// //   ViewMore,
-// //   FooterNote,
-// // } from "./Ourproducts.style";
-
-// // import jswLogo from "../../assets/jsw.png";
-// // import tataLogo from "../../assets/TATA.png";
-// // import jslLogo from "../../assets/jsl.png";
-
-// // const OurProducts = () => {
-// //   const [card1, setCard1] = useState({ material: "GI", thickness: "0.35 mm" });
-// //   const [card2, setCard2] = useState({ material: "GI", thickness: "0.35 mm" });
-// //   const [card3, setCard3] = useState({ material: "GI", thickness: "0.35 mm" });
-
-// //   return (
-// //     <Section>
-// //       <HeaderWrapper>
-// //         <Title>Our Products</Title>
-// //         <IntroText>
-// //           We offer a wide variety of high-quality roofing solutions, including
-// //           metal roofing sheets, performance materials, and complete roofing
-// //           accessories. At Lee Roofs, quality meets trust. Whether you’re a
-// //           builder, architect, or homeowner, our range of roofing products is
-// //           designed to combine aesthetics with superior protection. Committed to
-// //           excellence, we ensure that our roofing sheets not only last longer but
-// //           also provide lasting comfort and energy savings. Explore our brands
-// //           below.
-// //         </IntroText>
-// //       </HeaderWrapper>
-
-
-// //       {/* ===== JSW ===== */}
-// //       <BrandPill>
-// //         <BrandPillLogo src={jswLogo} alt="JSW logo" />
-// //         <BrandPillText>JSW Colouron+</BrandPillText>
-// //       </BrandPill>
-
-// //       <Card>
-// //         <ImageWrapper>
-// //           {/* backend sheet image here */}
-// //           <ProductImage src="" alt="JSW Sheet" />
-// //         </ImageWrapper>
-// //         <CardContent>
-// //           <CardHeader>
-// //             <Logo>
-// //               <LogoImage src={jswLogo} alt="JSW Logo" />
-// //             </Logo>
-// //             <CardTitle>JSW Roofing Sheets</CardTitle>
-// //           </CardHeader>
-// //           <CardDescription>
-// //             Made from high-tensile pure steel and featuring an Al–Zn
-// //             (Galvalume) anti-corrosion layer, JSW roofing sheets offer deeper
-// //             rust resistance, even in coastal or humid environments. They’re
-// //             designed for strength, durability, and long-term performance.
-// //           </CardDescription>
-// //           <Options>
-// //             <OptionGroup>
-// //               <OptionLabel>Material</OptionLabel>
-// //               <OptionValues>
-// //                 {["GI", "Al-Zn"].map((m) => (
-// //                   <OptionValue
-// //                     key={m}
-// //                     active={card1.material === m}
-// //                     onClick={() => setCard1({ ...card1, material: m })}
-// //                   >
-// //                     {m}
-// //                   </OptionValue>
-// //                 ))}
-// //               </OptionValues>
-// //             </OptionGroup>
-// //             <OptionGroup>
-// //               <OptionLabel>Thickness</OptionLabel>
-// //               <OptionValues>
-// //                 {["0.35 mm", "0.40 mm", "0.45 mm"].map((t) => (
-// //                   <OptionValue
-// //                     key={t}
-// //                     active={card1.thickness === t}
-// //                     onClick={() => setCard1({ ...card1, thickness: t })}
-// //                   >
-// //                     {t}
-// //                   </OptionValue>
-// //                 ))}
-// //               </OptionValues>
-// //             </OptionGroup>
-// //           </Options>
-// //           <Colors>
-// //             <ColorRectangle style={{ background: "#FFFFFF" }} title="White" />
-// //             <ColorRectangle style={{ background: "#008479" }} title="Teal Green" />
-// //             <ColorRectangle style={{ background: "#1F4492" }} title="Royal Blue" />
-// //           </Colors>
-// //           <ViewMore>Click to view more</ViewMore>
-// //         </CardContent>
-// //       </Card>
-
-// //       {/* ===== TATA ===== */}
-// //       <BrandPill>
-// //         <BrandPillLogo src={tataLogo} alt="TATA logo" />
-// //         <BrandPillText>TATA</BrandPillText>
-// //       </BrandPill>
-
-// //       <Card $reverse>
-// //         <ImageWrapper>
-// //           <ProductImage src="" alt="TATA Sheet" />
-// //         </ImageWrapper>
-// //         <CardContent>
-// //           <CardHeader>
-// //             <Logo>
-// //               <LogoImage src={tataLogo} alt="TATA Logo" />
-// //             </Logo>
-// //             <CardTitle>TATA Roofing Sheets</CardTitle>
-// //           </CardHeader>
-// //           <CardDescription>
-// //             Tata Shaktee galvanized sheets with ISI certification and zinc
-// //             coating deliver durability and cost-effective roofing solutions.
-// //             Built to withstand extreme conditions, they combine corrosion
-// //             resistance, heat resistance, and thermal comfort for long-lasting
-// //             protection.
-// //           </CardDescription>
-// //           <Options>
-// //             <OptionGroup>
-// //               <OptionLabel>Material</OptionLabel>
-// //               <OptionValues>
-// //                 {["GI", "Al-Zn"].map((m) => (
-// //                   <OptionValue
-// //                     key={m}
-// //                     active={card2.material === m}
-// //                     onClick={() => setCard2({ ...card2, material: m })}
-// //                   >
-// //                     {m}
-// //                   </OptionValue>
-// //                 ))}
-// //               </OptionValues>
-// //             </OptionGroup>
-// //             <OptionGroup>
-// //               <OptionLabel>Thickness</OptionLabel>
-// //               <OptionValues>
-// //                 {["0.35 mm", "0.40 mm", "0.45 mm"].map((t) => (
-// //                   <OptionValue
-// //                     key={t}
-// //                     active={card2.thickness === t}
-// //                     onClick={() => setCard2({ ...card2, thickness: t })}
-// //                   >
-// //                     {t}
-// //                   </OptionValue>
-// //                 ))}
-// //               </OptionValues>
-// //             </OptionGroup>
-// //           </Options>
-// //           <Colors>
-// //             <ColorRectangle style={{ background: "#FFFFFF" }} title="White" />
-// //             <ColorRectangle style={{ background: "#008479" }} title="Teal Green" />
-// //             <ColorRectangle style={{ background: "#1F4492" }} title="Royal Blue" />
-// //           </Colors>
-// //           <ViewMore>Click to view more</ViewMore>
-// //         </CardContent>
-// //       </Card>
-
-// //       {/* ===== JSL ===== */}
-// //       <BrandPill>
-// //         <BrandPillLogo src={jslLogo} alt="JSL logo" />
-// //         <BrandPillText>JSL</BrandPillText>
-// //       </BrandPill>
-
-// //       <Card>
-// //         <ImageWrapper>
-// //           <ProductImage src="" alt="Jindal Sheet" />
-// //         </ImageWrapper>
-// //         <CardContent>
-// //           <CardHeader>
-// //             <Logo>
-// //               <LogoImage src={jslLogo} alt="JSL Logo" />
-// //             </Logo>
-// //             <CardTitle>Jindal Roofing Sheets</CardTitle>
-// //           </CardHeader>
-// //           <CardDescription>
-// //             Jindal’s high-strength Alu-Zinc sheets pair superior durability
-// //             with advanced colour coatings. Built for long life and reduced
-// //             thermal transfer, they help keep interiors cooler while providing
-// //             excellent weather resistance.
-// //           </CardDescription>
-// //           <Options>
-// //             <OptionGroup>
-// //               <OptionLabel>Material</OptionLabel>
-// //               <OptionValues>
-// //                 {["GI", "Al-Zn"].map((m) => (
-// //                   <OptionValue
-// //                     key={m}
-// //                     active={card3.material === m}
-// //                     onClick={() => setCard3({ ...card3, material: m })}
-// //                   >
-// //                     {m}
-// //                   </OptionValue>
-// //                 ))}
-// //               </OptionValues>
-// //             </OptionGroup>
-// //             <OptionGroup>
-// //               <OptionLabel>Thickness</OptionLabel>
-// //               <OptionValues>
-// //                 {["0.35 mm", "0.40 mm", "0.45 mm"].map((t) => (
-// //                   <OptionValue
-// //                     key={t}
-// //                     active={card3.thickness === t}
-// //                     onClick={() => setCard3({ ...card3, thickness: t })}
-// //                   >
-// //                     {t}
-// //                   </OptionValue>
-// //                 ))}
-// //               </OptionValues>
-// //             </OptionGroup>
-// //           </Options>
-// //           <Colors>
-// //             <ColorRectangle style={{ background: "#FFFFFF" }} title="White" />
-// //             <ColorRectangle style={{ background: "#1F4492" }} title="Royal Blue" />
-// //           </Colors>
-// //           <ViewMore>Click to view more</ViewMore>
-// //         </CardContent>
-// //       </Card>
-
-
-// //       <FooterNote>
-// //         Whether you're building a new home, upgrading a commercial site, or tackling an industrial project,
-// //         Lee Roofs is your trusted partner. We offer more than just materials <br /> —we offer guidance, reliability,
-// //         and quality that lasts for years.
-// //       </FooterNote>
-// //     </Section>
-// //   );
-// // };
-
-// // export default OurProducts;
-
-
-
-// // Ourproducts.jsx
-// import React, { useState } from "react";
-// import {
-//   Section,
-//   HeaderWrapper,
-//   Title,
-//   IntroText,
-//   BrandPill,
-//   BrandPillLogo,
-//   BrandPillText,
-//   CardsWrapper,
-//   Card,
-//   ImageWrapper,
-//   ProductImage,
-//   CardContent,
-//   CardHeader,
-//   Logo,
-//   LogoImage,
-//   CardTitle,
-//   CardDescription,
-//   Options,
-//   OptionGroup,
-//   OptionLabel,
-//   OptionValues,
-//   OptionValue,
-//   Colors,
-//   ColorRectangle,
-//   ViewMore,
-//   FooterNote,
-//   AddToCartBtn,
-// } from "./Ourproducts.style";
-
-// import jswLogo from "../../assets/jsw.png";
-// import tataLogo from "../../assets/TATA.png";
-// import jslLogo from "../../assets/jsl.png";
-
-// const OurProducts = () => {
-//   const [card1, setCard1] = useState({ material: "GI", thickness: "0.35 mm" });
-//   const [card2, setCard2] = useState({ material: "GI", thickness: "0.35 mm" });
-//   const [card3, setCard3] = useState({ material: "GI", thickness: "0.35 mm" });
-
-//   const [expanded, setExpanded] = useState(null); // track expanded card
-
-//   return (
-//     <Section>
-//       <HeaderWrapper>
-//         <Title>Our Products</Title>
-//         <IntroText>
-//           We offer a wide variety of high-quality roofing solutions, including
-//           metal roofing sheets, performance materials, and complete roofing
-//           accessories. At Lee Roofs, quality meets trust. Whether you’re a
-//           builder, architect, or homeowner, our range of roofing products is
-//           designed to combine aesthetics with superior protection. Committed to
-//           excellence, we ensure that our roofing sheets not only last longer but
-//           also provide lasting comfort and energy savings. Explore our brands
-//           below.
-//         </IntroText>
-//       </HeaderWrapper>
-
-//       {/* ===== JSW ===== */}
-//       {(!expanded || expanded === "JSW") && (
-//         <>
-//           <BrandPill>
-//             <BrandPillLogo src={jswLogo} alt="JSW logo" />
-//             <BrandPillText>JSW Colouron+</BrandPillText>
-//           </BrandPill>
-
-//           <Card>
-//             <ImageWrapper>
-//               <ProductImage src="" alt="JSW Sheet" />
-//             </ImageWrapper>
-//             <CardContent>
-//               <CardHeader>
-//                 <Logo>
-//                   <LogoImage src={jswLogo} alt="JSW Logo" />
-//                 </Logo>
-//                 <CardTitle>JSW Roofing Sheets</CardTitle>
-//               </CardHeader>
-//               <CardDescription>
-//                 Made from high-tensile pure steel and featuring an Al–Zn
-//                 (Galvalume) anti-corrosion layer, JSW roofing sheets offer deeper
-//                 rust resistance, even in coastal or humid environments. They’re
-//                 designed for strength, durability, and long-term performance.
-//               </CardDescription>
-//               <Options>
-//                 <OptionGroup>
-//                   <OptionLabel>Material</OptionLabel>
-//                   <OptionValues>
-//                     {["GI", "Al-Zn"].map((m) => (
-//                       <OptionValue
-//                         key={m}
-//                         active={card1.material === m}
-//                         onClick={() => setCard1({ ...card1, material: m })}
-//                       >
-//                         {m}
-//                       </OptionValue>
-//                     ))}
-//                   </OptionValues>
-//                 </OptionGroup>
-//                 <OptionGroup>
-//                   <OptionLabel>Thickness</OptionLabel>
-//                   <OptionValues>
-//                     {["0.35 mm", "0.40 mm", "0.45 mm"].map((t) => (
-//                       <OptionValue
-//                         key={t}
-//                         active={card1.thickness === t}
-//                         onClick={() => setCard1({ ...card1, thickness: t })}
-//                       >
-//                         {t}
-//                       </OptionValue>
-//                     ))}
-//                   </OptionValues>
-//                 </OptionGroup>
-//               </Options>
-//               <Colors>
-//                 <ColorRectangle style={{ background: "#FFFFFF" }} title="White" />
-//                 <ColorRectangle style={{ background: "#008479" }} title="Teal Green" />
-//                 <ColorRectangle style={{ background: "#1F4492" }} title="Royal Blue" />
-//               </Colors>
-//               {expanded === "JSW" ? (
-//                 <AddToCartBtn>Add to cart</AddToCartBtn>
-//               ) : (
-//                 <ViewMore onClick={() => setExpanded("JSW")}>
-//                   Click to view more
-//                 </ViewMore>
-//               )}
-//             </CardContent>
-//           </Card>
-//         </>
-//       )}
-
-//       {/* ===== TATA ===== */}
-//       {(!expanded || expanded === "TATA") && (
-//         <>
-//           <BrandPill>
-//             <BrandPillLogo src={tataLogo} alt="TATA logo" />
-//             <BrandPillText>TATA</BrandPillText>
-//           </BrandPill>
-
-//           <Card $reverse>
-//             <ImageWrapper>
-//               <ProductImage src="" alt="TATA Sheet" />
-//             </ImageWrapper>
-//             <CardContent>
-//               <CardHeader>
-//                 <Logo>
-//                   <LogoImage src={tataLogo} alt="TATA Logo" />
-//                 </Logo>
-//                 <CardTitle>TATA Roofing Sheets</CardTitle>
-//               </CardHeader>
-//               <CardDescription>
-//                 Tata Shaktee galvanized sheets with ISI certification and zinc
-//                 coating deliver durability and cost-effective roofing solutions.
-//                 Built to withstand extreme conditions, they combine corrosion
-//                 resistance, heat resistance, and thermal comfort for long-lasting
-//                 protection.
-//               </CardDescription>
-//               <Options>
-//                 <OptionGroup>
-//                   <OptionLabel>Material</OptionLabel>
-//                   <OptionValues>
-//                     {["GI", "Al-Zn"].map((m) => (
-//                       <OptionValue
-//                         key={m}
-//                         active={card2.material === m}
-//                         onClick={() => setCard2({ ...card2, material: m })}
-//                       >
-//                         {m}
-//                       </OptionValue>
-//                     ))}
-//                   </OptionValues>
-//                 </OptionGroup>
-//                 <OptionGroup>
-//                   <OptionLabel>Thickness</OptionLabel>
-//                   <OptionValues>
-//                     {["0.35 mm", "0.40 mm", "0.45 mm"].map((t) => (
-//                       <OptionValue
-//                         key={t}
-//                         active={card2.thickness === t}
-//                         onClick={() => setCard2({ ...card2, thickness: t })}
-//                       >
-//                         {t}
-//                       </OptionValue>
-//                     ))}
-//                   </OptionValues>
-//                 </OptionGroup>
-//               </Options>
-//               <Colors>
-//                 <ColorRectangle style={{ background: "#FFFFFF" }} title="White" />
-//                 <ColorRectangle style={{ background: "#008479" }} title="Teal Green" />
-//                 <ColorRectangle style={{ background: "#1F4492" }} title="Royal Blue" />
-//               </Colors>
-//               {expanded === "TATA" ? (
-//                 <AddToCartBtn>Add to cart</AddToCartBtn>
-//               ) : (
-//                 <ViewMore onClick={() => setExpanded("TATA")}>
-//                   Click to view more
-//                 </ViewMore>
-//               )}
-//             </CardContent>
-//           </Card>
-//         </>
-//       )}
-
-//       {/* ===== JSL ===== */}
-//       {(!expanded || expanded === "JSL") && (
-//         <>
-//           <BrandPill>
-//             <BrandPillLogo src={jslLogo} alt="JSL logo" />
-//             <BrandPillText>JSL</BrandPillText>
-//           </BrandPill>
-
-//           <Card>
-//             <ImageWrapper>
-//               <ProductImage src="" alt="Jindal Sheet" />
-//             </ImageWrapper>
-//             <CardContent>
-//               <CardHeader>
-//                 <Logo>
-//                   <LogoImage src={jslLogo} alt="JSL Logo" />
-//                 </Logo>
-//                 <CardTitle>Jindal Roofing Sheets</CardTitle>
-//               </CardHeader>
-//               <CardDescription>
-//                 Jindal’s high-strength Alu-Zinc sheets pair superior durability
-//                 with advanced colour coatings. Built for long life and reduced
-//                 thermal transfer, they help keep interiors cooler while providing
-//                 excellent weather resistance.
-//               </CardDescription>
-//               <Options>
-//                 <OptionGroup>
-//                   <OptionLabel>Material</OptionLabel>
-//                   <OptionValues>
-//                     {["GI", "Al-Zn"].map((m) => (
-//                       <OptionValue
-//                         key={m}
-//                         active={card3.material === m}
-//                         onClick={() => setCard3({ ...card3, material: m })}
-//                       >
-//                         {m}
-//                       </OptionValue>
-//                     ))}
-//                   </OptionValues>
-//                 </OptionGroup>
-//                 <OptionGroup>
-//                   <OptionLabel>Thickness</OptionLabel>
-//                   <OptionValues>
-//                     {["0.35 mm", "0.40 mm", "0.45 mm"].map((t) => (
-//                       <OptionValue
-//                         key={t}
-//                         active={card3.thickness === t}
-//                         onClick={() => setCard3({ ...card3, thickness: t })}
-//                       >
-//                         {t}
-//                       </OptionValue>
-//                     ))}
-//                   </OptionValues>
-//                 </OptionGroup>
-//               </Options>
-//               <Colors>
-//                 <ColorRectangle style={{ background: "#FFFFFF" }} title="White" />
-//                 <ColorRectangle style={{ background: "#1F4492" }} title="Royal Blue" />
-//               </Colors>
-//               {expanded === "JSL" ? (
-//                 <AddToCartBtn>Add to cart</AddToCartBtn>
-//               ) : (
-//                 <ViewMore onClick={() => setExpanded("JSL")}>
-//                   Click to view more
-//                 </ViewMore>
-//               )}
-//             </CardContent>
-//           </Card>
-//         </>
-//       )}
-
-//       <FooterNote>
-//         Whether you're building a new home, upgrading a commercial site, or tackling an industrial project,
-//         Lee Roofs is your trusted partner. We offer more than just materials <br /> —we offer guidance, reliability,
-//         and quality that lasts for years.
-//       </FooterNote>
-//     </Section>
-//   );
-// };
-
-// export default OurProducts;
-
-
-
 // Ourproducts.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Section,
   HeaderWrapper,
@@ -576,16 +30,67 @@ import {
 } from "./Ourproducts.style";
 
 import { BsArrowReturnLeft } from "react-icons/bs"; // back arrow
-import jswLogo from "../../assets/jsw.png";
-import tataLogo from "../../assets/TATA.png";
-import jslLogo from "../../assets/jsl.png";
+import { useDispatch, useSelector } from "react-redux";
+import { getProducts } from "../../redux/productSlice";
 
 const OurProducts = () => {
-  const [card1, setCard1] = useState({ material: "GI", thickness: "0.35 mm" });
-  const [card2, setCard2] = useState({ material: "GI", thickness: "0.35 mm" });
-  const [card3, setCard3] = useState({ material: "GI", thickness: "0.35 mm" });
+  const dispatch = useDispatch();
+  const { products, loading, error } = useSelector((state) => state.product);
 
-  const [expanded, setExpanded] = useState(null); // track expanded card
+  const [selections, setSelections] = useState({});
+  const [expanded, setExpanded] = useState(null);
+
+  const initSelectionForProduct = (product) => {
+    const id = product._id || product.productName;
+    const firstMaterial = product.materials?.[0];
+    const materialName = firstMaterial?.materialName ?? "GI";
+    const firstThickness = firstMaterial?.thicknesses?.[0];
+    const thicknessValue = firstThickness?.thickness ?? "0.35 mm";
+    return {
+      material: materialName,
+      thickness: thicknessValue,
+      colorIndex: 0,
+    };
+  };
+
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [dispatch]);
+
+  // initialize selections when products load
+  useEffect(() => {
+    if (products.length > 0) {
+      const selObj = {};
+      products.forEach((p) => {
+        const id = p._id || p.productName;
+        selObj[id] = initSelectionForProduct(p);
+      });
+      setSelections(selObj);
+    }
+  }, [products]);
+
+  const updateSelection = (productId, newValues) => {
+    setSelections((prev) => ({
+      ...prev,
+      [productId]: {
+        ...(prev[productId] || {}),
+        ...newValues,
+      },
+    }));
+  };
+
+
+  // Render placeholder when no products loaded
+  if (loading) {
+    return (
+      <Section>
+        <HeaderWrapper>
+          <Title>Our Products</Title>
+          <IntroText>Loading products...</IntroText>
+        </HeaderWrapper>
+      </Section>
+    );
+  }
 
   return (
     <Section>
@@ -626,221 +131,136 @@ const OurProducts = () => {
         </div>
       )}
 
-      {/* ===== JSW ===== */}
-      {(!expanded || expanded === "JSW") && (
-        <>
-          <BrandPill>
-            <BrandPillLogo src={jswLogo} alt="JSW logo" />
-            <BrandPillText>JSW Colouron+</BrandPillText>
-          </BrandPill>
-
-          <Card>
-            <ImageWrapper>
-              <ProductImage src="" alt="JSW Sheet" />
-            </ImageWrapper>
-            <CardContent>
-              <CardHeader>
-                <Logo>
-                  <LogoImage src={jswLogo} alt="JSW Logo" />
-                </Logo>
-                <CardTitle>JSW Roofing Sheets</CardTitle>
-              </CardHeader>
-              <CardDescription>
-                Made from high-tensile pure steel and featuring an Al–Zn
-                (Galvalume) anti-corrosion layer, JSW roofing sheets offer deeper
-                rust resistance, even in coastal or humid environments. They’re
-                designed for strength, durability, and long-term performance.
-              </CardDescription>
-              <Options>
-                <OptionGroup>
-                  <OptionLabel>Material</OptionLabel>
-                  <OptionValues>
-                    {["GI", "Al-Zn"].map((m) => (
-                      <OptionValue
-                        key={m}
-                        active={card1.material === m}
-                        onClick={() => setCard1({ ...card1, material: m })}
-                      >
-                        {m}
-                      </OptionValue>
-                    ))}
-                  </OptionValues>
-                </OptionGroup>
-                <OptionGroup>
-                  <OptionLabel>Thickness</OptionLabel>
-                  <OptionValues>
-                    {["0.35 mm", "0.40 mm", "0.45 mm"].map((t) => (
-                      <OptionValue
-                        key={t}
-                        active={card1.thickness === t}
-                        onClick={() => setCard1({ ...card1, thickness: t })}
-                      >
-                        {t}
-                      </OptionValue>
-                    ))}
-                  </OptionValues>
-                </OptionGroup>
-              </Options>
-              <Colors>
-                <ColorRectangle style={{ background: "#FFFFFF" }} title="White" />
-                <ColorRectangle style={{ background: "#008479" }} title="Teal Green" />
-                <ColorRectangle style={{ background: "#1F4492" }} title="Royal Blue" />
-              </Colors>
-              {expanded === "JSW" ? (
-                <AddToCartBtn>Add to cart</AddToCartBtn>
-              ) : (
-                <ViewMore onClick={() => setExpanded("JSW")}>
-                  Click to view more
-                </ViewMore>
-              )}
-            </CardContent>
-          </Card>
-        </>
+      {/* Show error if any */}
+      {error && (
+        <div style={{ color: "red", marginBottom: 16 }}>
+          {error}
+        </div>
       )}
 
-      {/* ===== TATA ===== */}
-      {(!expanded || expanded === "TATA") && (
-        <>
-          <BrandPill>
-            <BrandPillLogo src={tataLogo} alt="TATA logo" />
-            <BrandPillText>TATA</BrandPillText>
-          </BrandPill>
-
-          <Card $reverse>
-            <ImageWrapper>
-              <ProductImage src="" alt="TATA Sheet" />
-            </ImageWrapper>
-            <CardContent>
-              <CardHeader>
-                <Logo>
-                  <LogoImage src={tataLogo} alt="TATA Logo" />
-                </Logo>
-                <CardTitle>TATA Roofing Sheets</CardTitle>
-              </CardHeader>
-              <CardDescription>
-                Tata Shaktee galvanized sheets with ISI certification and zinc
-                coating deliver durability and cost-effective roofing solutions.
-                Built to withstand extreme conditions, they combine corrosion
-                resistance, heat resistance, and thermal comfort for long-lasting
-                protection.
-              </CardDescription>
-              <Options>
-                <OptionGroup>
-                  <OptionLabel>Material</OptionLabel>
-                  <OptionValues>
-                    {["GI", "Al-Zn"].map((m) => (
-                      <OptionValue
-                        key={m}
-                        active={card2.material === m}
-                        onClick={() => setCard2({ ...card2, material: m })}
-                      >
-                        {m}
-                      </OptionValue>
-                    ))}
-                  </OptionValues>
-                </OptionGroup>
-                <OptionGroup>
-                  <OptionLabel>Thickness</OptionLabel>
-                  <OptionValues>
-                    {["0.35 mm", "0.40 mm", "0.45 mm"].map((t) => (
-                      <OptionValue
-                        key={t}
-                        active={card2.thickness === t}
-                        onClick={() => setCard2({ ...card2, thickness: t })}
-                      >
-                        {t}
-                      </OptionValue>
-                    ))}
-                  </OptionValues>
-                </OptionGroup>
-              </Options>
-              <Colors>
-                <ColorRectangle style={{ background: "#FFFFFF" }} title="White" />
-                <ColorRectangle style={{ background: "#008479" }} title="Teal Green" />
-                <ColorRectangle style={{ background: "#1F4492" }} title="Royal Blue" />
-              </Colors>
-              {expanded === "TATA" ? (
-                <AddToCartBtn>Add to cart</AddToCartBtn>
-              ) : (
-                <ViewMore onClick={() => setExpanded("TATA")}>
-                  Click to view more
-                </ViewMore>
-              )}
-            </CardContent>
-          </Card>
-        </>
+      {/* If no products */}
+      {products.length === 0 && !loading && !error && (
+        <div style={{ marginBottom: 24 }}>No products found.</div>
       )}
 
-      {/* ===== JSL ===== */}
-      {(!expanded || expanded === "JSL") && (
-        <>
-          <BrandPill>
-            <BrandPillLogo src={jslLogo} alt="JSL logo" />
-            <BrandPillText>JSL</BrandPillText>
-          </BrandPill>
+      {/* Render products dynamically */}
+      {products.map((product, idx) => {
+        const id = product._id || product.productName;
+        const sel = selections[id] || initSelectionForProduct(product);
 
-          <Card>
-            <ImageWrapper>
-              <ProductImage src="" alt="Jindal Sheet" />
-            </ImageWrapper>
-            <CardContent>
-              <CardHeader>
-                <Logo>
-                  <LogoImage src={jslLogo} alt="JSL Logo" />
-                </Logo>
-                <CardTitle>Jindal Roofing Sheets</CardTitle>
-              </CardHeader>
-              <CardDescription>
-                Jindal’s high-strength Alu-Zinc sheets pair superior durability
-                with advanced colour coatings. Built for long life and reduced
-                thermal transfer, they help keep interiors cooler while providing
-                excellent weather resistance.
-              </CardDescription>
-              <Options>
-                <OptionGroup>
-                  <OptionLabel>Material</OptionLabel>
-                  <OptionValues>
-                    {["GI", "Al-Zn"].map((m) => (
-                      <OptionValue
-                        key={m}
-                        active={card3.material === m}
-                        onClick={() => setCard3({ ...card3, material: m })}
-                      >
-                        {m}
-                      </OptionValue>
-                    ))}
-                  </OptionValues>
-                </OptionGroup>
-                <OptionGroup>
-                  <OptionLabel>Thickness</OptionLabel>
-                  <OptionValues>
-                    {["0.35 mm", "0.40 mm", "0.45 mm"].map((t) => (
-                      <OptionValue
-                        key={t}
-                        active={card3.thickness === t}
-                        onClick={() => setCard3({ ...card3, thickness: t })}
-                      >
-                        {t}
-                      </OptionValue>
-                    ))}
-                  </OptionValues>
-                </OptionGroup>
-              </Options>
-              <Colors>
-                <ColorRectangle style={{ background: "#FFFFFF" }} title="White" />
-                <ColorRectangle style={{ background: "#1F4492" }} title="Royal Blue" />
-              </Colors>
-              {expanded === "JSL" ? (
-                <AddToCartBtn>Add to cart</AddToCartBtn>
-              ) : (
-                <ViewMore onClick={() => setExpanded("JSL")}>
-                  Click to view more
-                </ViewMore>
-              )}
-            </CardContent>
-          </Card>
-        </>
-      )}
+        // Materials array from API: each has materialName and thicknesses
+        const materials = product.materials ?? [];
+
+        // Material options
+        const materialOptions = materials.map((m) => m.materialName);
+
+        // selected material object
+        const selectedMaterialObj = materials.find((m) => m.materialName === sel.material) || materials[0] || { thicknesses: [] };
+
+        // thickness options for selected material
+        const thicknessOptions = selectedMaterialObj.thicknesses?.map((t) => t.thickness) ?? [];
+
+        // selected thickness object
+        const selectedThicknessObj =
+          selectedMaterialObj.thicknesses?.find((t) => t.thickness === sel.thickness) ||
+          selectedMaterialObj.thicknesses?.[0] ||
+          { colors: [] };
+
+        const colors = selectedThicknessObj.colors ?? [];
+
+        // Decide product image: prefer selected color image, then brandIcon, else empty
+        const productImageSrc = (colors[sel.colorIndex] && colors[sel.colorIndex].image) || product.brandIcon || "";
+
+        return (
+          // preserve alternating reverse layout like original (JSW normal, TATA reverse, JSL normal)
+          <React.Fragment key={id}>
+            <BrandPill>
+              <BrandPillLogo src={product.brandIcon || ""} alt={`${product.brandName || product.productName} logo`} />
+              <BrandPillText>{product.productName ?? product.brandName ?? "Product"}</BrandPillText>
+            </BrandPill>
+
+            <Card $reverse={idx % 2 === 1}>
+              <ImageWrapper>
+                <ProductImage src={productImageSrc} alt={`${product.brandName || product.productName} Sheet`} />
+              </ImageWrapper>
+              <CardContent>
+                <CardHeader>
+                  <Logo>
+                    <LogoImage src={product.brandIcon || ""} alt={`${product.brandName || product.productName} Logo`} />
+                  </Logo>
+                  <CardTitle>{(product.brandName ?? "Brand") + " Roofing Sheets"}</CardTitle>
+                </CardHeader>
+                <CardDescription>
+                  {product.description ?? "High quality roofing sheets."}
+                </CardDescription>
+                <Options>
+                  <OptionGroup>
+                    <OptionLabel>Material</OptionLabel>
+                    <OptionValues>
+                      {/* If no material options exist, fallback to GI/Al-Zn to avoid breaking UI */}
+                      {(materialOptions.length > 0 ? materialOptions : ["GI", "Al-Zn"]).map((m) => (
+                        <OptionValue
+                          key={m}
+                          active={sel.material === m}
+                          onClick={() =>
+                            updateSelection(id, {
+                              material: m,
+                              // reset thickness to first thickness of new material
+                              thickness:
+                                (materials.find((mat) => mat.materialName === m)?.thicknesses?.[0]?.thickness) ??
+                                sel.thickness,
+                              colorIndex: 0,
+                            })
+                          }
+                        >
+                          {m}
+                        </OptionValue>
+                      ))}
+                    </OptionValues>
+                  </OptionGroup>
+                  <OptionGroup>
+                    <OptionLabel>Thickness</OptionLabel>
+                    <OptionValues>
+                      {/* If no thickness options exist, fallback to typical list */}
+                      {(thicknessOptions.length > 0 ? thicknessOptions : ["0.35 mm", "0.40 mm", "0.45 mm"]).map((t) => (
+                        <OptionValue
+                          key={t}
+                          active={sel.thickness === t}
+                          onClick={() => updateSelection(id, { thickness: t, colorIndex: 0 })}
+                        >
+                          {t}
+                        </OptionValue>
+                      ))}
+                    </OptionValues>
+                  </OptionGroup>
+                </Options>
+                <Colors>
+                  {/* Show colors from selected thickness. If none, show some placeholders */}
+                  {(colors.length > 0 ? colors : [
+                    { colorCode: "#FFFFFF", colorName: "White" },
+                    { colorCode: "#008479", colorName: "Teal Green" },
+                    { colorCode: "#1F4492", colorName: "Royal Blue" },
+                  ]).map((c, ci) => (
+                    <ColorRectangle
+                      key={ci}
+                      style={{ background: c.colorCode ?? c.colorCode ?? c.color }}
+                      title={c.colorName ?? c.colorName ?? `color-${ci}`}
+                      onClick={() => updateSelection(id, { colorIndex: ci })}
+                    />
+                  ))}
+                </Colors>
+                {expanded === id ? (
+                  <AddToCartBtn>Add to cart</AddToCartBtn>
+                ) : (
+                  <ViewMore onClick={() => setExpanded(id)}>
+                    Click to view more
+                  </ViewMore>
+                )}
+              </CardContent>
+            </Card>
+          </React.Fragment>
+        );
+      })}
 
       {/* Always visible footer */}
       <FooterNote>

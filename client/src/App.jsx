@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import ProtectedRoute from "./components/ProtectedRoutes";
+import ProtectedRoute from "./components/ProtectedRoute";
 import WebsiteLayout from "./layout/layout";
 
 // Admin pages
@@ -15,15 +15,15 @@ import Login from "./pages/Dashboard/Login";
 import Product from "./pages/Product/Product";
 
 // Website pages
-import OurProducts from "../../website/src/Components/OurProducts/Ourproducts";
 import Header from "./Components/Home/Header";
-import RoofingSolutions from "./Components/Home/RoofingSolutions";
+import RoofingSolutions from "./components/Home/RoofingSolutions";
 import FAQ from "./Components/Home/FAQ";
 import AboutUs from "./Components/AboutUs/AboutUs";
 import AboutDetails from "./Components/AboutUs/AboutDetails";
 import Contact from "./Components/ContactUs/Contact";
 import EnquiryForm from "./Components/ContactUs/EnquiryForm";
 import Cart from "./Components/Cart/Cart";
+import OurProducts from "./Components/OurProducts/Ourproducts";
 
 const App = () => {
   return (

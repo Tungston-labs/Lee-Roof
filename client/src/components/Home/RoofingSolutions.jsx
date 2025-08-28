@@ -29,16 +29,12 @@ import {
 const RoofingSolutions = () => {
   const dispatch = useDispatch();
   const { products, loading, error } = useSelector((state) => state.product);
-
-  // local state for card selections (material + thickness per brand)
   const [cardStates, setCardStates] = useState({});
 
-  // fetch products from slice
   useEffect(() => {
     dispatch(getProducts());
   }, [dispatch]);
 
-  // filter unique brands
   const uniqueBrands = React.useMemo(() => {
     const seen = new Set();
     return products.filter((p) => {
@@ -48,15 +44,13 @@ const RoofingSolutions = () => {
     });
   }, [products]);
 
-  // initialize card states when products load
   useEffect(() => {
     if (uniqueBrands.length) {
       const initial = {};
       uniqueBrands.forEach((brand) => {
         initial[brand.brandName] = {
           material: brand.materials?.[0]?.materialName || "",
-          thickness:
-            brand.materials?.[0]?.thicknesses?.[0]?.thickness || "",
+          thickness: brand.materials?.[0]?.thicknesses?.[0]?.thickness || "",
         };
       });
       setCardStates(initial);
@@ -82,16 +76,24 @@ const RoofingSolutions = () => {
       <CardsWrapper>
         {uniqueBrands.map((brand, idx) => {
           const cardState = cardStates[brand.brandName] || {};
+
+          // 🔑 Get the currently selected material + thickness
+          const selectedMaterial = brand.materials.find(
+            (m) => m.materialName === cardState.material
+          );
+          const selectedThickness = selectedMaterial?.thicknesses.find(
+            (t) => t.thickness === cardState.thickness
+          );
+
+          const selectedImage = selectedThickness?.colors?.[0]?.image;
+
           return (
             <Card key={brand._id} $reverse={idx % 2 !== 0}>
               <ImagePlaceholder>
                 <img
-                  src={
-                    brand.materials?.[0]?.thicknesses?.[0]?.colors?.[0]?.image
-                  }
+                  src={selectedImage}
                   alt={brand.productName}
                   width="100%"
-                  
                 />
               </ImagePlaceholder>
               <CardContent>
@@ -139,43 +141,36 @@ const RoofingSolutions = () => {
                   <OptionGroup>
                     <OptionLabel>Thickness</OptionLabel>
                     <OptionValues>
-                      {brand.materials
-                        .find((m) => m.materialName === cardState.material)
-                        ?.thicknesses.map((t) => (
-                          <OptionValue
-                            key={t.thickness}
-                            active={cardState.thickness === t.thickness}
-                            onClick={() =>
-                              setCardStates((prev) => ({
-                                ...prev,
-                                [brand.brandName]: {
-                                  ...prev[brand.brandName],
-                                  thickness: t.thickness,
-                                },
-                              }))
-                            }
-                          >
-                            {t.thickness}
-                          </OptionValue>
-                        ))}
+                      {selectedMaterial?.thicknesses.map((t) => (
+                        <OptionValue
+                          key={t.thickness}
+                          active={cardState.thickness === t.thickness}
+                          onClick={() =>
+                            setCardStates((prev) => ({
+                              ...prev,
+                              [brand.brandName]: {
+                                ...prev[brand.brandName],
+                                thickness: t.thickness,
+                              },
+                            }))
+                          }
+                        >
+                          {t.thickness}
+                        </OptionValue>
+                      ))}
                     </OptionValues>
                   </OptionGroup>
                 </Options>
 
                 {/* Colors */}
                 <Colors>
-                  {brand.materials
-                    .find((m) => m.materialName === cardState.material)
-                    ?.thicknesses.find(
-                      (t) => t.thickness === cardState.thickness
-                    )
-                    ?.colors.map((c) => (
-                      <ColorRectangle
-                        key={c._id}
-                        style={{ background: c.colorCode }}
-                        title={c.colorName}
-                      />
-                    ))}
+                  {selectedThickness?.colors.map((c) => (
+                    <ColorRectangle
+                      key={c._id}
+                      style={{ background: c.colorCode }}
+                      title={c.colorName}
+                    />
+                  ))}
                 </Colors>
 
                 <ViewMore to={`/products/${brand._id}`}>
