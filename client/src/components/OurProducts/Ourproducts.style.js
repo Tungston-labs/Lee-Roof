@@ -79,14 +79,14 @@ export const ImageWrapper = styled.div`
   flex: 1;
   display: flex;
   justify-content: center;
+  height: 400px;
   
 `;
 
 export const ProductImage = styled.img`
   width: 200%;
-  max-width: 550px;
-  min-height: 350px; /* keeps space for backend image */
-  background: #f8fafc; /* placeholder bg */
+  min-height: 350px; 
+  background: #f8fafc; 
   border-radius: 8px;
 `;
 

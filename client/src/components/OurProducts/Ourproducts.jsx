@@ -1,4 +1,4 @@
-// Ourproducts.jsx
+// OurProducts.jsx
 import React, { useEffect, useState } from "react";
 import {
   Section,
@@ -29,7 +29,7 @@ import {
   AddToCartBtn,
 } from "./Ourproducts.style";
 
-import { BsArrowReturnLeft } from "react-icons/bs"; // back arrow
+import { BsArrowReturnLeft } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { getProducts } from "../../redux/productSlice";
 
@@ -37,50 +37,43 @@ const OurProducts = () => {
   const dispatch = useDispatch();
   const { products, loading, error } = useSelector((state) => state.product);
 
-  const [selections, setSelections] = useState({});
   const [expanded, setExpanded] = useState(null);
+  const [selections, setSelections] = useState({});
 
-  const initSelectionForProduct = (product) => {
-    const id = product._id || product.productName;
+  // Initialize default material/thickness selection
+  const initSelection = (product) => {
     const firstMaterial = product.materials?.[0];
-    const materialName = firstMaterial?.materialName ?? "GI";
+    const material = firstMaterial?.materialName ?? "GI";
     const firstThickness = firstMaterial?.thicknesses?.[0];
-    const thicknessValue = firstThickness?.thickness ?? "0.35 mm";
-    return {
-      material: materialName,
-      thickness: thicknessValue,
-      colorIndex: 0,
-    };
+    const thickness = firstThickness?.thickness ?? "0.35 mm";
+    return { material, thickness, colorIndex: 0 };
   };
 
+  // Fetch products
   useEffect(() => {
     dispatch(getProducts());
   }, [dispatch]);
 
-  // initialize selections when products load
+  // Initialize selections after products load
   useEffect(() => {
     if (products.length > 0) {
       const selObj = {};
       products.forEach((p) => {
         const id = p._id || p.productName;
-        selObj[id] = initSelectionForProduct(p);
+        selObj[id] = initSelection(p);
       });
       setSelections(selObj);
     }
   }, [products]);
 
-  const updateSelection = (productId, newValues) => {
+  // Update selection for product
+  const updateSelection = (id, values) => {
     setSelections((prev) => ({
       ...prev,
-      [productId]: {
-        ...(prev[productId] || {}),
-        ...newValues,
-      },
+      [id]: { ...prev[id], ...values },
     }));
   };
 
-
-  // Render placeholder when no products loaded
   if (loading) {
     return (
       <Section>
@@ -92,9 +85,20 @@ const OurProducts = () => {
     );
   }
 
+  if (error) {
+    return (
+      <Section>
+        <HeaderWrapper>
+          <Title>Our Products</Title>
+          <IntroText style={{ color: "red" }}>{error}</IntroText>
+        </HeaderWrapper>
+      </Section>
+    );
+  }
+
   return (
     <Section>
-      {/* Hide heading + intro when a product is expanded */}
+      {/* Header text hidden when product expanded */}
       {!expanded && (
         <HeaderWrapper>
           <Title>Our Products</Title>
@@ -111,7 +115,7 @@ const OurProducts = () => {
         </HeaderWrapper>
       )}
 
-      {/* Back Arrow visible only when product expanded */}
+      {/* Back button when expanded */}
       {expanded && (
         <div
           style={{
@@ -131,138 +135,115 @@ const OurProducts = () => {
         </div>
       )}
 
-      {/* Show error if any */}
-      {error && (
-        <div style={{ color: "red", marginBottom: 16 }}>
-          {error}
-        </div>
-      )}
-
-      {/* If no products */}
-      {products.length === 0 && !loading && !error && (
-        <div style={{ marginBottom: 24 }}>No products found.</div>
-      )}
-
-      {/* Render products dynamically */}
+      {/* Render products */}
       {products.map((product, idx) => {
         const id = product._id || product.productName;
-        const sel = selections[id] || initSelectionForProduct(product);
+        const sel = selections[id] || initSelection(product);
 
-        // Materials array from API: each has materialName and thicknesses
         const materials = product.materials ?? [];
-
-        // Material options
         const materialOptions = materials.map((m) => m.materialName);
-
-        // selected material object
-        const selectedMaterialObj = materials.find((m) => m.materialName === sel.material) || materials[0] || { thicknesses: [] };
-
-        // thickness options for selected material
+        const selectedMaterialObj =
+          materials.find((m) => m.materialName === sel.material) || materials[0] || { thicknesses: [] };
         const thicknessOptions = selectedMaterialObj.thicknesses?.map((t) => t.thickness) ?? [];
-
-        // selected thickness object
         const selectedThicknessObj =
           selectedMaterialObj.thicknesses?.find((t) => t.thickness === sel.thickness) ||
           selectedMaterialObj.thicknesses?.[0] ||
           { colors: [] };
-
         const colors = selectedThicknessObj.colors ?? [];
-
-        // Decide product image: prefer selected color image, then brandIcon, else empty
-        const productImageSrc = (colors[sel.colorIndex] && colors[sel.colorIndex].image) || product.brandIcon || "";
+        const productImage =
+          (colors[sel.colorIndex] && colors[sel.colorIndex].image) || product.brandIcon || "";
 
         return (
-          // preserve alternating reverse layout like original (JSW normal, TATA reverse, JSL normal)
-          <React.Fragment key={id}>
-            <BrandPill>
-              <BrandPillLogo src={product.brandIcon || ""} alt={`${product.brandName || product.productName} logo`} />
-              <BrandPillText>{product.productName ?? product.brandName ?? "Product"}</BrandPillText>
-            </BrandPill>
+          (!expanded || expanded === id) && (
+            <React.Fragment key={id}>
+              {/* Brand pill */}
+              <BrandPill>
+                <BrandPillLogo src={product.brandIcon || ""} alt={`${product.brandName} logo`} />
+                <BrandPillText>{product.productName}</BrandPillText>
+              </BrandPill>
 
-            <Card $reverse={idx % 2 === 1}>
-              <ImageWrapper>
-                <ProductImage src={productImageSrc} alt={`${product.brandName || product.productName} Sheet`} />
-              </ImageWrapper>
-              <CardContent>
-                <CardHeader>
-                  <Logo>
-                    <LogoImage src={product.brandIcon || ""} alt={`${product.brandName || product.productName} Logo`} />
-                  </Logo>
-                  <CardTitle>{(product.brandName ?? "Brand") + " Roofing Sheets"}</CardTitle>
-                </CardHeader>
-                <CardDescription>
-                  {product.description ?? "High quality roofing sheets."}
-                </CardDescription>
-                <Options>
-                  <OptionGroup>
-                    <OptionLabel>Material</OptionLabel>
-                    <OptionValues>
-                      {/* If no material options exist, fallback to GI/Al-Zn to avoid breaking UI */}
-                      {(materialOptions.length > 0 ? materialOptions : ["GI", "Al-Zn"]).map((m) => (
-                        <OptionValue
-                          key={m}
-                          active={sel.material === m}
-                          onClick={() =>
-                            updateSelection(id, {
-                              material: m,
-                              // reset thickness to first thickness of new material
-                              thickness:
-                                (materials.find((mat) => mat.materialName === m)?.thicknesses?.[0]?.thickness) ??
-                                sel.thickness,
-                              colorIndex: 0,
-                            })
-                          }
-                        >
-                          {m}
-                        </OptionValue>
-                      ))}
-                    </OptionValues>
-                  </OptionGroup>
-                  <OptionGroup>
-                    <OptionLabel>Thickness</OptionLabel>
-                    <OptionValues>
-                      {/* If no thickness options exist, fallback to typical list */}
-                      {(thicknessOptions.length > 0 ? thicknessOptions : ["0.35 mm", "0.40 mm", "0.45 mm"]).map((t) => (
-                        <OptionValue
-                          key={t}
-                          active={sel.thickness === t}
-                          onClick={() => updateSelection(id, { thickness: t, colorIndex: 0 })}
-                        >
-                          {t}
-                        </OptionValue>
-                      ))}
-                    </OptionValues>
-                  </OptionGroup>
-                </Options>
-                <Colors>
-                  {/* Show colors from selected thickness. If none, show some placeholders */}
-                  {(colors.length > 0 ? colors : [
-                    { colorCode: "#FFFFFF", colorName: "White" },
-                    { colorCode: "#008479", colorName: "Teal Green" },
-                    { colorCode: "#1F4492", colorName: "Royal Blue" },
-                  ]).map((c, ci) => (
-                    <ColorRectangle
-                      key={ci}
-                      style={{ background: c.colorCode ?? c.colorCode ?? c.color }}
-                      title={c.colorName ?? c.colorName ?? `color-${ci}`}
-                      onClick={() => updateSelection(id, { colorIndex: ci })}
-                    />
-                  ))}
-                </Colors>
-                {expanded === id ? (
-                  <AddToCartBtn>Add to cart</AddToCartBtn>
-                ) : (
-                  <ViewMore onClick={() => setExpanded(id)}>
-                    Click to view more
-                  </ViewMore>
-                )}
-              </CardContent>
-            </Card>
-          </React.Fragment>
+              {/* Product card */}
+              <Card $reverse={idx % 2 === 1}>
+                <ImageWrapper>
+                  <ProductImage src={productImage} alt={`${product.brandName} Sheet`} />
+                </ImageWrapper>
+                <CardContent>
+                  <CardHeader>
+                    <Logo>
+                      <LogoImage src={product.brandIcon || ""} alt={`${product.brandName} logo`} />
+                    </Logo>
+                    <CardTitle>{product.brandName} Roofing Sheets</CardTitle>
+                  </CardHeader>
+                  <CardDescription>{product.description}</CardDescription>
+
+                  {/* Material + Thickness options */}
+                  <Options>
+                    <OptionGroup>
+                      <OptionLabel>Material</OptionLabel>
+                      <OptionValues>
+                        {(materialOptions.length > 0 ? materialOptions : ["GI", "Al-Zn"]).map((m) => (
+                          <OptionValue
+                            key={m}
+                            active={sel.material === m}
+                            onClick={() =>
+                              updateSelection(id, {
+                                material: m,
+                                thickness:
+                                  (materials.find((mat) => mat.materialName === m)?.thicknesses?.[0]?.thickness) ??
+                                  sel.thickness,
+                                colorIndex: 0,
+                              })
+                            }
+                          >
+                            {m}
+                          </OptionValue>
+                        ))}
+                      </OptionValues>
+                    </OptionGroup>
+                    <OptionGroup>
+                      <OptionLabel>Thickness</OptionLabel>
+                      <OptionValues>
+                        {(thicknessOptions.length > 0 ? thicknessOptions : ["0.35 mm", "0.40 mm"]).map((t) => (
+                          <OptionValue
+                            key={t}
+                            active={sel.thickness === t}
+                            onClick={() => updateSelection(id, { thickness: t, colorIndex: 0 })}
+                          >
+                            {t}
+                          </OptionValue>
+                        ))}
+                      </OptionValues>
+                    </OptionGroup>
+                  </Options>
+
+                  {/* Colors */}
+                  <Colors>
+                    {(colors.length > 0
+                      ? colors
+                      : [{ colorCode: "#FFFFFF", colorName: "White" }]
+                    ).map((c, ci) => (
+                      <ColorRectangle
+                        key={ci}
+                        style={{ background: c.colorCode }}
+                        title={c.colorName}
+                        onClick={() => updateSelection(id, { colorIndex: ci })}
+                      />
+                    ))}
+                  </Colors>
+
+                  {expanded === id ? (
+                    <AddToCartBtn>Add to cart</AddToCartBtn>
+                  ) : (
+                    <ViewMore onClick={() => setExpanded(id)}>Click to view more</ViewMore>
+                  )}
+                </CardContent>
+              </Card>
+            </React.Fragment>
+          )
         );
       })}
 
-      {/* Always visible footer */}
+      {/* Footer note always visible */}
       <FooterNote>
         Whether you're building a new home, upgrading a commercial site, or tackling an industrial project,
         Lee Roofs is your trusted partner. We offer more than just materials <br /> —we offer guidance, reliability,
