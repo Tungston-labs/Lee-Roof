@@ -1,5 +1,7 @@
-// RoofingSolutions.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getProducts } from "../../redux/productSlice"; // adjust path
+
 import {
   Section,
   Title,
@@ -24,15 +26,45 @@ import {
   OptionValues,
 } from "./RoofingSolutions.style";
 
-import jswLogo from "../../assets/jsw.png";
-import tataLogo from "../../assets/TATA.png";
-import jslLogo from "../../assets/jsl.png";
-
 const RoofingSolutions = () => {
-  // Independent selectable state for each card
-  const [card1, setCard1] = useState({ material: "GI", thickness: "0.35 mm" });
-  const [card2, setCard2] = useState({ material: "GI", thickness: "0.35 mm" });
-  const [card3, setCard3] = useState({ material: "GI", thickness: "0.35 mm" });
+  const dispatch = useDispatch();
+  const { products, loading, error } = useSelector((state) => state.product);
+
+  // local state for card selections (material + thickness per brand)
+  const [cardStates, setCardStates] = useState({});
+
+  // fetch products from slice
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [dispatch]);
+
+  // filter unique brands
+  const uniqueBrands = React.useMemo(() => {
+    const seen = new Set();
+    return products.filter((p) => {
+      if (seen.has(p.brandName)) return false;
+      seen.add(p.brandName);
+      return true;
+    });
+  }, [products]);
+
+  // initialize card states when products load
+  useEffect(() => {
+    if (uniqueBrands.length) {
+      const initial = {};
+      uniqueBrands.forEach((brand) => {
+        initial[brand.brandName] = {
+          material: brand.materials?.[0]?.materialName || "",
+          thickness:
+            brand.materials?.[0]?.thicknesses?.[0]?.thickness || "",
+        };
+      });
+      setCardStates(initial);
+    }
+  }, [uniqueBrands]);
+
+  if (loading) return <p>Loading products...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <Section>
@@ -41,200 +73,118 @@ const RoofingSolutions = () => {
           Explore Our <br /> Roofing Solutions
         </Title>
         <IntroText>
-          At Lee Roofs, we build lasting relationships with engineers, architects,
-          and homeowners by delivering high-quality roofing solutions backed by
-          expertise and trust. Committed to sustainability and ongoing
-          improvements, we continually refine our products and processes so you
-          receive premium roofing sheets on time and at competitive prices across
-          South India.
+          At Lee Roofs, we build lasting relationships with engineers,
+          architects, and homeowners by delivering high-quality roofing
+          solutions backed by expertise and trust.
         </IntroText>
       </HeaderWrapper>
 
       <CardsWrapper>
-        {/* Card 1 */}
-        <Card>
-          <ImagePlaceholder>JSW Image</ImagePlaceholder>
-          <CardContent>
-            <CardHeader>
-              <Logo>
-                <LogoImage src={jswLogo} alt="JSW Logo" />
-              </Logo>
-              <CardTitle>Colouron +</CardTitle>
-            </CardHeader>
-            <CardDescription>
-              Made from high-tensile pure steel and featuring an Al-Zn (Galvalume)
-              anti-corrosion layer, JSW roofing sheets offer 4x deeper rust
-              resistance, even in coastal or humid environments like Kerala,
-              Tamil Nadu, and Andhra Pradesh.
-            </CardDescription>
+        {uniqueBrands.map((brand, idx) => {
+          const cardState = cardStates[brand.brandName] || {};
+          return (
+            <Card key={brand._id} $reverse={idx % 2 !== 0}>
+              <ImagePlaceholder>
+                <img
+                  src={
+                    brand.materials?.[0]?.thicknesses?.[0]?.colors?.[0]?.image
+                  }
+                  alt={brand.productName}
+                  width="100%"
+                  
+                />
+              </ImagePlaceholder>
+              <CardContent>
+                <CardHeader>
+                  <Logo>
+                    <LogoImage
+                      src={brand.brandIcon}
+                      alt={`${brand.brandName} Logo`}
+                    />
+                  </Logo>
+                  <CardTitle>{brand.brandName}</CardTitle>
+                </CardHeader>
 
-            <Options>
-              <OptionGroup>
-                <OptionLabel>Material</OptionLabel>
-                <OptionValues>
-                  <OptionValue
-                    active={card1.material === "GI"}
-                    onClick={() => setCard1({ ...card1, material: "GI" })}
-                  >
-                    GI
-                  </OptionValue>
-                  <OptionValue
-                    active={card1.material === "Al-Zn"}
-                    onClick={() => setCard1({ ...card1, material: "Al-Zn" })}
-                  >
-                    Al-Zn
-                  </OptionValue>
-                </OptionValues>
-              </OptionGroup>
+                <CardDescription>{brand.description}</CardDescription>
 
-              <OptionGroup>
-                <OptionLabel>Thickness</OptionLabel>
-                <OptionValues>
-                  {["0.35 mm", "0.40 mm", "0.45 mm"].map((t) => (
-                    <OptionValue
-                      key={t}
-                      active={card1.thickness === t}
-                      onClick={() => setCard1({ ...card1, thickness: t })}
-                    >
-                      {t}
-                    </OptionValue>
-                  ))}
-                </OptionValues>
-              </OptionGroup>
-            </Options>
+                <Options>
+                  {/* Material options */}
+                  <OptionGroup>
+                    <OptionLabel>Material</OptionLabel>
+                    <OptionValues>
+                      {brand.materials.map((m) => (
+                        <OptionValue
+                          key={m.materialName}
+                          active={cardState.material === m.materialName}
+                          onClick={() =>
+                            setCardStates((prev) => ({
+                              ...prev,
+                              [brand.brandName]: {
+                                ...prev[brand.brandName],
+                                material: m.materialName,
+                                thickness:
+                                  m.thicknesses?.[0]?.thickness ||
+                                  prev[brand.brandName]?.thickness,
+                              },
+                            }))
+                          }
+                        >
+                          {m.materialName}
+                        </OptionValue>
+                      ))}
+                    </OptionValues>
+                  </OptionGroup>
 
-            <Colors>
-              <ColorRectangle style={{ background: "#FFFFFF" }} />
-              <ColorRectangle style={{ background: "#008479" }} />
-              <ColorRectangle style={{ background: "#1F4492" }} />
-            </Colors>
+                  {/* Thickness options */}
+                  <OptionGroup>
+                    <OptionLabel>Thickness</OptionLabel>
+                    <OptionValues>
+                      {brand.materials
+                        .find((m) => m.materialName === cardState.material)
+                        ?.thicknesses.map((t) => (
+                          <OptionValue
+                            key={t.thickness}
+                            active={cardState.thickness === t.thickness}
+                            onClick={() =>
+                              setCardStates((prev) => ({
+                                ...prev,
+                                [brand.brandName]: {
+                                  ...prev[brand.brandName],
+                                  thickness: t.thickness,
+                                },
+                              }))
+                            }
+                          >
+                            {t.thickness}
+                          </OptionValue>
+                        ))}
+                    </OptionValues>
+                  </OptionGroup>
+                </Options>
 
-            <ViewMore>Click to view more</ViewMore>
-          </CardContent>
-        </Card>
+                {/* Colors */}
+                <Colors>
+                  {brand.materials
+                    .find((m) => m.materialName === cardState.material)
+                    ?.thicknesses.find(
+                      (t) => t.thickness === cardState.thickness
+                    )
+                    ?.colors.map((c) => (
+                      <ColorRectangle
+                        key={c._id}
+                        style={{ background: c.colorCode }}
+                        title={c.colorName}
+                      />
+                    ))}
+                </Colors>
 
-        {/* Card 2 */}
-        <Card $reverse>
-          <ImagePlaceholder>TATA Image</ImagePlaceholder>
-          <CardContent>
-            <CardHeader>
-              <Logo>
-                <LogoImage src={tataLogo} alt="TATA Logo" />
-              </Logo>
-              <CardTitle>TATA Roofing Sheets</CardTitle>
-            </CardHeader>
-            <CardDescription>
-              Tata Shaktee galvanized sheets with ISI certification and zinc
-              coating deliver durability and cost-effective roofing solutions.
-              Designed to withstand extreme conditions, they combine corrosion
-              resistance, heat resistance, and thermal comfort.
-            </CardDescription>
-
-            <Options>
-              <OptionGroup>
-                <OptionLabel>Material</OptionLabel>
-                <OptionValues>
-                  <OptionValue
-                    active={card2.material === "GI"}
-                    onClick={() => setCard2({ ...card2, material: "GI" })}
-                  >
-                    GI
-                  </OptionValue>
-                  <OptionValue
-                    active={card2.material === "Al-Zn"}
-                    onClick={() => setCard2({ ...card2, material: "Al-Zn" })}
-                  >
-                    Al-Zn
-                  </OptionValue>
-                </OptionValues>
-              </OptionGroup>
-
-              <OptionGroup>
-                <OptionLabel>Thickness</OptionLabel>
-                <OptionValues>
-                  {["0.35 mm", "0.40 mm", "0.45 mm"].map((t) => (
-                    <OptionValue
-                      key={t}
-                      active={card2.thickness === t}
-                      onClick={() => setCard2({ ...card2, thickness: t })}
-                    >
-                      {t}
-                    </OptionValue>
-                  ))}
-                </OptionValues>
-              </OptionGroup>
-            </Options>
-
-            <Colors>
-              <ColorRectangle style={{ background: "#FFFFFF" }} />
-              <ColorRectangle style={{ background: "#008479" }} />
-              <ColorRectangle style={{ background: "#1F4492" }} />
-            </Colors>
-
-            <ViewMore>Click to view more</ViewMore>
-          </CardContent>
-        </Card>
-
-        {/* Card 3 */}
-        <Card>
-          <ImagePlaceholder>JSL Image</ImagePlaceholder>
-          <CardContent>
-            <CardHeader>
-              <Logo>
-                <LogoImage src={jslLogo} alt="JSL Logo" />
-              </Logo>
-              <CardTitle>Jindal Roofing Sheets</CardTitle>
-            </CardHeader>
-            <CardDescription>
-              Jindal’s high-strength Alu-Zinc sheets combine superior durability
-              with advanced colour coatings. Designed for long life and reduced
-              thermal transfer, they keep interiors cooler while ensuring
-              excellent weather resistance.
-            </CardDescription>
-
-            <Options>
-              <OptionGroup>
-                <OptionLabel>Material</OptionLabel>
-                <OptionValues>
-                  <OptionValue
-                    active={card3.material === "GI"}
-                    onClick={() => setCard3({ ...card3, material: "GI" })}
-                  >
-                    GI
-                  </OptionValue>
-                  <OptionValue
-                    active={card3.material === "Al-Zn"}
-                    onClick={() => setCard3({ ...card3, material: "Al-Zn" })}
-                  >
-                    Al-Zn
-                  </OptionValue>
-                </OptionValues>
-              </OptionGroup>
-
-              <OptionGroup>
-                <OptionLabel>Thickness</OptionLabel>
-                <OptionValues>
-                  {["0.35 mm", "0.40 mm", "0.45 mm"].map((t) => (
-                    <OptionValue
-                      key={t}
-                      active={card3.thickness === t}
-                      onClick={() => setCard3({ ...card3, thickness: t })}
-                    >
-                      {t}
-                    </OptionValue>
-                  ))}
-                </OptionValues>
-              </OptionGroup>
-            </Options>
-
-            <Colors>
-              <ColorRectangle style={{ background: "#FFFFFF" }} />
-              <ColorRectangle style={{ background: "#1F4492" }} />
-            </Colors>
-
-             <ViewMore to="/products">Click to view more</ViewMore>
-          </CardContent>
-        </Card>
+                <ViewMore to={`/products/${brand._id}`}>
+                  Click to view more
+                </ViewMore>
+              </CardContent>
+            </Card>
+          );
+        })}
       </CardsWrapper>
     </Section>
   );
