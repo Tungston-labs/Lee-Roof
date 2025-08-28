@@ -15,3 +15,4 @@ export const uploadImages = (req, res) => {
     images: files,
   });
 };
+

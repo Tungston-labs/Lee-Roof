@@ -46,7 +46,6 @@ export const createProduct = async (req, res) => {
 };
 
 
-
 export const getProducts = async (req, res) => {
   try {
     const products = await Product.find();
@@ -67,34 +66,37 @@ export const getProductById = async (req, res) => {
   }
 };
 // Update Product
+
 export const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
+    const { productName, description, brandName, materials } = req.body;
 
-    const {
-      name,
-      description,
-      brandName,
-      variants,
-      primaryMaterial,
-      primaryColor,
-      primaryThickness,
-      primaryColorCode,
-    } = req.body;
+    console.log("REQ.BODY (UPDATE):", req.body);
 
-    const primaryImage = req.files?.primaryImage?.[0]?.path || undefined;
-    const brandIcon = req.files?.brandIcon?.[0]?.path || undefined;
+    const BASE_URL = process.env.BASE_URL || "http://localhost:5000";
 
-    let parsedVariants = [];
-    if (variants) {
-      parsedVariants = JSON.parse(variants);
+    // Handle brand icon (Multer -> req.files.brandIcon[0])
+    let brandIcon = null;
+    if (req.files?.brandIcon?.[0]) {
+      brandIcon = `${BASE_URL}/uploads/${req.files.brandIcon[0].filename}`;
+    }
 
-      parsedVariants.forEach((variant) => {
-        variant.colors.forEach((color) => {
-          const fieldKey = `colorImage_${variant.material}_${color.name}`;
-          if (req.files?.[fieldKey]) {
-            color.image = req.files[fieldKey][0].path;
-          }
+    // Parse materials
+    let parsedMaterials = [];
+    if (materials) {
+      parsedMaterials = JSON.parse(materials);
+
+      parsedMaterials.forEach((material) => {
+        material.thicknesses.forEach((thickness) => {
+          thickness.colors.forEach((color) => {
+            const fieldKey = `colorImage_${material.materialName}_${color.colorName}`;
+            if (req.files?.[fieldKey]?.[0]) {
+              color.image = `${BASE_URL}/uploads/${req.files[fieldKey][0].filename}`;
+            } else {
+              color.image = color.image || null;
+            }
+          });
         });
       });
     }
@@ -102,25 +104,26 @@ export const updateProduct = async (req, res) => {
     const updatedProduct = await Product.findByIdAndUpdate(
       id,
       {
-        name,
+        productName,
         description,
         brandName,
         ...(brandIcon && { brandIcon }),
-        ...(primaryImage && { primaryImage }),
-        primaryMaterial,
-        primaryColor,
-        primaryThickness,
-        primaryColorCode,
-        variants: parsedVariants,
+        materials: parsedMaterials,
       },
       { new: true }
     );
 
-    if (!updatedProduct)
-      return res.status(404).json({ error: "Product not found" });
-    res.json(updatedProduct);
+    if (!updatedProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    res.json({
+      message: "✅ Product updated successfully",
+      product: updatedProduct,
+    });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("updateProduct error:", error);
+    res.status(500).json({ message: "Server error while updating product" });
   }
 };
 

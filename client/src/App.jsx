@@ -9,7 +9,7 @@ import EnquiryDetails from "./pages/Enquiry/EnquiryDetails";
 import ViewProduct from "./pages/Product/ViewProduct";
 import AddProduct from "./pages/Product/Add_product/AddProduct";
 import Productcard from "./pages/Product/Productcard";
-import EditProduct from "./pages/Product/EditProduct";
+// import EditProduct from "./pages/Product/EditProduct";
 import MultiStepForm from "./components/Navbar/multistep/MultiStepForm";
 import Login from "./pages/Dashboard/Login";
 import Product from "./pages/Product/Product";

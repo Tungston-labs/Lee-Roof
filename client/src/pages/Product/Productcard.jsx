@@ -35,7 +35,7 @@ const ProductCard = () => {
   console.log("selectedColor=", selectedColor);
   const navigate = useNavigate();
   const { id } = useParams();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 const handleDelete = (id) => {
   Swal.fire({
     title: "Are you sure?",

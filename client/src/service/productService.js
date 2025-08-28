@@ -37,6 +37,7 @@ export const updateProductAPI = async (id, formData) => {
 };
 
 // Delete product
+
 export const deleteProductAPI = async (id) => {
   const token = localStorage.getItem("token"); // adjust if stored differently
 

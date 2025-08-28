@@ -26,7 +26,7 @@ export const Input = styled.input`
 `;
 
 export const ColorInput = styled.input`
-  width: 36px;
+  width: 40px;
   height: 36px;
   border: none;
   cursor: pointer;

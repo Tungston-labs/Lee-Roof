@@ -51,12 +51,13 @@ export const deleteProduct = createAsyncThunk(
 
 const productSlice = createSlice({
   name: "product",
-  initialState: { products: [], product: null, loading: false, error: null },
+  initialState: { products: [], product: null, loading: false, error: null,  successMessage: null, },
   reducers: {
     clearProductState: (state) => {
       state.product = null;
       state.error = null;
       state.loading = false;
+        state.successMessage = null;
     },
   },
   extraReducers: (builder) => {
@@ -77,14 +78,21 @@ const productSlice = createSlice({
         if (index !== -1) state.products[index] = action.payload;
       })
       .addCase(updateProduct.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
-      .addCase(deleteProduct.pending, (state) => { state.loading = true; })
+      .addCase(deleteProduct.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = state.products.filter(p => p._id !== action.payload._id);
+        state.successMessage = "Product deleted successfully!";
+        state.products = state.products.filter((p) => p._id !== action.meta.arg); // remove from state
       })
-      .addCase(deleteProduct.rejected, (state, action) => { state.loading = false; state.error = action.payload; });
-  },
-});
+      .addCase(deleteProduct.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload?.message || "Failed to delete product";
+      });
+    },
+  });
 
 export const { clearProductState } = productSlice.actions;
 export default productSlice.reducer;
