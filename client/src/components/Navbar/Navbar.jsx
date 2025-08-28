@@ -24,7 +24,7 @@ const Navbar = () => {
       <NavBarRight>
         {/* Center Nav Links */}
         <NavLinks>
-         <NavLink to="/" end>
+         <NavLink to="/dashboard" end>
   Dashboard
 </NavLink>
 <NavLink to="/enquiry">

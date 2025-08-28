@@ -35,6 +35,7 @@ const RoofingSolutions = () => {
   const [card2, setCard2] = useState({ material: "GI", thickness: "0.35 mm" });
   const [card3, setCard3] = useState({ material: "GI", thickness: "0.35 mm" });
 
+
   return (
     <Section>
       <HeaderWrapper>
