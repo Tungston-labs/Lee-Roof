@@ -73,6 +73,7 @@ export const ImagePlaceholder = styled.div`
  flex: 1;
   min-height: 220px;
   max-height:500px;
+  max-width: 500px;
   background: #eaeaea;
   display: flex;
   align-items: center;

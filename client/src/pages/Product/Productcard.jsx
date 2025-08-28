@@ -19,12 +19,13 @@ import {
   Title,
   TitleWrapper,
 } from "./Productcard.Styles";
-
+import Swal from "sweetalert2";
 import Navbar from "../../components/Navbar/Navbar";
 import { FaArrowLeft } from "react-icons/fa";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, } from "react-router-dom";
 import { getProductByIdAPI } from "../../service/productService";
-
+import { deleteProduct } from "../../redux/productSlice";
+import { useDispatch } from "react-redux";
 const ProductCard = () => {
   const [selectedMaterial, setSelectedMaterial] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
@@ -34,7 +35,32 @@ const ProductCard = () => {
   console.log("selectedColor=", selectedColor);
   const navigate = useNavigate();
   const { id } = useParams();
-
+  const dispatch = useDispatch();
+const handleDelete = (id) => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      dispatch(deleteProduct(id))
+        .unwrap()
+        .then(() => {
+          Swal.fire("Deleted!", "Your product has been deleted.", "success").then(() => {
+            navigate("/view-product"); // redirect to homepage after alert
+          });
+        })
+        .catch((err) => {
+          console.error("Delete failed:", err);
+          Swal.fire("Error!", "Failed to delete product.", "error");
+        });
+    }
+  });
+};
   // Fetch product by ID
   useEffect(() => {
     const fetchProduct = async () => {
@@ -99,13 +125,13 @@ const ProductCard = () => {
             colors, thickness, and variant details.
           </p>
           <ButtonGroup>
-            <ActionButton variant="delete">Delete</ActionButton>
-            <ActionButton
+          <ActionButton variant="delete" onClick={() => handleDelete(product._id)}>Delete</ActionButton>
+            {/* <ActionButton
               variant="edit"
               onClick={() => navigate(`/edit-product/${id}`)}
             >
               Edit
-            </ActionButton>
+            </ActionButton> */}
           </ButtonGroup>
         </HeaderRow>
 

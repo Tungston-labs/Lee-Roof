@@ -19,7 +19,7 @@ upload.single("brandIcon"),
 
 router.get("/", getProducts);
 router.get("/:id", getProductById);
-router.delete("/:id", adminAuth,deleteProduct);
+router.delete("/:id",deleteProduct);
 router.put(
   "/:id",
   upload.fields([

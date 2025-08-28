@@ -84,7 +84,7 @@ export const ImageWrapper = styled.div`
 `;
 
 export const ProductImage = styled.img`
-  width: 200%;
+  width: 100%;
   min-height: 350px; 
   background: #f8fafc; 
   border-radius: 8px;

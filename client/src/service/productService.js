@@ -38,6 +38,13 @@ export const updateProductAPI = async (id, formData) => {
 
 // Delete product
 export const deleteProductAPI = async (id) => {
-  const res = await axios.delete(`${API_URL}/${id}`);
+  const token = localStorage.getItem("token"); // adjust if stored differently
+
+  const res = await axios.delete(`${API_URL}/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
   return res.data;
 };

@@ -38,13 +38,16 @@ export const updateProduct = createAsyncThunk(
   }
 );
 
-export const deleteProduct = createAsyncThunk("product/deleteProduct", async (id, { rejectWithValue }) => {
-  try {
-    return await deleteProductAPI(id);
-  } catch (err) {
-    return rejectWithValue(err.response?.data || err.message);
+export const deleteProduct = createAsyncThunk(
+  "product/deleteProduct",
+  async (id, { rejectWithValue }) => {
+    try {
+      return await deleteProductAPI(id);
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || err.message);
+    }
   }
-});
+);
 
 const productSlice = createSlice({
   name: "product",
