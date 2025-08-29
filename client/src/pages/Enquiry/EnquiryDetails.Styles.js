@@ -181,13 +181,14 @@ export const ItemsGrid = styled.div`
   display: flex;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 16px;
+  flex-wrap: wrap;
 `;
 
 export const ColorBadge = styled.span`
   display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
+  width: 1.5rem;
+  height: 1rem;
+  border-radius: 30%;
   background: ${({ color }) => (color === "blue" ? "blue" : "gray")};
 `;
 
@@ -214,8 +215,7 @@ export const ItemCard = styled.div`
 `;
 
 export const ItemImage = styled.img`
-  width: 100%;
-  height: 100%;
+  
   height: 200px;
    width: 200px;
   margin-bottom: 10px;

@@ -1,4 +1,7 @@
 import Admin from "../models/admin.js"
+import Product from "../models/product.js";
+import Enquiry from "../models/Enquiry.js";
+
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"
 
@@ -91,4 +94,23 @@ export const Login = async (req, res) => {
     });
   } catch (error) {
  res.status(500).json({ error: error.message });  }
+};
+export const getDashboardCounts = async (req, res) => {
+  try {
+    const enquiryCount = await Enquiry.countDocuments();
+    const productCount = await Product.countDocuments();
+
+    res.status(200).json({
+      success: true,
+      enquiryCount,
+      productCount,
+    });
+  } catch (error) {
+    console.error("Error fetching dashboard counts:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch dashboard counts",
+      error: error.message,
+    });
+  }
 };

@@ -19,12 +19,14 @@ import {
   EnquiryButton,
   ActionsWrapper,
 } from "./Cart.style";
-import { updateQty } from "../../redux/cartSlice"; 
+import { updateQty } from "../../redux/cartSlice";
 import { BsArrowReturnLeft } from "react-icons/bs";
 import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart } from "../../redux/cartSlice";
 import { FaTrashAlt } from "react-icons/fa";
 import emptyCartImg from "../../assets/empty-cart.png";
+import Swal from "sweetalert2";
+
 import { useNavigate } from "react-router-dom";
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart.items);
@@ -35,8 +37,8 @@ const Cart = () => {
       <CartTitle>Your Cart</CartTitle>
       <CartDescription>
         Your selections are safely stored in your cart with the latest price
-        updates. Complete your purchase now to avoid missing out due to stock
-        or rate changes for your premium roofing sheets.
+        updates. Complete your purchase now to avoid missing out due to stock or
+        rate changes for your premium roofing sheets.
       </CartDescription>
 
       {cartItems.length === 0 ? (
@@ -47,57 +49,85 @@ const Cart = () => {
           <p>Looks like you haven’t added any items yet.</p>
           <EmptyCartButton>Cart is empty</EmptyCartButton>
           <ContinueShopping href="/products">
-            <BsArrowReturnLeft style={{ color: "#004D7B", marginRight: "6px" }} />
+            <BsArrowReturnLeft
+              style={{ color: "#004D7B", marginRight: "6px" }}
+            />
             Continue Shopping
           </ContinueShopping>
         </EmptyCart>
       ) : (
-        // ---------------- Filled Cart ----------------
         <CartItems>
           {cartItems.map((item) => (
-            <CartItem key={item.id}>
-              <RemoveButton onClick={() => dispatch(removeFromCart(item.id))}>
+            <CartItem key={item.uniqueId}>
+              <RemoveButton
+                onClick={() => {
+                  Swal.fire({
+                    title: "Are you sure?",
+                    text: "This item will be removed from your cart.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, remove it!",
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      dispatch(removeFromCart(item.uniqueId));
+                      Swal.fire(
+                        "Removed!",
+                        "The item has been removed.",
+                        "success"
+                      );
+                    }
+                  });
+                }}
+              >
                 <FaTrashAlt />
               </RemoveButton>
 
-              {/* ✅ Product image from Redux */}
               <ProductImage src={item.image} alt={item.name} />
 
-           <ProductDetails>
-  <ProductText>
-    <strong>{item.name}</strong>
-    <br />
-    {item.description}
-    <br />
-    <span>
-      <strong>Material:</strong> {item.material} |{" "}
-      <strong>Thickness:</strong> {item.thickness} |{" "}
-      <strong>Color:</strong> {item.color}
-    </span>
-  </ProductText>
-</ProductDetails>
+              <ProductDetails>
+                <ProductText>
+                  <strong>{item.name}</strong>
+                  <br />
+                  {item.description}
+                  <br />
+                  <span>
+                    <strong>Material:</strong> {item.material} |{" "}
+                    <strong>Thickness:</strong> {item.thickness} |{" "}
+                    <strong>Color:</strong> {item.color}
+                  </span>
+                </ProductText>
+              </ProductDetails>
 
-              {/* ✅ Show current qty */}
-         <QuantityBox
-  type="number"
-  min="1"
-  value={item.qty}
-  onChange={(e) =>
-    dispatch(updateQty({ id: item.id, qty: parseInt(e.target.value) }))
-  }
-/>
-
+              <QuantityBox
+                type="number"
+                min="1"
+                value={item.qty}
+                onChange={(e) =>
+                  dispatch(
+                    updateQty({
+                      uniqueId: item.uniqueId,
+                      qty: parseInt(e.target.value),
+                    })
+                  )
+                }
+              />
             </CartItem>
           ))}
 
           <ActionsWrapper>
-      <EnquiryButton
-        onClick={() => navigate("/contact", { state: { items: cartItems } })}
-      >
-        Proceed with Enquiry
-      </EnquiryButton>
-      <ContinueShopping href="/products">← Continue Shopping</ContinueShopping>
-    </ActionsWrapper>
+            <EnquiryButton
+              onClick={() =>
+                navigate("/contact", { state: { items: cartItems } })
+              }
+            >
+              Proceed with Enquiry
+            </EnquiryButton>
+            <ContinueShopping href="/products">
+              ← Continue Shopping
+            </ContinueShopping>
+          </ActionsWrapper>
         </CartItems>
       )}
     </CartWrapper>
