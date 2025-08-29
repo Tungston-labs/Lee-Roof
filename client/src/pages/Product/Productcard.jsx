@@ -203,6 +203,7 @@ const ProductCard = () => {
               )}
             </ProductDesc>
             <ProductDesc>
+            
               {/* {product.primaryColor}{" "} */}
               {selectedThickness?.colors?.length > 0 && (
                 <>

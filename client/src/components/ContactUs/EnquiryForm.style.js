@@ -63,7 +63,40 @@ export const ItemsList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 15px;
+
+  /* Limit to 3 items, each item ~80px height + spacing */
+  max-height: calc((80px + 94px) * 3);
+  overflow-y: auto;
+  padding-right: 6px; /* prevent scrollbar cutting content */
+
+  /* Custom scrollbar */
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #004d7b;
+    border-radius: 3px;
+  }
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Center content when empty */
+  &:empty,
+  & > p {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1; 
+    text-align: center;
+    color:#0b4177;
+    family: "Raleway", sans-serif;git add .
+    
+    min-height: 200px; /* adjust height */
+  }
 `;
+
+
 
 export const ItemCard = styled.div`
   display: flex;
