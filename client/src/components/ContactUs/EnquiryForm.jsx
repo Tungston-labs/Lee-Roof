@@ -111,13 +111,13 @@ const EnquiryForm = () => {
                 ))
               ) : (
                 <p
-                  style={{
-                    color: "#eb0f0fff",
-                    fontSize: "24px", 
-                    fontWeight: "bold", 
-                    textAlign: "center",
-                    marginTop: "1em",
-                  }}
+                  // style={{
+                  //   color: "#0b4177",
+                  //   fontSize: "24px", 
+                  //   fontWeight: "bold", 
+                  //   textAlign: "center",
+                  //   marginTop: "10rem",
+                  // }}
                 >
                   Select "Proceed with enquiry" on cart page to list the
                   products here

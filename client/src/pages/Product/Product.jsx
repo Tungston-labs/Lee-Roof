@@ -49,22 +49,22 @@ const AddFullProductPage = ({ existingProduct }) => {
 
   const handleSubmit = async () => {
     try {
-      // Build normalized materials array by merging variants into materials
-      const baseMaterials = formData.materials.materials || []; // from MaterialAdd
-      const variants = formData.variants || []; // from VariantForm
+    
+      const baseMaterials = formData.materials.materials || []; 
+      const variants = formData.variants || []; 
 
-      // Normalize function to convert your variant shape -> backend shape
+    
       const normalizeThicknesses = (thicknesses = []) =>
         thicknesses.map((th) => ({
           thickness: th.thickness || "",
           colors: (th.colors || []).map((c) => ({
-            colorName: c.color || "", // name field in VariantForm was `color`
-            colorCode: c.colorHex || "", // hex color was stored as `colorHex`
+            colorName: c.color || "", 
+            colorCode: c.colorHex || "", 
             image: c.image || null,
           })),
         }));
 
-      // Start with baseMaterials and replace thicknesses if variant exists for that material
+   
       const merged = baseMaterials.map((mat) => {
         const v = variants.find((x) => x.material === mat.materialName);
         if (v) {
@@ -73,11 +73,10 @@ const AddFullProductPage = ({ existingProduct }) => {
             thicknesses: normalizeThicknesses(v.thicknesses),
           };
         }
-        // keep existing thicknesses if any
+  
         return { ...mat, thicknesses: mat.thicknesses || [] };
       });
 
-      // Also include any variants whose material wasn't present in baseMaterials
       variants.forEach((v) => {
         const exists = merged.some((m) => m.materialName === v.material);
         if (!exists) {
@@ -88,18 +87,18 @@ const AddFullProductPage = ({ existingProduct }) => {
         }
       });
 
-      // Now prepare FormData
+  
       const form = new FormData();
       if (formData.product.brandIconFile)
         form.append("brandIcon", formData.product.brandIconFile);
       form.append("brandName", formData.product.brandName || "");
       form.append("productName", formData.product.productName || "");
       form.append("description", formData.product.description || "");
-      // IMPORTANT: send merged array (not the wrapper object)
+     
       form.append("materials", JSON.stringify(merged));
       form.append("variants", JSON.stringify(formData.variants || []));
 
-      // send request (same as before)
+    
       const response = await fetch("http://localhost:5000/api/products", {
         method: "POST",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -153,8 +152,8 @@ const AddFullProductPage = ({ existingProduct }) => {
      <div
   style={{
     display: "flex",
-    justifyContent: "flex-end", // pushes content to the right
-    marginTop: "20px", // optional spacing
+    justifyContent: "flex-end", 
+    marginTop: "20px", 
   }}
 >
   <button

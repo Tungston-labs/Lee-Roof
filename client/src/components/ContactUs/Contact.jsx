@@ -86,11 +86,13 @@ const Contact = () => {
 
         <MapWrapper>
           <MapIframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15731.673!2d76.408348!3d10.058807!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080ce6e9fbd0d9%3A0x8d3f3cde4a5e45c5!2sVengoor%2C%20Kerala%20683544!5e0!3m2!1sen!2sin!4v1692789712345!5m2!1sen!2sin"
-            allowFullScreen=""
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          ></MapIframe>
+  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3930.360630062847!2d76.47066557585848!3d10.120203169375227!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b07e28c2daf7c07%3A0x41755487d511e041!2sLee%20Builders!5e0!3m2!1sen!2sin!4v1724935400000!5m2!1sen!2sin"
+  allowFullScreen=""
+  loading="lazy"
+  referrerPolicy="no-referrer-when-downgrade"
+  title="Lee Roofs Location">
+
+        </MapIframe>
         </MapWrapper>
       </ContactContainer>
     </ContactSection>
