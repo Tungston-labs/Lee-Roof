@@ -45,14 +45,15 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/enquiry-page"
-          element={
-            <ProtectedRoute>
-              <EnquiryDetails />
-            </ProtectedRoute>
-          }
-        />
+       <Route
+  path="/enquiry-page/:id"   
+  element={
+    <ProtectedRoute>
+      <EnquiryDetails />
+    </ProtectedRoute>
+  }
+/>
+
         <Route
           path="/view-product"
           element={
@@ -103,7 +104,6 @@ const App = () => {
         />
         <Route path="/login" element={<Login />} />
 
-        {/* Website routes (Always with Navbar + Footer) */}
         <Route
           path="/"
           element={

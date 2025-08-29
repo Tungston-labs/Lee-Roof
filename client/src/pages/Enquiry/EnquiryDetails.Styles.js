@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const PageWrapper = styled.div`
-   padding: 4rem;
+  padding: 4rem;
   font-family: Inter, Helvetica, sans-serif;
 `;
 
@@ -18,14 +18,14 @@ export const Title = styled.h2`
   font-size: 2rem;
   margin: 0;
   font-family: Inter;
-font-weight: 700;
-font-style: Bold;
-// font-size: 35.1px;
-leading-trim: NONE;
-line-height: 100%;
-letter-spacing: 0%;
+  font-weight: 700;
+  font-style: Bold;
+  // font-size: 35.1px;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0%;
 
- /* Tablets */
+  /* Tablets */
   @media (max-width: 1024px) {
     font-size: 1.5rem;
   }
@@ -39,7 +39,6 @@ letter-spacing: 0%;
   @media (max-width: 480px) {
     font-size: 0.9em;
   }
-
 `;
 
 export const Subtitle = styled.p`
@@ -47,14 +46,14 @@ export const Subtitle = styled.p`
   margin: 10px 0 20px 0;
   font-size: 1.2rem;
   font-family: Helvetica;
-font-weight: 400;
-font-style: Regular;
-// font-size: 25.1px;
-leading-trim: NONE;
-line-height: 100%;
-letter-spacing: 0%;
+  font-weight: 400;
+  font-style: Regular;
+  // font-size: 25.1px;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0%;
 
-/* Tablet */
+  /* Tablet */
   @media (max-width: 1024px) {
     font-size: 1rem;
   }
@@ -70,7 +69,6 @@ letter-spacing: 0%;
     font-size: 0.9rem;
     line-height: 1.4;
   }
-
 `;
 
 export const StatusSelect = styled.select`
@@ -82,14 +80,13 @@ export const StatusSelect = styled.select`
   background: white;
 
   option[value="Open"] {
-    background: #30A8EE;
+    background: #30a8ee;
     font-weight: bold;
   }
   option[value="Closed"] {
-    background: #29CFC1;
+    background: #29cfc1;
     font-weight: bold;
   }
-  
 `;
 
 export const CustomerSection = styled.section`
@@ -101,13 +98,12 @@ export const CustomerSection = styled.section`
     font-weight: 600;
     color: #004d7b;
     font-family: Inter;
-font-weight: 700;
-font-style: Bold;
-// font-size: 25.1px;
-leading-trim: NONE;
-line-height: 100%;
-letter-spacing: 0%;
-
+    font-weight: 700;
+    font-style: Bold;
+    // font-size: 25.1px;
+    leading-trim: NONE;
+    line-height: 100%;
+    letter-spacing: 0%;
   }
 `;
 
@@ -122,12 +118,12 @@ export const CustomerCard = styled.div`
 `;
 
 export const CustomerDetailsLeft = styled.div`
-  flex: 0 0 20%;  
+  flex: 0 0 20%;
   min-width: 300px;
 `;
 
 export const CustomerDetailsRight = styled.div`
-  flex: 1;   /* take remaining space */
+  flex: 1; /* take remaining space */
   min-width: 300px;
 `;
 
@@ -138,17 +134,17 @@ export const DetailItem = styled.div`
 `;
 
 export const Label = styled.span`
-//   font-weight: 600;
+  //   font-weight: 600;
   font-size: 0.9rem;
   margin-bottom: 4px;
   font-family: Helvetica;
-font-weight: 400;
-font-style: Regular;
-// font-size: 18px;
-leading-trim: NONE;
-line-height: 100%;
-letter-spacing: 0%;
-color:#DEDEDE;
+  font-weight: 400;
+  font-style: Regular;
+  // font-size: 18px;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #dedede;
 `;
 
 export const Value = styled.span`
@@ -156,13 +152,13 @@ export const Value = styled.span`
   font-weight: 400;
   line-height: 1.4;
   font-family: Helvetica;
-font-weight: 400;
-font-style: Regular;
-// font-size: 18px;
-leading-trim: NONE;
-line-height: 100%;
-letter-spacing: 0%;
-color:white;
+  font-weight: 400;
+  font-style: Regular;
+  // font-size: 18px;
+  leading-trim: NONE;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: white;
 `;
 
 // export const DetailItem = styled.p`
@@ -182,38 +178,10 @@ export const ItemsSection = styled.section`
 `;
 
 export const ItemsGrid = styled.div`
-  display: grid;
+  display: flex;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 16px;
 `;
-
-// export const ItemCard = styled.div`
-//   background: #fff;
-//   border-radius: 12px;
-//   padding: 16px;
-//   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-//   text-align: center;
-// `;
-
-// export const ItemImage = styled.img`
-//   max-width: 100%;
-//   height: auto;
-//   margin-bottom: 10px;
-// `;
-
-// export const ItemTitle = styled.h4`
-//   font-size: 1rem;
-//   margin: 8px 0;
-// `;
-
-// export const ItemInfo = styled.p`
-//   font-size: 0.9rem;
-//   color: #333;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   gap: 6px;
-// `;
 
 export const ColorBadge = styled.span`
   display: inline-block;
@@ -235,17 +203,21 @@ export const CustomerDetails = styled.div`
 export const ItemCard = styled.div`
   background: #f5f5f5;
   border-radius: 12px;
-  padding: 16px;
+  // max-width: 300px;
+  width: fit-content;
+  padding: 2rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  text-align: start;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
 export const ItemImage = styled.img`
-  max-width: 100%;
-  height: auto;
+  width: 100%;
+  height: 100%;
+  height: 200px;
+   width: 200px;
   margin-bottom: 10px;
   border-radius: 8px;
 `;
