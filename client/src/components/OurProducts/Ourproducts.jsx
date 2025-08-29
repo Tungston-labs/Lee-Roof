@@ -108,10 +108,10 @@ const OurProducts = () => {
             metal roofing sheets, performance materials, and complete roofing
             accessories. At Lee Roofs, quality meets trust. Whether you’re a
             builder, architect, or homeowner, our range of roofing products is
-            designed to combine aesthetics with superior protection. Committed to
-            excellence, we ensure that our roofing sheets not only last longer but
-            also provide lasting comfort and energy savings. Explore our brands
-            below.
+            designed to combine aesthetics with superior protection. Committed
+            to excellence, we ensure that our roofing sheets not only last
+            longer but also provide lasting comfort and energy savings. Explore
+            our brands below.
           </IntroText>
         </HeaderWrapper>
       )}
@@ -143,35 +143,49 @@ const OurProducts = () => {
 
         const materials = product.materials ?? [];
         const materialOptions = materials.map((m) => m.materialName);
-        const selectedMaterialObj =
-          materials.find((m) => m.materialName === sel.material) || materials[0] || { thicknesses: [] };
-        const thicknessOptions = selectedMaterialObj.thicknesses?.map((t) => t.thickness) ?? [];
-        const selectedThicknessObj =
-          selectedMaterialObj.thicknesses?.find((t) => t.thickness === sel.thickness) ||
-          selectedMaterialObj.thicknesses?.[0] ||
-          { colors: [] };
+        const selectedMaterialObj = materials.find(
+          (m) => m.materialName === sel.material
+        ) ||
+          materials[0] || { thicknesses: [] };
+        const thicknessOptions =
+          selectedMaterialObj.thicknesses?.map((t) => t.thickness) ?? [];
+        const selectedThicknessObj = selectedMaterialObj.thicknesses?.find(
+          (t) => t.thickness === sel.thickness
+        ) ||
+          selectedMaterialObj.thicknesses?.[0] || { colors: [] };
         const colors = selectedThicknessObj.colors ?? [];
         const productImage =
-          (colors[sel.colorIndex] && colors[sel.colorIndex].image) || product.brandIcon || "";
+          (colors[sel.colorIndex] && colors[sel.colorIndex].image) ||
+          product.brandIcon ||
+          "";
 
         return (
           (!expanded || expanded === id) && (
             <React.Fragment key={id}>
               {/* Brand pill */}
               <BrandPill>
-                <BrandPillLogo src={product.brandIcon || ""} alt={`${product.brandName} logo`} />
+                <BrandPillLogo
+                  src={product.brandIcon || ""}
+                  alt={`${product.brandName} logo`}
+                />
                 <BrandPillText>{product.productName}</BrandPillText>
               </BrandPill>
 
               {/* Product card */}
               <Card $reverse={idx % 2 === 1}>
                 <ImageWrapper>
-                  <ProductImage src={productImage} alt={`${product.brandName} Sheet`} />
+                  <ProductImage
+                    src={productImage}
+                    alt={`${product.brandName} Sheet`}
+                  />
                 </ImageWrapper>
                 <CardContent>
                   <CardHeader>
                     <Logo>
-                      <LogoImage src={product.brandIcon || ""} alt={`${product.brandName} logo`} />
+                      <LogoImage
+                        src={product.brandIcon || ""}
+                        alt={`${product.brandName} logo`}
+                      />
                     </Logo>
                     <CardTitle>{product.brandName} Roofing Sheets</CardTitle>
                   </CardHeader>
@@ -182,7 +196,10 @@ const OurProducts = () => {
                     <OptionGroup>
                       <OptionLabel>Material</OptionLabel>
                       <OptionValues>
-                        {(materialOptions.length > 0 ? materialOptions : ["GI", "Al-Zn"]).map((m) => (
+                        {(materialOptions.length > 0
+                          ? materialOptions
+                          : ["GI", "Al-Zn"]
+                        ).map((m) => (
                           <OptionValue
                             key={m}
                             active={sel.material === m}
@@ -190,7 +207,9 @@ const OurProducts = () => {
                               updateSelection(id, {
                                 material: m,
                                 thickness:
-                                  (materials.find((mat) => mat.materialName === m)?.thicknesses?.[0]?.thickness) ??
+                                  materials.find(
+                                    (mat) => mat.materialName === m
+                                  )?.thicknesses?.[0]?.thickness ??
                                   sel.thickness,
                                 colorIndex: 0,
                               })
@@ -204,11 +223,19 @@ const OurProducts = () => {
                     <OptionGroup>
                       <OptionLabel>Thickness</OptionLabel>
                       <OptionValues>
-                        {(thicknessOptions.length > 0 ? thicknessOptions : ["0.35 mm", "0.40 mm"]).map((t) => (
+                        {(thicknessOptions.length > 0
+                          ? thicknessOptions
+                          : ["0.35 mm", "0.40 mm"]
+                        ).map((t) => (
                           <OptionValue
                             key={t}
                             active={sel.thickness === t}
-                            onClick={() => updateSelection(id, { thickness: t, colorIndex: 0 })}
+                            onClick={() =>
+                              updateSelection(id, {
+                                thickness: t,
+                                colorIndex: 0,
+                              })
+                            }
                           >
                             {t}
                           </OptionValue>
@@ -223,52 +250,64 @@ const OurProducts = () => {
                       ? colors
                       : [{ colorCode: "#FFFFFF", colorName: "White" }]
                     ).map((c, ci) => (
-                      <ColorRectangle
-                        key={ci}
-                        style={{ background: c.colorCode }}
-                        title={c.colorName}
-                        onClick={() => updateSelection(id, { colorIndex: ci })}
-                      />
+                      <div key={ci} style={{ textAlign: "center" }}>
+                        <ColorRectangle
+                          style={{ background: c.colorCode }}
+                          onClick={() =>
+                            updateSelection(id, { colorIndex: ci })
+                          }
+                        />
+                        <p
+                          style={{
+                            color: c.colorCode,
+                            marginTop: "0.5rem",
+                            fontFamily: "Helvetica, sans-serif",
+                          }}
+                        >
+                          {c.colorName}
+                        </p>
+                      </div>
                     ))}
                   </Colors>
 
-                {expanded === id ? (
- <AddToCartBtn
-  onClick={() => {
-    const selectedColor =
-      colors[sel.colorIndex]?.colorName || "Default Color";
+                  {expanded === id ? (
+                    <AddToCartBtn
+                      onClick={() => {
+                        const selectedColor =
+                          colors[sel.colorIndex]?.colorName || "Default Color";
 
-    dispatch(
-      addToCart({
-        id,
-        name: product.productName,
-        description: product.description,
-        image: productImage,
-        material: sel.material,       // ✅ include material
-        thickness: sel.thickness,     // ✅ include thickness
-        color: selectedColor,         // ✅ include color
-        qty: 1,                       // default qty
-      })
-    );
+                        dispatch(
+                          addToCart({
+                            id,
+                            name: product.productName,
+                            description: product.description,
+                            image: productImage,
+                            material: sel.material,
+                            thickness: sel.thickness,
+                            color: selectedColor,
+                            qty: 1,
+                          })
+                        );
 
-    Swal.fire({
-      title: "Added to Cart!",
-      text: `${product.productName} (${sel.material}, ${sel.thickness}, ${selectedColor}) has been added successfully.`,
-      icon: "success",
-      confirmButtonColor: "#004D7B",
-      timer: 1500,
-      showConfirmButton: false,
-      position: "top-end",
-      toast: true,
-    });
-  }}
->
-  Add to cart
-</AddToCartBtn>
-
-) : (
-  <ViewMore onClick={() => setExpanded(id)}>Click to view more</ViewMore>
-)}
+                        Swal.fire({
+                          title: "Added to Cart!",
+                          text: `${product.productName} (${sel.material}, ${sel.thickness}, ${selectedColor}) has been added successfully.`,
+                          icon: "success",
+                          confirmButtonColor: "#004D7B",
+                          timer: 1500,
+                          showConfirmButton: false,
+                          position: "top-end",
+                          toast: true,
+                        });
+                      }}
+                    >
+                      Add to cart
+                    </AddToCartBtn>
+                  ) : (
+                    <ViewMore onClick={() => setExpanded(id)}>
+                      Click to view more
+                    </ViewMore>
+                  )}
                 </CardContent>
               </Card>
             </React.Fragment>
@@ -278,8 +317,9 @@ const OurProducts = () => {
 
       {/* Footer note always visible */}
       <FooterNote>
-        Whether you're building a new home, upgrading a commercial site, or tackling an industrial project,
-        Lee Roofs is your trusted partner. We offer more than just materials <br /> —we offer guidance, reliability,
+        Whether you're building a new home, upgrading a commercial site, or
+        tackling an industrial project, Lee Roofs is your trusted partner. We
+        offer more than just materials <br /> —we offer guidance, reliability,
         and quality that lasts for years.
       </FooterNote>
     </Section>

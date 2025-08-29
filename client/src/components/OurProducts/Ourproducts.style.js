@@ -170,10 +170,10 @@ export const Colors = styled.div`
 `;
 
 export const ColorRectangle = styled.div`
-  width: 28px;
-  height: 20px;
+  width: 3rem;
+  height: 2rem;
   border: 1px solid #cfd6df;
-  border-radius: 4px;
+  border-radius: 20%;
 `;
 
 export const ViewMore = styled.span`

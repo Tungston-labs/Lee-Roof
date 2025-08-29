@@ -183,9 +183,9 @@ export const Colors = styled.div`
 `;
 
 export const ColorRectangle = styled.div`
-  width: 25px;
-  height: 15px;
-  border-radius: 4px;
+  width: 2.5rem;
+  height: 1.5rem;
+  border-radius: 20%;
   border: 2px solid #ACACAC;
 `;
 

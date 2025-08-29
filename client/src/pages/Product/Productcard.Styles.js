@@ -75,7 +75,8 @@ export const ProductDesc = styled.p`
 export const SectionTitle = styled.h4`
   font-size: 1rem;
   color: #222;
-  margin: 12px 0 8px;
+
+  margin: 12px 0 4px;
 `;
 
 export const OptionsRow = styled.div`
@@ -99,9 +100,9 @@ export const OptionButton = styled.button`
 `;
 
 export const ColorSwatch = styled.button`
-  width: 30px;
-  height: 30px;
-  border-radius: 100px;
+  width: 2.5rem;
+  height: 2rem;
+  border-radius: 30%;
   border: 2px solid ${({ selected }) => (selected ? '#004D7B' : '#ccc')};
   background-color: ${({ color }) => color};
   cursor: pointer;

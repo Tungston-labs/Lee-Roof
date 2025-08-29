@@ -28,7 +28,7 @@ import { FaPaperPlane } from "react-icons/fa";
 
 const EnquiryForm = () => {
   const location = useLocation();
-  const items = location.state?.items || []; 
+  const items = location.state?.items || [];
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -64,7 +64,10 @@ const EnquiryForm = () => {
         })),
       };
 
-      const res = await axios.post("http://localhost:5000/api/enquiries", payload);
+      const res = await axios.post(
+        "http://localhost:5000/api/enquiries",
+        payload
+      );
 
       alert("Enquiry submitted successfully!");
       console.log("Saved enquiry:", res.data);
@@ -107,7 +110,18 @@ const EnquiryForm = () => {
                   </ItemCard>
                 ))
               ) : (
-                <p>No items in cart.</p>
+                <p
+                  style={{
+                    color: "#eb0f0fff",
+                    fontSize: "24px", 
+                    fontWeight: "bold", 
+                    textAlign: "center",
+                    marginTop: "1em",
+                  }}
+                >
+                  Select "Proceed with enquiry" on cart page to list the
+                  products here
+                </p>
               )}
             </ItemsList>
           </SectionBox>

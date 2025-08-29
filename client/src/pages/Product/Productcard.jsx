@@ -22,7 +22,7 @@ import {
 import Swal from "sweetalert2";
 import Navbar from "../../components/Navbar/Navbar";
 import { FaArrowLeft } from "react-icons/fa";
-import { useNavigate, useParams, } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getProductByIdAPI } from "../../service/productService";
 import { deleteProduct } from "../../redux/productSlice";
 import { useDispatch } from "react-redux";
@@ -35,32 +35,36 @@ const ProductCard = () => {
   console.log("selectedColor=", selectedColor);
   const navigate = useNavigate();
   const { id } = useParams();
-  const dispatch = useDispatch()
-const handleDelete = (id) => {
-  Swal.fire({
-    title: "Are you sure?",
-    text: "You won't be able to revert this!",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!"
-  }).then((result) => {
-    if (result.isConfirmed) {
-      dispatch(deleteProduct(id))
-        .unwrap()
-        .then(() => {
-          Swal.fire("Deleted!", "Your product has been deleted.", "success").then(() => {
-            navigate("/view-product"); // redirect to homepage after alert
+  const dispatch = useDispatch();
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(deleteProduct(id))
+          .unwrap()
+          .then(() => {
+            Swal.fire(
+              "Deleted!",
+              "Your product has been deleted.",
+              "success"
+            ).then(() => {
+              navigate("/view-product"); // redirect to homepage after alert
+            });
+          })
+          .catch((err) => {
+            console.error("Delete failed:", err);
+            Swal.fire("Error!", "Failed to delete product.", "error");
           });
-        })
-        .catch((err) => {
-          console.error("Delete failed:", err);
-          Swal.fire("Error!", "Failed to delete product.", "error");
-        });
-    }
-  });
-};
+      }
+    });
+  };
   // Fetch product by ID
   useEffect(() => {
     const fetchProduct = async () => {
@@ -105,7 +109,8 @@ const handleDelete = (id) => {
     setSelectedColor(color);
   };
   const defaultVariantImage =
-  product.materials?.[0]?.thicknesses?.[0]?.colors?.[0]?.image || "/images/sheet.webp";
+    product.materials?.[0]?.thicknesses?.[0]?.colors?.[0]?.image ||
+    "/images/sheet.webp";
 
   return (
     <>
@@ -125,7 +130,12 @@ const handleDelete = (id) => {
             colors, thickness, and variant details.
           </p>
           <ButtonGroup>
-          <ActionButton variant="delete" onClick={() => handleDelete(product._id)}>Delete</ActionButton>
+            <ActionButton
+              variant="delete"
+              onClick={() => handleDelete(product._id)}
+            >
+              Delete
+            </ActionButton>
             {/* <ActionButton
               variant="edit"
               onClick={() => navigate(`/edit-product/${id}`)}
@@ -193,26 +203,36 @@ const handleDelete = (id) => {
               )}
             </ProductDesc>
             <ProductDesc>
-              <strong>Color:</strong>
               {/* {product.primaryColor}{" "} */}
               {selectedThickness?.colors?.length > 0 && (
                 <>
-                  <SectionTitle>Color</SectionTitle>
+                  <SectionTitle style={{ marginTop: "-2rem" }}>
+                    Color:
+                  </SectionTitle>
                   <OptionsRow>
                     {selectedThickness.colors.map((c) => (
-                      <ColorSwatch
-                        key={c._id}
-                        color={c.colorCode}
-                        selected={selectedColor?._id === c._id}
-                        onClick={() => handleColorClick(c)}
-                      />
+                      <div key={c._id} style={{ textAlign: "center" }}>
+                        <ColorSwatch
+                          color={c.colorCode}
+                          selected={selectedColor?._id === c._id}
+                          onClick={() => handleColorClick(c)}
+                        />
+                        <p
+                          style={{
+                            color: c.colorCode,
+                            marginTop: "0.5rem",
+                            fontFamily: "Helvetica, sans-serif",
+                          }}
+                        >
+                          {c.colorName}
+                        </p>
+                      </div>
                     ))}
                   </OptionsRow>
                 </>
               )}
             </ProductDesc>
 
-            {/* Material Options */}
             {product.variants?.length > 0 && (
               <>
                 <SectionTitle>Material</SectionTitle>
@@ -230,24 +250,24 @@ const handleDelete = (id) => {
               </>
             )}
 
-            {/* Color Options */}
             {selectedMaterial?.colors?.length > 0 && (
               <>
                 <SectionTitle>Color</SectionTitle>
                 <OptionsRow>
                   {selectedMaterial.colors.map((c) => (
-                    <ColorSwatch
-                      key={c.name}
-                      color={c.code}
-                      selected={selectedColor?.name === c.name}
-                      onClick={() => handleColorClick(c)}
-                    />
+                    <div key={c._id}>
+                      <ColorSwatch
+                        color={c.colorCode}
+                        selected={selectedColor?.colorName === c.colorName}
+                        onClick={() => handleColorClick(c)}
+                      />
+                      <p>{c.colorName}</p>
+                    </div>
                   ))}
                 </OptionsRow>
               </>
             )}
 
-            {/* Thickness Options */}
             {selectedColor?.thickness?.length > 0 && (
               <>
                 <SectionTitle>Thickness</SectionTitle>

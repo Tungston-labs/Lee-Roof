@@ -90,11 +90,7 @@ const RoofingSolutions = () => {
           return (
             <Card key={brand._id} $reverse={idx % 2 !== 0}>
               <ImagePlaceholder>
-                <img
-                  src={selectedImage}
-                  alt={brand.productName}
-                  width="100%"
-                />
+                <img src={selectedImage} alt={brand.productName} width="100%" />
               </ImagePlaceholder>
               <CardContent>
                 <CardHeader>
@@ -165,11 +161,18 @@ const RoofingSolutions = () => {
                 {/* Colors */}
                 <Colors>
                   {selectedThickness?.colors.map((c) => (
-                    <ColorRectangle
-                      key={c._id}
-                      style={{ background: c.colorCode }}
-                      title={c.colorName}
-                    />
+                    <div key={c._id} style={{ textAlign: "center" }}>
+                      <ColorRectangle style={{ background: c.colorCode }} />
+                      <p
+                        style={{
+                          color: c.colorCode,
+                          marginTop: "0.5rem",
+                          fontFamily: "Helvetica, sans-serif",
+                        }}
+                      >
+                        {c.colorName}
+                      </p>
+                    </div>
                   ))}
                 </Colors>
 
