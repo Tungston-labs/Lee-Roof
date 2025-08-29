@@ -96,8 +96,9 @@ export const RemoveButton = styled.button`
 `;
 
 export const ProductImage = styled.img`
-  width: 100px;
-  height: auto;
+  width: 10%;
+  height:15%;
+  max-height:100px;
   margin-right: 20px;
 `;
 

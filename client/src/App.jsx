@@ -13,7 +13,7 @@ import Productcard from "./pages/Product/Productcard";
 import MultiStepForm from "./components/Navbar/multistep/MultiStepForm";
 import Login from "./pages/Dashboard/Login";
 import Product from "./pages/Product/Product";
-
+import EditProduct from "./pages/Product/EditProduct";
 // Website pages
 import Header from "./Components/Home/Header";
 import RoofingSolutions from "./components/Home/RoofingSolutions";
@@ -27,128 +27,129 @@ import OurProducts from "./Components/OurProducts/Ourproducts";
 
 const App = () => {
   return (
-    <Routes>
-      {/* Admin routes (Protected, No Navbar) */}
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/enquiry"
-        element={
-          <ProtectedRoute>
-            <Enquiry />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/enquiry-page"
-        element={
-          <ProtectedRoute>
-            <EnquiryDetails />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/view-product"
-        element={
-          <ProtectedRoute>
-            <ViewProduct />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/add-product"
-        element={
-          <ProtectedRoute>
-            <AddProduct />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/product"
-        element={
-          <ProtectedRoute>
-            <Product />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/products-card/:id"
-        element={
-          <ProtectedRoute>
-            <Productcard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/edit-product"
-        element={
-          <ProtectedRoute>
-            <EditProduct />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/mult"
-        element={
-          <ProtectedRoute>
-            <MultiStepForm />
-          </ProtectedRoute>
-        }
-      />
-      <Route path="/login" element={<Login />} />
+      <Routes>
+        {/* Admin routes (Protected, No Navbar) */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/enquiry"
+          element={
+            <ProtectedRoute>
+              <Enquiry />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/enquiry-page"
+          element={
+            <ProtectedRoute>
+              <EnquiryDetails />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/view-product"
+          element={
+            <ProtectedRoute>
+              <ViewProduct />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add-product"
+          element={
+            <ProtectedRoute>
+              <AddProduct />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/product"
+          element={
+            <ProtectedRoute>
+              <Product />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/products-card/:id"
+          element={
+            <ProtectedRoute>
+              <Productcard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit-product"
+          element={
+            <ProtectedRoute>
+              <EditProduct />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mult"
+          element={
+            <ProtectedRoute>
+              <MultiStepForm />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/login" element={<Login />} />
 
-      {/* Website routes (Always with Navbar + Footer) */}
-      <Route
-        path="/"
-        element={
-          <WebsiteLayout>
-            <Header />
-            <RoofingSolutions />
-            <FAQ />
-          </WebsiteLayout>
-        }
-      />
-      <Route
-        path="/about"
-        element={
-          <WebsiteLayout>
-            <AboutUs />
-            <AboutDetails />
-          </WebsiteLayout>
-        }
-      />
-      <Route
-        path="/products"
-        element={
-          <WebsiteLayout>
-            <OurProducts />
-          </WebsiteLayout>
-        }
-      />
-      <Route
-        path="/cart"
-        element={
-          <WebsiteLayout>
-            <Cart />
-          </WebsiteLayout>
-        }
-      />
-      <Route
-        path="/contact"
-        element={
-          <WebsiteLayout>
-            <Contact />
-            <EnquiryForm />
-          </WebsiteLayout>
-        }
-      />
-    </Routes>
+        {/* Website routes (Always with Navbar + Footer) */}
+        <Route
+          path="/"
+          element={
+            <WebsiteLayout>
+              <Header />
+              <RoofingSolutions />
+              <FAQ />
+            </WebsiteLayout>
+          }
+        />
+        <Route
+          path="/about"
+          element={
+            <WebsiteLayout>
+              <AboutUs />
+              <AboutDetails />
+            </WebsiteLayout>
+          }
+        />
+        <Route
+          path="/products"
+          element={
+            <WebsiteLayout>
+              <OurProducts />
+            </WebsiteLayout>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <WebsiteLayout>
+              <Cart />
+            </WebsiteLayout>
+          }
+        />
+        <Route
+          path="/contact"
+          element={
+            <WebsiteLayout>
+              <Contact />
+              <EnquiryForm />
+            </WebsiteLayout>
+          }
+        />
+      </Routes>
+    
   );
 };
 

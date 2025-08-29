@@ -25,6 +25,7 @@ import instagramIcon from "../../assets/instagram.svg";
 import twitterIcon from "../../assets/twitter.svg";
 
 const Contact = () => {
+  
   return (
     <ContactSection>
       <ContactContainer>

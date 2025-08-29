@@ -1,5 +1,5 @@
-// EnquiryForm.jsx
 import React from "react";
+import { useLocation } from "react-router-dom";
 import {
   PageWrapper,
   TopBar,
@@ -23,19 +23,18 @@ import {
   SubmitButton,
   InputRow,
 } from "./EnquiryForm.style";
-
 import { FaPaperPlane } from "react-icons/fa";
 
-const EnquiryForm = ({ items = [] }) => {
+const EnquiryForm = () => {
+  const location = useLocation();
+  const items = location.state?.items || []; // ✅ get items from Cart
+   
   return (
     <PageWrapper>
-     
-      {/* Grey Box overlapping the blue and white background */}
       <GreyBox>
-
-       <TopBar>
-        <Heading>Enquiry Form</Heading>
-      </TopBar>
+        <TopBar>
+          <Heading>Enquiry Form</Heading>
+        </TopBar>
 
         <ContentWrapper>
           {/* Left Section: Items in cart */}
@@ -52,9 +51,13 @@ const EnquiryForm = ({ items = [] }) => {
                       <h4>{item.name}</h4>
                       <ColorRow>
                         <ColorBox style={{ backgroundColor: item.color }} />
-                        <span>{item.colorName}</span>
+                        <span>{item.color}</span>
                       </ColorRow>
-                      <p>{item.size} sq ft/m²</p>
+                      <p>
+                        <strong>Material:</strong> {item.material} |{" "}
+                        <strong>Thickness:</strong> {item.thickness}
+                      </p>
+                      <p>Qty: {item.qty}</p>
                     </ItemDetails>
                   </ItemCard>
                 ))

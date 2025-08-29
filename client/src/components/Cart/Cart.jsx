@@ -1,107 +1,107 @@
 // Cart.jsx
-import React, { useState } from "react";
+import React from "react";
 import {
-    CartWrapper,
-    CartTitle,
-    CartDescription,
-    EmptyCart,
-    EmptyCartImage,
-    EmptyCartText,
-    EmptyCartButton,
-    ContinueShopping,
-    CartItems,
-    CartItem,
-    ProductImage,
-    ProductDetails,
-    ProductText,
-    QuantityBox,
-    RemoveButton,
-    EnquiryButton,
-    ActionsWrapper,
+  CartWrapper,
+  CartTitle,
+  CartDescription,
+  EmptyCart,
+  EmptyCartImage,
+  EmptyCartText,
+  EmptyCartButton,
+  ContinueShopping,
+  CartItems,
+  CartItem,
+  ProductImage,
+  ProductDetails,
+  ProductText,
+  QuantityBox,
+  RemoveButton,
+  EnquiryButton,
+  ActionsWrapper,
 } from "./Cart.style";
-
+import { updateQty } from "../../redux/cartSlice"; 
 import { BsArrowReturnLeft } from "react-icons/bs";
-
-
+import { useSelector, useDispatch } from "react-redux";
+import { removeFromCart } from "../../redux/cartSlice";
 import { FaTrashAlt } from "react-icons/fa";
-import emptyCartImg from "../../assets/empty-cart.png"; // ✅ only empty cart image remains
-
+import emptyCartImg from "../../assets/empty-cart.png";
+import { useNavigate } from "react-router-dom";
 const Cart = () => {
-    // Dummy state (replace with backend/cart context later)
-    const [cartItems, setCartItems] = useState([
-        // Example backend-like data
-        // {
-        //   id: 1,
-        //   name: "Premium Roofing Sheet",
-        //   description: "Durable sheet with weather protection",
-        //   qty: 2,
-        //   image: "https://your-backend.com/uploads/sheet1.png",
-        // },
-    ]);
+  const cartItems = useSelector((state) => state.cart.items);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  return (
+    <CartWrapper>
+      <CartTitle>Your Cart</CartTitle>
+      <CartDescription>
+        Your selections are safely stored in your cart with the latest price
+        updates. Complete your purchase now to avoid missing out due to stock
+        or rate changes for your premium roofing sheets.
+      </CartDescription>
 
-    // Remove item
-    const handleRemove = (index) => {
-        const updated = [...cartItems];
-        updated.splice(index, 1);
-        setCartItems(updated);
-    };
+      {cartItems.length === 0 ? (
+        // ---------------- Empty Cart ----------------
+        <EmptyCart>
+          <EmptyCartImage src={emptyCartImg} alt="Empty Cart" />
+          <EmptyCartText>Your Cart is Empty</EmptyCartText>
+          <p>Looks like you haven’t added any items yet.</p>
+          <EmptyCartButton>Cart is empty</EmptyCartButton>
+          <ContinueShopping href="/products">
+            <BsArrowReturnLeft style={{ color: "#004D7B", marginRight: "6px" }} />
+            Continue Shopping
+          </ContinueShopping>
+        </EmptyCart>
+      ) : (
+        // ---------------- Filled Cart ----------------
+        <CartItems>
+          {cartItems.map((item) => (
+            <CartItem key={item.id}>
+              <RemoveButton onClick={() => dispatch(removeFromCart(item.id))}>
+                <FaTrashAlt />
+              </RemoveButton>
 
-    return (
-        <CartWrapper>
-            <CartTitle>Your Cart</CartTitle>
-            <CartDescription>
-                Your selections are safely stored in your cart with the latest price
-                updates. Complete your purchase now to avoid missing out due to stock
-                or rate changes for your premium roofing sheets.
-            </CartDescription>
+              {/* ✅ Product image from Redux */}
+              <ProductImage src={item.image} alt={item.name} />
 
-            {cartItems.length === 0 ? (
-                // ---------------- Empty Cart ----------------
-                <EmptyCart>
-                    <EmptyCartImage src={emptyCartImg} alt="Empty Cart" />
-                    <EmptyCartText>Your Cart is Empty</EmptyCartText>
-                    <p>Looks like you haven’t added any items yet.</p>
-                    <EmptyCartButton>Cart is empty</EmptyCartButton>
-                    <ContinueShopping href="/products">
-                        <BsArrowReturnLeft style={{ color: "#004D7B", marginRight: "6px" }} />
-                        Continue Shopping
-                    </ContinueShopping>
+           <ProductDetails>
+  <ProductText>
+    <strong>{item.name}</strong>
+    <br />
+    {item.description}
+    <br />
+    <span>
+      <strong>Material:</strong> {item.material} |{" "}
+      <strong>Thickness:</strong> {item.thickness} |{" "}
+      <strong>Color:</strong> {item.color}
+    </span>
+  </ProductText>
+</ProductDetails>
 
-                </EmptyCart>
-            ) : (
-                // ---------------- Filled Cart ----------------
-                <CartItems>
-                    {cartItems.map((item, index) => (
-                        <CartItem key={item.id || index}>
-                            <RemoveButton onClick={() => handleRemove(index)}>
-                                <FaTrashAlt />
-                            </RemoveButton>
+              {/* ✅ Show current qty */}
+         <QuantityBox
+  type="number"
+  min="1"
+  value={item.qty}
+  onChange={(e) =>
+    dispatch(updateQty({ id: item.id, qty: parseInt(e.target.value) }))
+  }
+/>
 
-                            {/* ✅ Product image now comes from backend */}
-                            <ProductImage src={item.image} alt={item.name} />
+            </CartItem>
+          ))}
 
-                            <ProductDetails>
-                                <ProductText>
-                                    <strong>{item.name}</strong>
-                                    <br />
-                                    {item.description}
-                                </ProductText>
-                            </ProductDetails>
-
-                            <QuantityBox type="number" min="1" value={item.qty} readOnly />
-                        </CartItem>
-                    ))}
-
-                    <ActionsWrapper>
-                        <EnquiryButton>Proceed with Enquiry</EnquiryButton>
-                        <ContinueShopping href="/products">
-                            ← Continue Shopping
-                        </ContinueShopping>
-                    </ActionsWrapper>
-                </CartItems>
-            )}
-        </CartWrapper>
-    );
+          <ActionsWrapper>
+      <EnquiryButton
+        onClick={() => navigate("/contact", { state: { items: cartItems } })}
+      >
+        Proceed with Enquiry
+      </EnquiryButton>
+      <ContinueShopping href="/products">← Continue Shopping</ContinueShopping>
+    </ActionsWrapper>
+        </CartItems>
+      )}
+    </CartWrapper>
+  );
 };
 
 export default Cart;

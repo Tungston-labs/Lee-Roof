@@ -28,10 +28,11 @@ import {
   FooterNote,
   AddToCartBtn,
 } from "./Ourproducts.style";
-
+import { addToCart } from "../../redux/cartSlice";
 import { BsArrowReturnLeft } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { getProducts } from "../../redux/productSlice";
+import Swal from "sweetalert2";
 
 const OurProducts = () => {
   const dispatch = useDispatch();
@@ -231,11 +232,43 @@ const OurProducts = () => {
                     ))}
                   </Colors>
 
-                  {expanded === id ? (
-                    <AddToCartBtn>Add to cart</AddToCartBtn>
-                  ) : (
-                    <ViewMore onClick={() => setExpanded(id)}>Click to view more</ViewMore>
-                  )}
+                {expanded === id ? (
+ <AddToCartBtn
+  onClick={() => {
+    const selectedColor =
+      colors[sel.colorIndex]?.colorName || "Default Color";
+
+    dispatch(
+      addToCart({
+        id,
+        name: product.productName,
+        description: product.description,
+        image: productImage,
+        material: sel.material,       // ✅ include material
+        thickness: sel.thickness,     // ✅ include thickness
+        color: selectedColor,         // ✅ include color
+        qty: 1,                       // default qty
+      })
+    );
+
+    Swal.fire({
+      title: "Added to Cart!",
+      text: `${product.productName} (${sel.material}, ${sel.thickness}, ${selectedColor}) has been added successfully.`,
+      icon: "success",
+      confirmButtonColor: "#004D7B",
+      timer: 1500,
+      showConfirmButton: false,
+      position: "top-end",
+      toast: true,
+    });
+  }}
+>
+  Add to cart
+</AddToCartBtn>
+
+) : (
+  <ViewMore onClick={() => setExpanded(id)}>Click to view more</ViewMore>
+)}
                 </CardContent>
               </Card>
             </React.Fragment>
