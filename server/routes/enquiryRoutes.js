@@ -3,24 +3,46 @@ import Enquiry from "../models/Enquiry.js";
 
 const router = express.Router();
 
-// Get all enquiries
-router.get("/", async (req, res) => {
-  const enquiries = await Enquiry.find();
-  res.json(enquiries);
+router.post("/", async (req, res) => {
+  try {
+    const { name, email, phone, address, location, items } = req.body;
+
+    const enquiry = new Enquiry({
+      name,
+      email,
+      phone,
+      address,
+      location,
+      items, 
+    });
+
+    await enquiry.save();
+    res.status(201).json({ message: "Enquiry created successfully", enquiry });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 });
 
-// Get single enquiry
+router.get("/", async (req, res) => {
+  try {
+    const enquiries = await Enquiry.find();
+    res.json(enquiries);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.get("/:id", async (req, res) => {
   try {
     const enquiry = await Enquiry.findById(req.params.id);
-    if (!enquiry) return res.status(404).json({ message: "Not found" });
+    if (!enquiry) return res.status(404).json({ message: "Enquiry not found" });
+
     res.json(enquiry);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
 
-// Create enquiry
 router.post("/", async (req, res) => {
   try {
     const enquiry = new Enquiry(req.body);

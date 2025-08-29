@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
+import axios from "axios"; // install if not added: npm install axios
 import {
   PageWrapper,
   TopBar,
@@ -27,8 +28,52 @@ import { FaPaperPlane } from "react-icons/fa";
 
 const EnquiryForm = () => {
   const location = useLocation();
-  const items = location.state?.items || []; // ✅ get items from Cart
-   
+  const items = location.state?.items || []; 
+
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address: "",
+    location: "",
+    notes: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const payload = {
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+        location: formData.location,
+        notes: formData.notes,
+        items: items.map((item) => ({
+          name: item.name,
+          color: item.color,
+          size: item.size || item.thickness, // adapt based on your schema
+          img: item.image,
+          quantity: item.qty,
+        })),
+      };
+
+      const res = await axios.post("http://localhost:5000/api/enquiries", payload);
+
+      alert("Enquiry submitted successfully!");
+      console.log("Saved enquiry:", res.data);
+    } catch (error) {
+      console.error("Error submitting enquiry:", error);
+      alert("Something went wrong, please try again!");
+    }
+  };
+
   return (
     <PageWrapper>
       <GreyBox>
@@ -72,19 +117,60 @@ const EnquiryForm = () => {
             <FormWrapper>
               <FormTitle>Fill the Form for More Enquiry</FormTitle>
               <FormDesc>
-                Your selections are safely stored in your cart with the latest
-                price updates. Complete your purchase now to avoid missing out
-                due to stock or rate changes for your premium roofing sheets
+                Your selections are safely stored in your cart. Submit your
+                details and we’ll get back to you quickly.
               </FormDesc>
-              <Form>
+              <Form onSubmit={handleSubmit}>
                 <InputRow>
-                  <Input type="text" placeholder="First Name" />
-                  <Input type="text" placeholder="Last Name" />
+                  <Input
+                    type="text"
+                    placeholder="First Name"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                  />
+                  <Input
+                    type="text"
+                    placeholder="Last Name"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                  />
                 </InputRow>
-                <Input type="email" placeholder="Email Address" />
-                <Input type="tel" placeholder="Phone Number" />
-                <Input type="text" placeholder="Delivery Location" />
-                <TextArea placeholder="Additional Notes" />
+                <Input
+                  type="email"
+                  placeholder="Email Address"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+                <Input
+                  type="tel"
+                  placeholder="Phone Number"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                />
+                <Input
+                  type="text"
+                  placeholder="Delivery Address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                />
+                <Input
+                  type="text"
+                  placeholder="Location"
+                  name="location"
+                  value={formData.location}
+                  onChange={handleChange}
+                />
+                <TextArea
+                  placeholder="Additional Notes"
+                  name="notes"
+                  value={formData.notes}
+                  onChange={handleChange}
+                />
                 <SubmitButton type="submit">
                   <FaPaperPlane size={18} />
                   <span>Send</span>
