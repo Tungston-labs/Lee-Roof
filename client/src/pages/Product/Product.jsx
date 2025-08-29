@@ -3,8 +3,10 @@ import Navbar from "../../components/Navbar/Navbar";
 import ProductForm from "./Add_product/AddProduct";
 import ProductMaterialForm from "./Add_product/MaterialAdd";
 import VariantForm from "./Add_product/AddVarient";
+import { useNavigate } from "react-router-dom";
 
 const AddFullProductPage = ({ existingProduct }) => {
+  const navigate=useNavigate()
   const [formData, setFormData] = useState({
     product: {
       brandIconFile: null,
@@ -104,7 +106,9 @@ const AddFullProductPage = ({ existingProduct }) => {
         body: form,
       });
       const data = await response.json();
-      if (response.ok) alert("Form submitted successfully");
+      if (response.ok) {alert("Form submitted successfully");
+      navigate("/product");
+      }
       else alert("Failed to submit: " + (data.error || JSON.stringify(data)));
     } catch (err) {
       console.error("submit error", err);
