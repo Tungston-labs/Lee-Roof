@@ -42,7 +42,7 @@ export const ImageSection = styled.div`
 
 export const ProductImage = styled.img`
   width: 100%;
-//   max-width: 250px;
+//   max-width: 150px;
   min-height: 400px;
   height:500px
 //   border-radius: 10px;

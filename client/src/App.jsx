@@ -15,15 +15,15 @@ import Login from "./pages/Dashboard/Login";
 import Product from "./pages/Product/Product";
 import EditProduct from "./pages/Product/EditProduct";
 // Website pages
-import Header from "./Components/Home/Header";
+import Header from "./components/Home/Header";
 import RoofingSolutions from "./components/Home/RoofingSolutions";
-import FAQ from "./Components/Home/FAQ";
-import AboutUs from "./Components/AboutUs/AboutUs";
-import AboutDetails from "./Components/AboutUs/AboutDetails";
-import Contact from "./Components/ContactUs/Contact";
-import EnquiryForm from "./Components/ContactUs/EnquiryForm";
-import Cart from "./Components/Cart/Cart";
-import OurProducts from "./Components/OurProducts/Ourproducts";
+import FAQ from "./components/Home/FAQ";
+import AboutUs from "./components/AboutUs/AboutUs";
+import AboutDetails from "./components/AboutUs/AboutDetails";
+import Contact from "./components/ContactUs/Contact";
+import EnquiryForm from "./components/ContactUs/EnquiryForm";
+import Cart from "./components/Cart/Cart";
+import OurProducts from "./components/OurProducts/Ourproducts";
 
 const App = () => {
   return (

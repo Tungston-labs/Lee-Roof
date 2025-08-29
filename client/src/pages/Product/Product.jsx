@@ -146,18 +146,28 @@ const AddFullProductPage = ({ existingProduct }) => {
 
       <hr />
 
-      <button
-        onClick={handleSubmit}
-        style={{
-          padding: "10px 20px",
-          background: "green",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-        }}
-      >
-        Submit All
-      </button>
+     <div
+  style={{
+    display: "flex",
+    justifyContent: "flex-end", // pushes content to the right
+    marginTop: "20px", // optional spacing
+  }}
+>
+  <button
+    onClick={handleSubmit}
+    style={{
+      padding: "10px 20px",
+      background: "#004D7B",
+      color: "white",
+      border: "none",
+      borderRadius: "5px",
+      cursor: "pointer",
+    }}
+  >
+    Submit All
+  </button>
+</div>
+
     </div>
   );
 };

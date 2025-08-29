@@ -109,7 +109,7 @@ export const ProductCard = styled.div`
 `;
 
 export const ProductImage = styled.img`
-  width: 19rem;
+  // width: 19rem;
   height: 20rem;
   border-radius: 8px;
   margin-bottom: 12px;

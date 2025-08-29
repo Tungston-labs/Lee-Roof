@@ -11,6 +11,7 @@ import {
 } from "./AddVarient.Styles";
 import MultiStepForm from "../../../components/Navbar/multistep/MultiStepForm";
 import ImageDropdown from "../../../components/ImageDropDown";
+import { FaTrash } from "react-icons/fa"; // install with npm i react-icons
 
 const VariantForm = ({ data, materials = [], savedImages = [], onUpdate }) => {
   const handleVariantsChange = (updatedVariants) => {
@@ -66,6 +67,25 @@ const VariantForm = ({ data, materials = [], savedImages = [], onUpdate }) => {
     handleVariantsChange(updated);
   };
 
+  // 👉 Add these handler functions
+const removeVariant = (vIndex) => {
+  const updated = [...data];
+  updated.splice(vIndex, 1);
+  handleVariantsChange(updated);
+};
+
+const removeThicknessRow = (vIndex, tIndex) => {
+  const updated = [...data];
+  updated[vIndex].thicknesses.splice(tIndex, 1);
+  handleVariantsChange(updated);
+};
+
+const removeColorRow = (vIndex, tIndex, cIndex) => {
+  const updated = [...data];
+  updated[vIndex].thicknesses[tIndex].colors.splice(cIndex, 1);
+  handleVariantsChange(updated);
+};
+
   return (
     <FormWrapper>
       <div>
@@ -107,71 +127,141 @@ const VariantForm = ({ data, materials = [], savedImages = [], onUpdate }) => {
         </div>
       </Header>
 
-      {data.map((variant, vIndex) => (
-        <div key={vIndex} style={{ marginBottom: 20 }}>
-          <Row>
-            <Select
-              value={variant.material}
-              onChange={(e) => handleMaterialChange(vIndex, e.target.value)}
+     {data.map((variant, vIndex) => (
+  <div
+    key={vIndex}
+    style={{
+      marginBottom: 20,
+      border: "1px solid #ddd",
+      padding: 15,
+      borderRadius: 8,
+    }}
+  >
+    {/* Variant Header with remove */}
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 10,
+      }}
+    >
+      <h4 style={{ margin: 0 }}>Variant {vIndex + 1}</h4>
+      <button
+        type="button"
+        onClick={() => removeVariant(vIndex)}
+        style={{
+          background: "transparent",
+          border: "none",
+          color: "red",
+          cursor: "pointer",
+        }}
+      >
+        <FaTrash />
+      </button>
+    </div>
+
+    <Row>
+      <Select
+        value={variant.material}
+        onChange={(e) => handleMaterialChange(vIndex, e.target.value)}
+      >
+        <option value="">Select material</option>
+        {materials.length === 0 && <option disabled>No materials</option>}
+        {materials.map((m, i) => (
+          <option key={i} value={m.materialName}>
+            {m.materialName}
+          </option>
+        ))}
+      </Select>
+    </Row>
+
+    {variant.thicknesses.map((th, tIndex) => (
+      <div
+        key={tIndex}
+        style={{
+          marginTop: 10,
+          border: "1px dashed #ccc",
+          padding: 10,
+          borderRadius: 6,
+        }}
+      >
+        {/* Thickness Row with remove */}
+        <Row>
+          <Input
+            type="text"
+            placeholder="Enter thickness"
+            value={th.thickness}
+            onChange={(e) => handleThicknessChange(vIndex, tIndex, e.target.value)}
+          />
+          <button
+            type="button"
+            onClick={() => removeThicknessRow(vIndex, tIndex)}
+            style={{
+              marginLeft: 10,
+              background: "transparent",
+              border: "none",
+              color: "red",
+              cursor: "pointer",
+            }}
+          >
+            <FaTrash />
+          </button>
+        </Row>
+
+        {th.colors.map((colorRow, cIndex) => (
+          <Row key={cIndex}>
+            <ImageDropdown
+              images={savedImages}
+              value={colorRow.image}
+              onChange={(val) =>
+                handleColorChange(vIndex, tIndex, cIndex, "image", val)
+              }
+            />
+            <Input
+              type="text"
+              placeholder="Colour name"
+              value={colorRow.color}
+              onChange={(e) =>
+                handleColorChange(vIndex, tIndex, cIndex, "color", e.target.value)
+              }
+            />
+            <ColorInput
+              type="color"
+              value={colorRow.colorHex || "#000000"}
+              onChange={(e) =>
+                handleColorChange(vIndex, tIndex, cIndex, "colorHex", e.target.value)
+              }
+            />
+            <Button type="button" onClick={() => addColorRow(vIndex, tIndex)}>
+              + Add Color
+            </Button>
+
+            {/* Remove Color */}
+            <button
+              type="button"
+              onClick={() => removeColorRow(vIndex, tIndex, cIndex)}
+              style={{
+                marginLeft: 10,
+                background: "transparent",
+                border: "none",
+                color: "red",
+                cursor: "pointer",
+              }}
             >
-              <option value="">Select material</option>
-              {materials.length === 0 && <option disabled>No materials</option>}
-              {materials.map((m, i) => (
-                <option key={i} value={m.materialName}>
-                  {m.materialName}
-                </option>
-              ))}
-            </Select>
+              <FaTrash />
+            </button>
           </Row>
+        ))}
 
-          {variant.thicknesses.map((th, tIndex) => (
-            <div key={tIndex}>
-              <Row>
-                <Input
-                  type="text"
-                  placeholder="Enter thickness"
-                  value={th.thickness}
-                  onChange={(e) => handleThicknessChange(vIndex, tIndex, e.target.value)}
-                />
-              </Row>
+        <Button type="button" onClick={() => addThicknessRow(vIndex)}>
+          + Add Thickness
+        </Button>
+      </div>
+    ))}
+  </div>
+))}
 
-              {th.colors.map((colorRow, cIndex) => (
-                <Row key={cIndex}>
-                  <ImageDropdown
-                    images={savedImages}
-                    value={colorRow.image}
-                    onChange={(val) =>
-                      handleColorChange(vIndex, tIndex, cIndex, "image", val)
-                    }
-                  />
-                  <Input
-                    type="text"
-                    placeholder="Colour name"
-                    value={colorRow.color}
-                    onChange={(e) =>
-                      handleColorChange(vIndex, tIndex, cIndex, "color", e.target.value)
-                    }
-                  />
-                  <ColorInput
-                    type="color"
-                    value={colorRow.colorHex || "#000000"}
-                    onChange={(e) =>
-                      handleColorChange(vIndex, tIndex, cIndex, "colorHex", e.target.value)
-                    }
-                  />
-                  <Button type="button" onClick={() => addColorRow(vIndex, tIndex)}>
-                    + Add Color
-                  </Button>
-                </Row>
-              ))}
-
-              <Button type="button" onClick={() => addThicknessRow(vIndex)}>
-                + Add Thickness
-              </Button>
-            </div>
-          ))}
-        </div>
-      ))}
 
       <AddVariantButton type="button" onClick={addVariant}>
         + Add Variant
