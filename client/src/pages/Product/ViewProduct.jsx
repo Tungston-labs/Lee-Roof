@@ -34,7 +34,7 @@ const ProductPage = () => {
     };
 
     fetchProducts();
-  }, []); // 👈 no need for [id] here
+  }, []); 
 
   return (
     <>

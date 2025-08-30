@@ -53,7 +53,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Update enquiry (status or details)
 router.put("/:id", async (req, res) => {
   try {
     const updated = await Enquiry.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -62,8 +61,35 @@ router.put("/:id", async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+router.patch("/:enquiryId/status", async (req, res) => {
+  try {
+    const { enquiryId } = req.params;
+    const { status } = req.body;
 
-// Delete enquiry
+    if (!["Pending", "Open", "Closed"].includes(status)) {
+      return res.status(400).json({ message: "Invalid status value" });
+    }
+
+    const updatedEnquiry = await Enquiry.findByIdAndUpdate(
+      enquiryId,
+      { status },
+      { new: true }
+    );
+
+    if (!updatedEnquiry) {
+      return res.status(404).json({ message: "Enquiry not found" });
+    }
+
+    res.status(200).json({
+      message: `Enquiry status updated to ${status}`,
+      enquiry: updatedEnquiry,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating enquiry status", error });
+  }
+});
+
+
 router.delete("/:id", async (req, res) => {
   try {
     await Enquiry.findByIdAndDelete(req.params.id);
@@ -72,5 +98,4 @@ router.delete("/:id", async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
-
 export default router;

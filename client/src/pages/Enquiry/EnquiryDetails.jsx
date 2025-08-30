@@ -20,7 +20,6 @@ import {
   CustomerDetailsRight,
   Label,
   Value,
-  QuantityInput,
 } from "./EnquiryDetails.Styles";
 import Navbar from "../../components/Navbar/Navbar";
 import { FaArrowLeft } from "react-icons/fa";
@@ -28,9 +27,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const EnquiryPage = () => {
-  const { id } = useParams(); // get enquiry id from route
+  const { id } = useParams();
   const navigate = useNavigate();
   const [enquiry, setEnquiry] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [statusUpdating, setStatusUpdating] = useState(false);
 
   // Fetch enquiry by ID
   useEffect(() => {
@@ -40,17 +41,49 @@ const EnquiryPage = () => {
         setEnquiry(res.data);
       } catch (err) {
         console.error("Error fetching enquiry:", err);
+      } finally {
+        setLoading(false);
       }
     };
     fetchEnquiry();
   }, [id]);
+
+  const handleStatusChange = async (e) => {
+    const newStatus = e.target.value;
+    if (!newStatus) return;
+
+    try {
+      setStatusUpdating(true);
+      const res = await axios.patch(
+        `http://localhost:5000/api/enquiries/${id}/status`,
+        { status: newStatus }
+      );
+      setEnquiry(res.data.enquiry); // Update the UI immediately
+    } catch (err) {
+      console.error("Error updating status:", err);
+      alert("Failed to update status. Try again.");
+    } finally {
+      setStatusUpdating(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <PageWrapper>
+          <p>Loading enquiry...</p>
+        </PageWrapper>
+      </>
+    );
+  }
 
   if (!enquiry) {
     return (
       <>
         <Navbar />
         <PageWrapper>
-          <p>Loading enquiry...</p>
+          <p>Enquiry not found.</p>
         </PageWrapper>
       </>
     );
@@ -68,8 +101,13 @@ const EnquiryPage = () => {
           >
             <FaArrowLeft /> <Title>Enquiry</Title>
           </div>
-          <StatusSelect defaultValue={enquiry.status}>
+          <StatusSelect
+            value={enquiry.status}
+            onChange={handleStatusChange}
+            disabled={statusUpdating}
+          >
             <option value="">Select a status</option>
+            <option value="Pending">Pending</option>
             <option value="Open">Open</option>
             <option value="Closed">Closed</option>
           </StatusSelect>
@@ -128,8 +166,6 @@ const EnquiryPage = () => {
                     <ColorBadge color={item.color.toLowerCase()} />
                     {item.color}
                   </ItemInfo>
-                  <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                  </div>
                 </ItemCard>
               ))
             ) : (

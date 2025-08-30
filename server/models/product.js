@@ -22,8 +22,14 @@ const productSchema = new mongoose.Schema(
     description: { type: String },
     brandName: { type: String, required: true },
     brandIcon: { type: String }, // URL
-    materials: [materialSchema], // embedded materials -> thickness -> colors -> images
+    materials: [materialSchema], 
+     status: {
+      type: String,
+      enum: ["pending", "open", "closed"],
+      default: "pending",
+    },
   },
+  
   { timestamps: true }
 );
 

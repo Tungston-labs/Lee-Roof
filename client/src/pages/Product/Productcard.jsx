@@ -65,14 +65,12 @@ const ProductCard = () => {
       }
     });
   };
-  // Fetch product by ID
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const data = await getProductByIdAPI(id);
         setProduct(data);
 
-        // Default selections
         const defaultMaterial = data.materials?.[0] || null;
         const defaultThickness = defaultMaterial?.thicknesses?.[0] || null;
         const defaultColor = defaultThickness?.colors?.[0] || null;
@@ -90,7 +88,6 @@ const ProductCard = () => {
 
   if (!product) return <p>Loading...</p>;
 
-  // Material click
   const handleMaterialClick = (material) => {
     setSelectedMaterial(material);
     const firstThickness = material.thicknesses?.[0] || null;
@@ -98,13 +95,11 @@ const ProductCard = () => {
     setSelectedColor(firstThickness?.colors?.[0] || null);
   };
 
-  // Thickness click
   const handleThicknessClick = (thickness) => {
     setSelectedThickness(thickness);
     setSelectedColor(thickness?.colors?.[0] || null);
   };
 
-  // Color click
   const handleColorClick = (color) => {
     setSelectedColor(color);
   };
