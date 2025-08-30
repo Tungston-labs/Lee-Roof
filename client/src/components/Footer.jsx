@@ -28,18 +28,24 @@ const Footer = () => {
           <Logo src={leeLogo} alt="Lee Builders" />
 
           <SocialIcons>
-            <SocialIcon href="#">
-              <FaWhatsapp />
-            </SocialIcon>
-            <SocialIcon href="#">
+           <SocialIcon href="https://wa.me/919400144330" target="_blank" rel="noopener noreferrer">
+  <FaWhatsapp />
+</SocialIcon>
+
+            {/* <SocialIcon href="#">
               <FaFacebookF />
-            </SocialIcon>
-            <SocialIcon href="#">
-              <FaInstagram />
-            </SocialIcon>
-            <SocialIcon href="#">
+            </SocialIcon> */}
+           <SocialIcon 
+  href="https://www.instagram.com/lee_roofing?igsh=bXB2eW5idW9nMThq" 
+  target="_blank" 
+  rel="noopener noreferrer"
+>
+  <FaInstagram />
+</SocialIcon>
+
+            {/* <SocialIcon href="#">
               <FaTwitter />
-            </SocialIcon>
+            </SocialIcon> */}
           </SocialIcons>
         </LogoSection>
 

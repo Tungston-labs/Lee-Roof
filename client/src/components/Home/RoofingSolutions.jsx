@@ -25,8 +25,9 @@ import {
   HeaderWrapper,
   OptionValues,
 } from "./RoofingSolutions.style";
-
+import { useNavigate } from "react-router-dom";
 const RoofingSolutions = () => {
+    const navigate = useNavigate();
   const dispatch = useDispatch();
   const { products, loading, error } = useSelector((state) => state.product);
   const [cardStates, setCardStates] = useState({});
@@ -175,10 +176,9 @@ const RoofingSolutions = () => {
                     </div>
                   ))}
                 </Colors>
-
-                <ViewMore to={`/products/${brand._id}`}>
-                  Click to view more
-                </ViewMore>
+<ViewMore onClick={() => navigate("/products")}>
+          Click to view more
+        </ViewMore>
               </CardContent>
             </Card>
           );

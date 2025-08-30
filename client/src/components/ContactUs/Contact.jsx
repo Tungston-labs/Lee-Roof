@@ -68,18 +68,28 @@ const Contact = () => {
           <SocialSection>
             <SocialTitle>Follow us on</SocialTitle>
             <SocialIcons>
-              <SocialIcon href="#">
-                <img src={whatsappIcon} alt="WhatsApp" />
-              </SocialIcon>
-              <SocialIcon href="#">
+            <SocialIcon 
+  href="https://wa.me/919400144330" 
+  target="_blank" 
+  rel="noopener noreferrer"
+>
+  <img src={whatsappIcon} alt="WhatsApp" />
+</SocialIcon>
+
+              {/* <SocialIcon href="#">
                 <img src={facebookIcon} alt="Facebook" />
-              </SocialIcon>
-              <SocialIcon href="#">
-                <img src={instagramIcon} alt="Instagram" />
-              </SocialIcon>
-              <SocialIcon href="#">
+              </SocialIcon> */}
+             <SocialIcon 
+  href="https://www.instagram.com/lee_roofing?igsh=bXB2eW5idW9nMThq" 
+  target="_blank" 
+  rel="noopener noreferrer"
+>
+  <img src={instagramIcon} alt="Instagram" />
+</SocialIcon>
+
+              {/* <SocialIcon href="#">
                 <img src={twitterIcon} alt="Twitter" />
-              </SocialIcon>
+              </SocialIcon> */}
             </SocialIcons>
           </SocialSection>
         </ContactContent>

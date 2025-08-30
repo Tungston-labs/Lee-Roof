@@ -15,8 +15,9 @@ import {
 } from "./Header.style";
 
 import { FiArrowUpRight } from "react-icons/fi";
-
+import { useNavigate } from "react-router-dom";
 const Header = () => {
+    const navigate = useNavigate();
   return (
     <Section>
       {/* Top Text Section */}
@@ -42,7 +43,9 @@ const Header = () => {
             Premium, weather-resistant roofing sheets <br /> designed for style,
             strength, and peace of mind.
           </InfoText>
-          <EnquireButton>Enquire Now</EnquireButton>
+        <EnquireButton onClick={() => navigate("/contact")}>
+      Enquire Now
+    </EnquireButton>
         </InfoCard>
       </ImageWrapper>
     </Section>

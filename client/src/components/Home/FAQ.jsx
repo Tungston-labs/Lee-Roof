@@ -16,7 +16,7 @@ import {
   ContactButtonWrapper,
   ContactButton,
 } from "./faq.style";
-
+import { useNavigate } from "react-router-dom";
 import { IoIosArrowDropdownCircle, IoIosArrowDropupCircle } from "react-icons/io";
 
 const faqs = [
@@ -44,7 +44,7 @@ const faqs = [
 
 const FAQ = () => {
   const [hoverIndex, setHoverIndex] = useState(null);
-
+  const navigate = useNavigate();
   return (
     <FAQWrapper>
       {/* Top FAQ Section */}
@@ -103,8 +103,10 @@ const FAQ = () => {
             options for your project.
           </p>
         </UpgradeText>
-        <ContactButtonWrapper>
-          <ContactButton>Contact Our Team</ContactButton>
+         <ContactButtonWrapper>
+          <ContactButton onClick={() => navigate("/contact")}>
+            Contact Our Team
+          </ContactButton>
         </ContactButtonWrapper>
       </UpgradeSection>
     </FAQWrapper>
