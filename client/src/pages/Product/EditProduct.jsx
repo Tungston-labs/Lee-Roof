@@ -40,7 +40,7 @@ import {
 
 import { Row, ColorInput, Button, AddVariantButton } from "./Add_product/AddVarient.Styles";
 
-const API_URL = "http://localhost:5000/api/products"; // adjust if needed
+const API_URL = "http://62.72.57.65/api/products"; 
 
 /**
  * Important mapping notes:
@@ -85,7 +85,7 @@ const CombinedProductPage = () => {
   if (!urlOrPath) return "";
   if (/^https?:\/\//i.test(urlOrPath)) return urlOrPath; // already absolute
   if (urlOrPath.startsWith("/uploads")) {
-    return `${process.env.REACT_APP_API_BASE || "http://localhost:5000"}${urlOrPath}`;
+    return `${process.env.REACT_APP_API_BASE || "http://62.72.57.65"}${urlOrPath}`;
   }
   const base = `${window.location.protocol}//${window.location.host}`;
   return base + (urlOrPath.startsWith("/") ? urlOrPath : `/${urlOrPath}`);

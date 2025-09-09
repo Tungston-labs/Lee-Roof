@@ -103,7 +103,7 @@ const EnquiryForm = () => {
         })),
       };
 
-      await axios.post("http://localhost:5000/api/enquiries", payload);
+      await axios.post("http://62.72.57.65/api/enquiries", payload);
 
       Swal.fire({
         icon: "success",

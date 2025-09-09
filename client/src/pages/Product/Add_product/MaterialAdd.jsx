@@ -58,7 +58,7 @@ const ProductMaterialForm = ({ data, onUpdate }) => {
       formData.append("images", file);
 
       try {
-        const res = await axios.post("http://localhost:5000/api/upload/", formData, {
+        const res = await axios.post("http://62.72.57.65/api/upload/", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,

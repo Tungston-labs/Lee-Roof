@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/products";
+const API_URL = "http://62.72.57.65/api/products";
 
 export const createProductAPI = async (formData) => {
   const token = localStorage.getItem("accessToken");

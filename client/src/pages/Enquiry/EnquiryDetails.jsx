@@ -37,7 +37,7 @@ const EnquiryPage = () => {
   useEffect(() => {
     const fetchEnquiry = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/enquiries/${id}`);
+        const res = await axios.get(`http://62.72.57.65/api/enquiries/${id}`);
         setEnquiry(res.data);
       } catch (err) {
         console.error("Error fetching enquiry:", err);
@@ -55,7 +55,7 @@ const EnquiryPage = () => {
     try {
       setStatusUpdating(true);
       const res = await axios.patch(
-        `http://localhost:5000/api/enquiries/${id}/status`,
+        `http://62.72.57.65/api/enquiries/${id}/status`,
         { status: newStatus }
       );
       setEnquiry(res.data.enquiry); // Update the UI immediately
