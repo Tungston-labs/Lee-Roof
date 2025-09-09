@@ -1,4 +1,4 @@
-const BASE_URL = process.env.BASE_URL || "https://leeroof.leebuilders.in";
+const BASE_URL = process.env.BASE_URL || "http://leeroof.leebuilders.in";
 
 export const uploadImages = (req, res) => {
   if (!req.files || req.files.length === 0) {
