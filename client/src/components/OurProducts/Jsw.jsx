@@ -35,7 +35,7 @@ const Jsw = () => {
   // Simulate backend call to fetch product image
   useEffect(() => {
     // Replace this with actual backend API call
-    fetch("http://62.72.57.65/api/jsw-sheet") // Example endpoint
+    fetch("http://leeroof.leebuilders.in/api/jsw-sheet") // Example endpoint
       .then((res) => res.json())
       .then((data) => {
         setSheetImage(data.imageUrl); // backend should return { imageUrl: "http://..." }
