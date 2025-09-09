@@ -235,7 +235,7 @@ if (Array.isArray(p.materials) && p.materials.length > 0) {
 
     (v.colors || []).forEach((c) => {
       grouped[matName][thicknessVal].push({
-        colorName: c.name || "",  // ✅ backend expects "colorName"
+        colorName: c.name || "",  //  backend expects "colorName"
         colorCode: c.colorCode || "",
         image: typeof c.image === "string" && c.image.startsWith("blob:")
           ? null
@@ -299,11 +299,11 @@ if (Array.isArray(p.materials) && p.materials.length > 0) {
 
       await dispatch(updateProduct({ id: productId, formData })).unwrap();
 
-      alert("✅ Product updated successfully");
+      alert(" Product updated successfully");
       navigate(-1);
     } catch (err) {
       console.error("Save failed:", err);
-      alert("❌ Failed to save product: " + (err?.message || JSON.stringify(err)));
+      alert("Failed to save product: " + (err?.message || JSON.stringify(err)));
     }
   };
 

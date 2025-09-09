@@ -25,12 +25,14 @@ import {
   InputRow,
 } from "./EnquiryForm.style";
 import { FaPaperPlane } from "react-icons/fa";
-import Swal from "sweetalert2"; 
+import Swal from "sweetalert2";
+
 const EnquiryForm = () => {
   const location = useLocation();
-    const initialItems = location.state?.items || [];
+  const initialItems = location.state?.items || [];
   const items = location.state?.items || [];
   const [cartItems, setCartItems] = useState(initialItems);
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -42,17 +44,18 @@ const EnquiryForm = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false); 
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" }); // clear error on typing
+    setErrors({ ...errors, [e.target.name]: "" }); 
   };
 
-  // ✅ Validation function
   const validate = () => {
     let newErrors = {};
 
-    if (!formData.firstName.trim()) newErrors.firstName = "First name is required";
+    if (!formData.firstName.trim())
+      newErrors.firstName = "First name is required";
     if (!formData.lastName.trim()) newErrors.lastName = "Last name is required";
 
     if (!formData.email) {
@@ -79,9 +82,10 @@ const EnquiryForm = () => {
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      return; // stop submit
+      return;
     }
 
+    setLoading(true); 
     try {
       const payload = {
         name: `${formData.firstName} ${formData.lastName}`,
@@ -99,9 +103,8 @@ const EnquiryForm = () => {
         })),
       };
 
-      const res = await axios.post("http://localhost:5000/api/enquiries", payload);
+      await axios.post("http://localhost:5000/api/enquiries", payload);
 
-       // ✅ SweetAlert success
       Swal.fire({
         icon: "success",
         title: "Enquiry Sent!",
@@ -109,32 +112,31 @@ const EnquiryForm = () => {
         confirmButtonColor: "#0b4177",
       });
 
-          // ✅ Reset form after success
-    setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
-      phone: "",
-      address: "",
-      location: "",
-      notes: "",
-    });
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        address: "",
+        location: "",
+        notes: "",
+      });
       setCartItems([]);
-    setErrors({}); // clear errors too
-  } catch (error) {
-    console.error("Error submitting enquiry:", error);
-      console.log("Saved enquiry:", res.data);
-    
+      setErrors({});
+    } catch (error) {
+      console.error("Error submitting enquiry:", error);
 
-      // ❌ SweetAlert error
       Swal.fire({
         icon: "error",
         title: "Submission Failed",
         text: "Something went wrong. Please try again!",
         confirmButtonColor: "#d33",
       });
+    } finally {
+      setLoading(false); 
     }
   };
+
   return (
     <PageWrapper>
       <GreyBox>
@@ -143,38 +145,39 @@ const EnquiryForm = () => {
         </TopBar>
 
         <ContentWrapper>
-          {/* Left Section: Items in cart */}
+          {/* Left Section: Items */}
           <SectionBox>
-  <SectionTitle>Items in cart</SectionTitle>
-  <ItemsList>
-    {cartItems.length > 0 ? (
-      cartItems.map((item, index) => (
-        <ItemCard key={index}>
-          <ItemImageSpace>
-            <img src={item.image} alt={item.name} />
-          </ItemImageSpace>
-          <ItemDetails>
-            <h4>{item.name}</h4>
-            <ColorRow>
-              <ColorBox style={{ backgroundColor: item.color }} />
-              <span>{item.color}</span>
-            </ColorRow>
-            <p>
-              <strong>Material:</strong> {item.material} |{" "}
-              <strong>Thickness:</strong> {item.thickness}
-            </p>
-            <p>Qty: {item.qty}</p>
-          </ItemDetails>
-        </ItemCard>
-      ))
-    ) : (
-      <p>Select "Proceed with enquiry" on cart page to list the products here</p>
-    )}
-  </ItemsList>
-</SectionBox>
+            <SectionTitle>Items in cart</SectionTitle>
+            <ItemsList>
+              {cartItems.length > 0 ? (
+                cartItems.map((item, index) => (
+                  <ItemCard key={index}>
+                    <ItemImageSpace>
+                      <img src={item.image} alt={item.name} />
+                    </ItemImageSpace>
+                    <ItemDetails>
+                      <h4>{item.name}</h4>
+                      <ColorRow>
+                        <ColorBox style={{ backgroundColor: item.color }} />
+                        <span>{item.color}</span>
+                      </ColorRow>
+                      <p>
+                        <strong>Material:</strong> {item.material} |{" "}
+                        <strong>Thickness:</strong> {item.thickness}
+                      </p>
+                      <p>Qty: {item.qty}</p>
+                    </ItemDetails>
+                  </ItemCard>
+                ))
+              ) : (
+                <p>
+                  Select "Proceed with enquiry" on cart page to list the
+                  products here
+                </p>
+              )}
+            </ItemsList>
+          </SectionBox>
 
-
-          {/* Right Section: Form */}
           <SectionBox>
             <FormWrapper>
               <FormTitle>Fill the Form for More Enquiry</FormTitle>
@@ -183,40 +186,62 @@ const EnquiryForm = () => {
                 details and we’ll get back to you quickly.
               </FormDesc>
               <Form onSubmit={handleSubmit}>
-            
-
-                <InputRow> 
-                <Input type="text" 
-                placeholder="First Name"
-                 name="firstName"
-                  value={formData.firstName} 
-                  onChange={handleChange}
-                   />
-                      {errors.firstName && <span style={{ color: "red", fontSize: "12px" }}>{errors.firstName}</span>}
-                   <Input type="text"
+                <InputRow>
+                  <Input
+                    type="text"
+                    placeholder="First Name"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    disabled={loading}
+                  />
+                  {errors.firstName && (
+                    <span style={{ color: "red", fontSize: "12px" }}>
+                      {errors.firstName}
+                    </span>
+                  )}
+                  <Input
+                    type="text"
                     placeholder="Last Name"
-                     name="lastName"
-                      value={formData.lastName} 
-                      onChange={handleChange} /> 
-                          {errors.lastName && <span style={{ color: "red", fontSize: "12px" }}>{errors.lastName}</span>}
-                      </InputRow>
-  {errors.email && <span style={{ color: "red", fontSize: "12px" }}>{errors.email}</span>}
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    disabled={loading}
+                  />
+                  {errors.lastName && (
+                    <span style={{ color: "red", fontSize: "12px" }}>
+                      {errors.lastName}
+                    </span>
+                  )}
+                </InputRow>
+
                 <Input
                   type="email"
                   placeholder="Email Address"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
+                  disabled={loading}
                 />
-           {errors.phone && <span style={{ color: "red", fontSize: "12px" }}>{errors.phone}</span>}
+                {errors.email && (
+                  <span style={{ color: "red", fontSize: "12px" }}>
+                    {errors.email}
+                  </span>
+                )}
+
                 <Input
                   type="tel"
                   placeholder="Phone Number"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
+                  disabled={loading}
                 />
-               {errors.address && <span style={{ color: "red", fontSize: "12px" }}>{errors.address}</span>}
+                {errors.phone && (
+                  <span style={{ color: "red", fontSize: "12px" }}>
+                    {errors.phone}
+                  </span>
+                )}
 
                 <Input
                   type="text"
@@ -224,8 +249,13 @@ const EnquiryForm = () => {
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
+                  disabled={loading}
                 />
-                   {errors.location && <span style={{ color: "red", fontSize: "12px" }}>{errors.location}</span>}
+                {errors.address && (
+                  <span style={{ color: "red", fontSize: "12px" }}>
+                    {errors.address}
+                  </span>
+                )}
 
                 <Input
                   type="text"
@@ -233,19 +263,31 @@ const EnquiryForm = () => {
                   name="location"
                   value={formData.location}
                   onChange={handleChange}
+                  disabled={loading}
                 />
-           
+                {errors.location && (
+                  <span style={{ color: "red", fontSize: "12px" }}>
+                    {errors.location}
+                  </span>
+                )}
 
                 <TextArea
                   placeholder="Additional Notes"
                   name="notes"
                   value={formData.notes}
                   onChange={handleChange}
+                  disabled={loading}
                 />
 
-                <SubmitButton type="submit">
-                  <FaPaperPlane size={18} />
-                  <span>Send</span>
+                <SubmitButton type="submit" disabled={loading}>
+                  {loading ? (
+                    <span>Submitting...</span> 
+                  ) : (
+                    <>
+                      <FaPaperPlane size={18} />
+                      <span>Send</span>
+                    </>
+                  )}
                 </SubmitButton>
               </Form>
             </FormWrapper>

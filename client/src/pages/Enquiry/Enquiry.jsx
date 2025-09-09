@@ -51,7 +51,7 @@ const EnquiryTable = () => {
       if (result.isConfirmed) {
         try {
           await axios.delete(`http://localhost:5000/api/enquiries/${id}`);
-          setEnquiries(enquiries.filter((enq) => enq._id !== id)); // ✅ remove from state
+          setEnquiries(enquiries.filter((enq) => enq._id !== id)); 
           Swal.fire("Deleted!", "The enquiry has been removed.", "success");
         } catch (err) {
           Swal.fire("Error!", "Failed to delete enquiry.", "error");

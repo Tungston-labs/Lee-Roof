@@ -57,7 +57,7 @@ const ProductForm = ({ data, onUpdate }) => {
                 onChange={(e) => {
                   const file = e.target.files[0];
                   if (file) {
-                    handleChange("brandIconFile", file); // save actual file
+                    handleChange("brandIconFile", file); 
                   }
                 }}
               />

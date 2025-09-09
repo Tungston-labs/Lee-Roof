@@ -270,44 +270,38 @@ const OurProducts = () => {
                     ))}
                   </Colors>
 
-                  {expanded === id ? (
-                    <AddToCartBtn
-                      onClick={() => {
-                        const selectedColor =
-                          colors[sel.colorIndex]?.colorName || "Default Color";
+                  <AddToCartBtn
+                    onClick={() => {
+                      const selectedColor =
+                        colors[sel.colorIndex]?.colorName || "Default Color";
 
-                        dispatch(
-                          addToCart({
-                            id,
-                            name: product.productName,
-                            description: product.description,
-                            image: productImage,
-                            material: sel.material,
-                            thickness: sel.thickness,
-                            color: selectedColor,
-                            qty: 1,
-                          })
-                        );
+                      dispatch(
+                        addToCart({
+                          id,
+                          name: product.productName,
+                          description: product.description,
+                          image: productImage,
+                          material: sel.material,
+                          thickness: sel.thickness,
+                          color: selectedColor,
+                          qty: 1,
+                        })
+                      );
 
-                        Swal.fire({
-                          title: "Added to Cart!",
-                          text: `${product.productName} (${sel.material}, ${sel.thickness}, ${selectedColor}) has been added successfully.`,
-                          icon: "success",
-                          confirmButtonColor: "#004D7B",
-                          timer: 1500,
-                          showConfirmButton: false,
-                          position: "top-end",
-                          toast: true,
-                        });
-                      }}
-                    >
-                      Add to cart
-                    </AddToCartBtn>
-                  ) : (
-                    <ViewMore onClick={() => setExpanded(id)}>
-                      Click to view more
-                    </ViewMore>
-                  )}
+                      Swal.fire({
+                        title: "Added to Cart!",
+                        text: `${product.productName} (${sel.material}, ${sel.thickness}, ${selectedColor}) has been added successfully.`,
+                        icon: "success",
+                        confirmButtonColor: "#004D7B",
+                        timer: 1500,
+                        showConfirmButton: false,
+                        position: "top-end",
+                        toast: true,
+                      });
+                    }}
+                  >
+                    Add to cart
+                  </AddToCartBtn>
                 </CardContent>
               </Card>
             </React.Fragment>
@@ -315,7 +309,6 @@ const OurProducts = () => {
         );
       })}
 
-      {/* Footer note always visible */}
       <FooterNote>
         Whether you're building a new home, upgrading a commercial site, or
         tackling an industrial project, Lee Roofs is your trusted partner. We
