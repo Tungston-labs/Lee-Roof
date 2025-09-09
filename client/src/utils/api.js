@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://leeroof.leebuilders.in/api",
+  baseURL: "https://leeroof.leebuilders.in/api",
 });
 
 api.interceptors.request.use((config) => {

@@ -12,7 +12,7 @@ const app = express();
 dotenv.config();
 // Enable CORS
 const corsOptions = {
-  origin: ["http://localhost:5173", "http://62.72.57.65","http://leeroof.leebuilders.in"],
+  origin: ["http://localhost:5173", "http://62.72.57.65","https://leeroof.leebuilders.in"],
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true, // allow cookies/auth headers

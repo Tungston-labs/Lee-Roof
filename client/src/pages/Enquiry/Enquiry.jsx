@@ -29,7 +29,7 @@ const EnquiryTable = () => {
   useEffect(() => {
     const fetchEnquiries = async () => {
       try {
-        const res = await axios.get("http://leeroof.leebuilders.in/api/enquiries");
+        const res = await axios.get("https://leeroof.leebuilders.in/api/enquiries");
         setEnquiries(res.data);
       } catch (err) {
         console.error("Error fetching enquiries:", err);
@@ -50,7 +50,7 @@ const EnquiryTable = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          await axios.delete(`http://leeroof.leebuilders.in/api/enquiries/${id}`);
+          await axios.delete(`https://leeroof.leebuilders.in/api/enquiries/${id}`);
           setEnquiries(enquiries.filter((enq) => enq._id !== id)); 
           Swal.fire("Deleted!", "The enquiry has been removed.", "success");
         } catch (err) {

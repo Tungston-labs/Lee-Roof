@@ -37,7 +37,7 @@ const EnquiryPage = () => {
   useEffect(() => {
     const fetchEnquiry = async () => {
       try {
-        const res = await axios.get(`http://leeroof.leebuilders.in/api/enquiries/${id}`);
+        const res = await axios.get(`https://leeroof.leebuilders.in/api/enquiries/${id}`);
         setEnquiry(res.data);
       } catch (err) {
         console.error("Error fetching enquiry:", err);
@@ -55,7 +55,7 @@ const EnquiryPage = () => {
     try {
       setStatusUpdating(true);
       const res = await axios.patch(
-        `http://leeroof.leebuilders.in/api/enquiries/${id}/status`,
+        `https://leeroof.leebuilders.in/api/enquiries/${id}/status`,
         { status: newStatus }
       );
       setEnquiry(res.data.enquiry); // Update the UI immediately

@@ -99,7 +99,7 @@ const AddFullProductPage = ({ existingProduct }) => {
       form.append("variants", JSON.stringify(formData.variants || []));
 
     
-      const response = await fetch("http://leeroof.leebuilders.in/api/products", {
+      const response = await fetch("https://leeroof.leebuilders.in/api/products", {
         method: "POST",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         body: form,

@@ -18,7 +18,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchCounts = async () => {
       try {
-        const res = await axios.get("http://leeroof.leebuilders.in/api/admin/count");
+        const res = await axios.get("https://leeroof.leebuilders.in/api/admin/count");
         setCounts(res.data);
       } catch (error) {
         console.error("Error fetching counts:", error);

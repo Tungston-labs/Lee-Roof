@@ -103,7 +103,7 @@ const EnquiryForm = () => {
         })),
       };
 
-      await axios.post("http://leeroof.leebuilders.in/api/enquiries", payload);
+      await axios.post("https://leeroof.leebuilders.in/api/enquiries", payload);
 
       Swal.fire({
         icon: "success",

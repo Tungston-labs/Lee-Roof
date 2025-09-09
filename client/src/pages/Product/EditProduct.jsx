@@ -40,7 +40,7 @@ import {
 
 import { Row, ColorInput, Button, AddVariantButton } from "./Add_product/AddVarient.Styles";
 
-const API_URL = "http://leeroof.leebuilders.in/api/products"; 
+const API_URL = "https://leeroof.leebuilders.in/api/products"; 
 
 /**
  * Important mapping notes:
@@ -85,7 +85,7 @@ const CombinedProductPage = () => {
   if (!urlOrPath) return "";
   if (/^https?:\/\//i.test(urlOrPath)) return urlOrPath; // already absolute
   if (urlOrPath.startsWith("/uploads")) {
-    return `${process.env.REACT_APP_API_BASE || "http://leeroof.leebuilders.in"}${urlOrPath}`;
+    return `${process.env.REACT_APP_API_BASE || "https://leeroof.leebuilders.in"}${urlOrPath}`;
   }
   const base = `${window.location.protocol}//${window.location.host}`;
   return base + (urlOrPath.startsWith("/") ? urlOrPath : `/${urlOrPath}`);
