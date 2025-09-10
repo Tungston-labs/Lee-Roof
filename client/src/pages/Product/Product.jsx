@@ -4,20 +4,20 @@ import ProductForm from "./Add_product/AddProduct";
 import ProductMaterialForm from "./Add_product/MaterialAdd";
 import VariantForm from "./Add_product/AddVarient";
 import { useNavigate } from "react-router-dom";
-
+import Swal from "sweetalert2";
 const AddFullProductPage = ({ existingProduct }) => {
-  const navigate = useNavigate();
+  const navigate=useNavigate()
   const [formData, setFormData] = useState({
     product: {
       brandIconFile: null,
-      brandIconUrl: "",
+      brandIconUrl: "", 
       brandName: "",
       productName: "",
       description: "",
     },
     materials: {
-      materials: [],
-      images: [],
+      materials: [], 
+      images: [], 
     },
     variants: [],
   });
@@ -26,7 +26,7 @@ const AddFullProductPage = ({ existingProduct }) => {
     if (existingProduct) {
       setFormData({
         product: {
-          brandIconFile: null,
+          brandIconFile: null, 
           brandIconUrl: existingProduct.brandIcon || "",
           brandName: existingProduct.brandName || "",
           productName: existingProduct.productName || "",
@@ -47,70 +47,94 @@ const AddFullProductPage = ({ existingProduct }) => {
     }
   }, [existingProduct]);
 
-  const handleSubmit = async () => {
-    try {
-      const baseMaterials = formData.materials.materials || [];
-      const variants = formData.variants || [];
+const handleSubmit = async () => {
+  try {
+    const baseMaterials = formData.materials.materials || [];
+    const variants = formData.variants || [];
 
-      const normalizeThicknesses = (thicknesses = []) =>
-        thicknesses.map((th) => ({
-          thickness: th.thickness || "",
-          colors: (th.colors || []).map((c) => ({
-            colorName: c.color || "",
-            colorCode: c.colorHex || "",
-            image: c.image || null,
-          })),
-        }));
+    const normalizeThicknesses = (thicknesses = []) =>
+      thicknesses.map((th) => ({
+        thickness: th.thickness || "",
+        colors: (th.colors || []).map((c) => ({
+          colorName: c.color || "",
+          colorCode: c.colorHex || "",
+          image: c.image || null,
+        })),
+      }));
 
-      const merged = baseMaterials.map((mat) => {
-        const v = variants.find((x) => x.material === mat.materialName);
-        if (v) {
-          return {
-            ...mat,
-            thicknesses: normalizeThicknesses(v.thicknesses),
-          };
-        }
+    const merged = baseMaterials.map((mat) => {
+      const v = variants.find((x) => x.material === mat.materialName);
+      if (v) {
+        return {
+          ...mat,
+          thicknesses: normalizeThicknesses(v.thicknesses),
+        };
+      }
+      return { ...mat, thicknesses: mat.thicknesses || [] };
+    });
 
-        return { ...mat, thicknesses: mat.thicknesses || [] };
-      });
+    variants.forEach((v) => {
+      const exists = merged.some((m) => m.materialName === v.material);
+      if (!exists) {
+        merged.push({
+          materialName: v.material,
+          thicknesses: normalizeThicknesses(v.thicknesses),
+        });
+      }
+    });
 
-      variants.forEach((v) => {
-        const exists = merged.some((m) => m.materialName === v.material);
-        if (!exists) {
-          merged.push({
-            materialName: v.material,
-            thicknesses: normalizeThicknesses(v.thicknesses),
-          });
-        }
-      });
-
-      const form = new FormData();
-      if (formData.product.brandIconFile)
-        form.append("brandIcon", formData.product.brandIconFile);
-      form.append("brandName", formData.product.brandName || "");
-      form.append("productName", formData.product.productName || "");
-      form.append("description", formData.product.description || "");
-
-      form.append("materials", JSON.stringify(merged));
-      form.append("variants", JSON.stringify(formData.variants || []));
-
-      const response = await fetch(
-        "https://leeroof.leebuilders.in/api/products",
-        {
-          method: "POST",
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-          body: form,
-        }
-      );
-      const data = await response.json();
-      if (response.ok) {
-        navigate("/view-product", { replace: true });
-        alert("Form submitted successfully");
-      } else alert("Failed to submit: " + (data.error || JSON.stringify(data)));
-    } catch (err) {
-      console.error("submit error", err);
+    const form = new FormData();
+    if (formData.product.brandIconFile) {
+      form.append("brandIcon", formData.product.brandIconFile);
     }
-  };
+    form.append("brandName", formData.product.brandName || "");
+    form.append("productName", formData.product.productName || "");
+    form.append("description", formData.product.description || "");
+    form.append("materials", JSON.stringify(merged));
+    form.append("variants", JSON.stringify(formData.variants || []));
+
+    const response = await fetch(
+      "https://leeroof.leebuilders.in/api/products",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: form,
+      }
+    );
+
+    const data = await response.json();
+    console.log("📡 Response:", response.status, data);
+
+    if (response.ok) {
+      Swal.fire({
+        title: "Success!",
+        text: "Product added successfully",
+        icon: "success",
+        confirmButtonColor: "#004D7B",
+      }).then(() => {
+        navigate("/view-product", { replace: true });
+      });
+    } else {
+      Swal.fire({
+        title: "Error",
+        text: data.error || "Failed to submit the product",
+        icon: "error",
+        confirmButtonColor: "#d33",
+      });
+    }
+  } catch (err) {
+    console.error("submit error", err);
+    Swal.fire({
+      title: "Oops...",
+      text: "Something went wrong! " + err.message,
+      icon: "error",
+      confirmButtonColor: "#d33",
+    });
+  }
+};
+
 
   return (
     <div style={{ padding: "20px" }}>
@@ -147,27 +171,28 @@ const AddFullProductPage = ({ existingProduct }) => {
 
       <hr />
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          marginTop: "20px",
-        }}
-      >
-        <button
-          onClick={handleSubmit}
-          style={{
-            padding: "10px 20px",
-            background: "#004D7B",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
-        >
-          Submit All
-        </button>
-      </div>
+     <div
+  style={{
+    display: "flex",
+    justifyContent: "flex-end", 
+    marginTop: "20px", 
+  }}
+>
+  <button
+    onClick={handleSubmit}
+    style={{
+      padding: "10px 20px",
+      background: "#004D7B",
+      color: "white",
+      border: "none",
+      borderRadius: "5px",
+      cursor: "pointer",
+    }}
+  >
+    Submit All
+  </button>
+</div>
+
     </div>
   );
 };
