@@ -104,7 +104,6 @@ const AddFullProductPage = ({ existingProduct }) => {
       );
       const data = await response.json();
       if (response.ok) {
-        alert("Form submitted successfully");
         navigate("/view-product", { replace: true });
       } else alert("Failed to submit: " + (data.error || JSON.stringify(data)));
     } catch (err) {
