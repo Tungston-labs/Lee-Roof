@@ -70,9 +70,9 @@ export const Card = styled.div`
 `;
 
 export const ImagePlaceholder = styled.div`
- flex: 1;
+  flex: 1;
   min-height: 220px;
-  max-height:500px;
+  max-height: 500px;
   max-width: 500px;
   background: #eaeaea;
   display: flex;
@@ -80,7 +80,15 @@ export const ImagePlaceholder = styled.div`
   justify-content: center;
   font-size: 1rem;
   color: #666;
+  overflow: hidden; /* ensures image doesn’t overflow */
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* makes image cover the area properly */
+  }
 `;
+
 
 export const CardContent = styled.div`
   flex: 2;

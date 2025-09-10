@@ -12,6 +12,7 @@ font-family: Helvetica, Arial, sans-serif;
   text-align: center;
   padding: 1rem;
   max-width: 900px;
+  
 `;
 
 export const Heading = styled.h1`
@@ -31,7 +32,7 @@ export const ImageWrapper = styled.div`
   position: relative;
   width: 100%;
   height: 400px;
-  background-image: url(${(props) => props.bg}); /* ✅ dynamic image */
+  background-image: url(${(props) => props.bg}); 
   background-size: cover;
   background-position: center;
   display: flex;
@@ -45,13 +46,17 @@ export const InfoCard = styled.div`
   background: #fff;
   border-radius: 20px;
   border-top-right-radius: 80px;
-  padding: 1.1rem;   /* ⬅ reduced from 2rem */
-  margin: 4rem;      /* ⬅ smaller outer margin */
-  max-width: 420px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  padding: 1.1rem;
+  margin: 4rem;
   max-width: 580px;
-  height: 190px;   
+  height: 190px;   /* default for desktop */
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+
+  @media (max-width: 768px) {
+    height: 300px; /* override for mobile */
+  }
 `;
+
 
 export const IconWrapper = styled.div`
   position: absolute;
