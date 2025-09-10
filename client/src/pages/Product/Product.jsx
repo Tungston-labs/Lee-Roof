@@ -6,18 +6,18 @@ import VariantForm from "./Add_product/AddVarient";
 import { useNavigate } from "react-router-dom";
 
 const AddFullProductPage = ({ existingProduct }) => {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     product: {
       brandIconFile: null,
-      brandIconUrl: "", 
+      brandIconUrl: "",
       brandName: "",
       productName: "",
       description: "",
     },
     materials: {
-      materials: [], 
-      images: [], 
+      materials: [],
+      images: [],
     },
     variants: [],
   });
@@ -26,7 +26,7 @@ const AddFullProductPage = ({ existingProduct }) => {
     if (existingProduct) {
       setFormData({
         product: {
-          brandIconFile: null, 
+          brandIconFile: null,
           brandIconUrl: existingProduct.brandIcon || "",
           brandName: existingProduct.brandName || "",
           productName: existingProduct.productName || "",
@@ -49,22 +49,19 @@ const AddFullProductPage = ({ existingProduct }) => {
 
   const handleSubmit = async () => {
     try {
-    
-      const baseMaterials = formData.materials.materials || []; 
-      const variants = formData.variants || []; 
+      const baseMaterials = formData.materials.materials || [];
+      const variants = formData.variants || [];
 
-    
       const normalizeThicknesses = (thicknesses = []) =>
         thicknesses.map((th) => ({
           thickness: th.thickness || "",
           colors: (th.colors || []).map((c) => ({
-            colorName: c.color || "", 
-            colorCode: c.colorHex || "", 
+            colorName: c.color || "",
+            colorCode: c.colorHex || "",
             image: c.image || null,
           })),
         }));
 
-   
       const merged = baseMaterials.map((mat) => {
         const v = variants.find((x) => x.material === mat.materialName);
         if (v) {
@@ -73,7 +70,7 @@ const AddFullProductPage = ({ existingProduct }) => {
             thicknesses: normalizeThicknesses(v.thicknesses),
           };
         }
-  
+
         return { ...mat, thicknesses: mat.thicknesses || [] };
       });
 
@@ -87,28 +84,29 @@ const AddFullProductPage = ({ existingProduct }) => {
         }
       });
 
-  
       const form = new FormData();
       if (formData.product.brandIconFile)
         form.append("brandIcon", formData.product.brandIconFile);
       form.append("brandName", formData.product.brandName || "");
       form.append("productName", formData.product.productName || "");
       form.append("description", formData.product.description || "");
-     
+
       form.append("materials", JSON.stringify(merged));
       form.append("variants", JSON.stringify(formData.variants || []));
 
-    
-      const response = await fetch("https://leeroof.leebuilders.in/api/products", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        body: form,
-      });
+      const response = await fetch(
+        "https://leeroof.leebuilders.in/api/products",
+        {
+          method: "POST",
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          body: form,
+        }
+      );
       const data = await response.json();
-      if (response.ok) {alert("Form submitted successfully");
-      navigate("/view-product");
-      }
-      else alert("Failed to submit: " + (data.error || JSON.stringify(data)));
+      if (response.ok) {
+        alert("Form submitted successfully");
+        navigate("/view-product", { replace: true });
+      } else alert("Failed to submit: " + (data.error || JSON.stringify(data)));
     } catch (err) {
       console.error("submit error", err);
     }
@@ -149,28 +147,27 @@ const AddFullProductPage = ({ existingProduct }) => {
 
       <hr />
 
-     <div
-  style={{
-    display: "flex",
-    justifyContent: "flex-end", 
-    marginTop: "20px", 
-  }}
->
-  <button
-    onClick={handleSubmit}
-    style={{
-      padding: "10px 20px",
-      background: "#004D7B",
-      color: "white",
-      border: "none",
-      borderRadius: "5px",
-      cursor: "pointer",
-    }}
-  >
-    Submit All
-  </button>
-</div>
-
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          marginTop: "20px",
+        }}
+      >
+        <button
+          onClick={handleSubmit}
+          style={{
+            padding: "10px 20px",
+            background: "#004D7B",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          Submit All
+        </button>
+      </div>
     </div>
   );
 };
