@@ -104,7 +104,7 @@ const RoofingSolutions = () => {
                       alt={`${brand.brandName} Logo`}
                     />
                   </Logo>
-                  <CardTitle>{brand.brandName}</CardTitle>
+                  <CardTitle>{brand.productName}</CardTitle>
                 </CardHeader>
 
                 <CardDescription>{brand.description}</CardDescription>

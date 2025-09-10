@@ -13,13 +13,16 @@ export const HeaderWrapper = styled.div`
 `;
 
 export const Title = styled.h2`
-  font-size: 5rem; /* bigger */
+  font-size: 3rem; 
   font-weight: 800;
   margin-bottom: 14px;
   margin-top: 10px;
   color: #004D7B;
-`;
 
+  @media (max-width: 768px) {
+    font-size: 2rem;
+  }
+`;
 export const IntroText = styled.p`
   font-size: 1.5rem;
   line-height: 1.4;
@@ -28,15 +31,30 @@ export const IntroText = styled.p`
 `;
 
 export const BrandPill = styled.div`
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 20px;
+  justify-content: center;
+  gap: 16px;
   background: #eef1f5;
   border-radius: 999px;
-  padding: 30px 36px;
+  padding: 16px 20px;
   margin: 18px 0 10px 0;
   box-shadow: inset 0 0 0 1px #e5e9ef;
+  flex-wrap: wrap; /* 
+
+  @media (max-width: 768px) {
+    padding: 12px 16px;
+    gap: 10px;
+  }
+
+  @media (max-width: 480px) {
+    flex-direction: column; 
+    text-align: center;
+    gap: 8px;
+    border-radius: 12px; 
+  }
 `;
+
 
 export const BrandPillLogo = styled.img`
   width: 46px;
@@ -102,8 +120,12 @@ export const CardHeader = styled.div`
 `;
 
 export const Logo = styled.div`
-  width: 120px;
+  width: 80px;
   flex-shrink: 0;
+
+  @media (max-width: 600px) {
+    width: 60px;
+  }
 `;
 
 export const LogoImage = styled.img`

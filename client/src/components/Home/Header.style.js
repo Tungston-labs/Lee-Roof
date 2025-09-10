@@ -36,7 +36,7 @@ export const ImageWrapper = styled.div`
   background-size: cover;
   background-position: center;
   display: flex;
-  justify-content: flex-end; /* ✅ places card on right side */
+  justify-content: flex-end; /* 
   align-items: flex-end;
   padding: 2rem;
 `;

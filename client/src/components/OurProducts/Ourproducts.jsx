@@ -168,7 +168,7 @@ const OurProducts = () => {
                   src={product.brandIcon || ""}
                   alt={`${product.brandName} logo`}
                 />
-                <BrandPillText>{product.productName}</BrandPillText>
+                <BrandPillText>{product.brandName}</BrandPillText>
               </BrandPill>
 
               {/* Product card */}
@@ -187,7 +187,7 @@ const OurProducts = () => {
                         alt={`${product.brandName} logo`}
                       />
                     </Logo>
-                    <CardTitle>{product.brandName} Roofing Sheets</CardTitle>
+                    <CardTitle>{product.productName}</CardTitle>
                   </CardHeader>
                   <CardDescription>{product.description}</CardDescription>
 
