@@ -24,10 +24,14 @@ import Contact from "./components/ContactUs/Contact";
 import EnquiryForm from "./components/ContactUs/EnquiryForm";
 import Cart from "./components/Cart/Cart";
 import OurProducts from "./components/OurProducts/Ourproducts";
+import ScrollToTop from "./utils/ScrollToTop";
 
 const App = () => {
   return (
+    <>
+     <ScrollToTop/>
       <Routes>
+       
         {/* Admin routes (Protected, No Navbar) */}
         <Route
           path="/dashboard"
@@ -149,7 +153,7 @@ const App = () => {
           }
         />
       </Routes>
-    
+    </>
   );
 };
 
