@@ -115,11 +115,11 @@ export const Logo = styled.div`
 `;
 
 export const LogoImage = styled.img`
-  height: 35px;
+  height: 60px;   /* increased from 35px */
   object-fit: contain;
 
   @media (max-width: 480px) {
-    height: 28px;
+    height: 36px; /* increased from 28px */
   }
 `;
 
