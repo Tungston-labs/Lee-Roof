@@ -24,6 +24,7 @@ import {
   LogoImage,
   HeaderWrapper,
   OptionValues,
+  ImageWrapper,
 } from "./RoofingSolutions.style";
 import { useNavigate } from "react-router-dom";
 const RoofingSolutions = () => {
@@ -91,7 +92,9 @@ const RoofingSolutions = () => {
           return (
             <Card key={brand._id} $reverse={idx % 2 !== 0}>
               <ImagePlaceholder>
+                <ImageWrapper>
                 <img src={selectedImage} alt={brand.productName} width="100%" />
+                </ImageWrapper>
               </ImagePlaceholder>
               <CardContent>
                 <CardHeader>
