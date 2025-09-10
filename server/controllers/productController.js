@@ -5,7 +5,7 @@ export const createProduct = async (req, res) => {
     const { productName, description, brandName, materials } = req.body;
        console.log("REQ.BODY:", req.body);
 
-    const BASE_URL = process.env.BASE_URL || "http://localhost:5000";
+    const BASE_URL = process.env.BASE_URL || "https://leeroof.leebuilders.in:5000";
 
     let brandIcon = null;
     if (req.file) {
